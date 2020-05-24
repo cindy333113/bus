@@ -41,6 +41,7 @@ return function (App $app) {
     **/
     $app->get('/driver', function (Request $request, Response $response, $args) {
 
+        echo '<pre>';
         var_dump(DB::fetchAll('driver'));
 
         return $response;
