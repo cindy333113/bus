@@ -11,8 +11,13 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
+        $routes = DB::fetchAll('route');
+        $route = DB::find('route','842','route_name');
+
         render('index', [
-            'msg' => 'hello',
+            'msg' => 'HAHA',
+            'rows' => $routes,
+            'row' => $route,
         ]);
 
         return $response;

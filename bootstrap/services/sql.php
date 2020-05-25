@@ -1,6 +1,24 @@
 <?php
     require  'db.php';
     session_start();
+
+
+
+
+/*
+function fetchroutename($conn)
+{
+    $stmt = $conn->prepare('SELECT route_name FROM `route`');
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_CLASS, 'route');
+    
+}
+
+
+
+
+
+
     
     function fetchAllUser($conn)
 {
@@ -71,5 +89,5 @@ function updatenextstop($conn, $d_account, $data=[])
     //var_dump($time);
     return $nextstop;//回傳 新建資料的結果(true or false)
 }
-
+*/
 ?>

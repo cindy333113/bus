@@ -1,9 +1,21 @@
 <?php
-
-
-
 ?>
+<table width='85%' >
+ <tr style='text-align:center'>
+  <td>站ID</td>
+  <td>站name</td>
+ </tr>
+ <?php
+ foreach($rows as $testroute){ ?>
+ <tr style='text-align:center'>
+  <td><?=$testroute['route_id']?></td>
+  <td><?=$testroute['route_name']?></td>
+ </tr>
+ <?php } ?>
 
+ <?php var_dump($row) ?>
+
+</table>
 <!DOCTYPE html>
 
 <html>

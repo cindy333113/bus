@@ -6,5 +6,5 @@ return [
     'charset' => 'utf8',
     'database' => 'heybus',
     'username' => 'root',
-    'password' => '12345678',
+    'password' => '',
 ];
