@@ -20,14 +20,13 @@ return function (App $app) {
 
     $app->post('/login', function (Request $request, Response $response, $args) {
 
-        $data = $request->getParsedBody();
+        $data = $request->getParsedBody(); //$_POST
 
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
 
         $result = verifyPassengerLogin($account, $password);
-        if($result)
-        {
+        if ($result) {
             render('index', ['msg' => 'success',]);
         } else {
             render('index', ['msg' => 'wrong',]);
@@ -40,6 +39,13 @@ return function (App $app) {
     * = DRIVER
     * =========================================================================
     **/
+    $app->get('/driver', function (Request $request, Response $response, $args) {
+
+        var_dump(DB::fetchAll('driver'));
+
+        return $response;
+    });
+
     $app->get('/driver/{id}', function (Request $request, Response $response, $args) {
 
         $driverId = $args['id'];
@@ -54,24 +60,37 @@ return function (App $app) {
     });
 
     /* =========================================================================
-    * = USERS
+    * = STOP
     * =========================================================================
     **/
-    $app->get('/users', function (Request $request, Response $response, $args) {
+    $app->get('/stop', function (Request $request, Response $response, $args) {
 
-        $result = DB::fetchAll('users');
-
-        $response->getBody()->write(json_encode($result));
+        render('stop', ['msg' => '增加站牌資訊',]);
 
         return $response;
     });
 
-    $app->get('/users/{id}', function (Request $request, Response $response, $args) {
+    $app->post('/stop/add', function (Request $request, Response $response, $args) {
 
-        $id = $args['id'];
-        $result = DB::find('users', $id);
+        $data = $request->getParsedBody();
 
-        $response->getBody()->write(json_encode($result));
+        $result = DB::create('stop', $data);
+
+        render('stop', ['msg' => $result ? '增加站牌資訊成功':'增加站牌資訊失敗',]);
+
+        return $response;
+    });
+
+    $app->post('/stop/update', function (Request $request, Response $response, $args) {
+
+        $data = $request->getParsedBody();
+
+        $stopId = $data['STOP_ID'];
+
+        $result = DB::update('stop', "`STOP_ID` = {$stopId}", $data);
+
+        render('stop', ['msg' => $result ? '修改站牌資訊成功':'修改站牌資訊失敗',]);
+
         return $response;
     });
 };
