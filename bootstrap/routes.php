@@ -11,6 +11,9 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
+        $request->getAttribute('session');
+        echo '<pre>';var_dump($request->getAttribute('session'));
+
         render('index', [
             'msg' => 'hello',
         ]);

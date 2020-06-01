@@ -12,6 +12,9 @@ $app = AppFactory::create();
 
 $app->add($response);
 
+// Register middleware
+$middleware($app);
+
 // Register routes
 $routes($app);
 
