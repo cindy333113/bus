@@ -11,9 +11,12 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
+        $response->getBody()->write(json_encode(['msg'=>'hello']));
+        /*
         render('index', [
             'msg' => 'hello',
         ]);
+        */
 
         return $response;
     });
