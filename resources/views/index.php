@@ -1,24 +1,22 @@
 <?php
+foreach($stopList as $key => $stop){
+    echo $stop['stop_name'].'<br>';
+};
 ?>
-<table width='85%' >
- <tr style='text-align:center'>
-  <td>站ID</td>
-  <td>站name</td>
- </tr>
- <?php
- foreach($rows as $testroute){ ?>
- <tr style='text-align:center'>
-  <td><?=$testroute['route_id']?></td>
-  <td><?=$testroute['route_name']?></td>
- </tr>
- <?php } ?>
 
- <?php var_dump($row) ?>
+
+
+ <?php //var_dump($rows) 
+ //php -S localhost:8080 -t public public/index.php
+ ?>
 
 </table>
 <!DOCTYPE html>
 
 <html>
+
+
+
 
 <?php ?>
 
@@ -58,6 +56,7 @@
     </div>
 
 </body>
+
 
 </html>
 

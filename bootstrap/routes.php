@@ -6,23 +6,192 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
-
 return function (App $app) {
-
-    $app->get('/', function (Request $request, Response $response, $args) {
-
+    /*$app->get('/', function (Request $request, Response $response, $args) {
         $routes = DB::fetchAll('route');
         $route = DB::find('route','842','route_name');
-
         render('index', [
             'msg' => 'HAHA',
             'rows' => $routes,
             'row' => $route,
         ]);
+        return $response;
+    });*/    
+    $app->get('/sql', function (Request $request, Response $response, $args) {
+        $conn=DB::getconnection();
+        $stmt =$conn->prepare("SELECT route_name from `route` ");
+        $stmt->execute();
+    
+        $a=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        return $response;
+    });
+    $app->get('/sql1/{id}', function (Request $request, Response $response, $args) {
+        //列出id=?的顧客所收藏的站牌及路線
+        $passengerId = $args['id'];
+        $conn=DB::getconnection();
+        $stmt =$conn->prepare("SELECT stop_name,r.route_name from collect c,stop s,route r where passenger_id=$passengerId and c.stop_id=s.stop_id and c.route_id=r.route_id ");
+        $stmt->execute();
+        $a=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        return $response;
+    });
+    $app->get('/sql2', function (Request $request, Response $response, $args) {
+        $conn=DB::getconnection();
+        $stmt =$conn->prepare("SELECT route_name from `route` ");
+        $stmt->execute();
+    
+        $a=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        return $response;
+    });
+
+    $app->get('/sql3/{paid}/{roid}/{stopid}/{diid}', function (Request $request, Response $response, $args) {
+        //找出預約的車子
+        $passengerId = $args['paid'];
+        $routeId = $args['roid'];
+        $stopid = $args['stopid'];
+        $directionId = $args['diid'];
+        $conn=DB::getconnection();
+        $stmt =$conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`) VALUES ($passengerId,(SELECT bus_id from bus where route_id=$routeId and direction=$directionId),$stopid)");
+        $stmt->execute();
+        $a=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        return $response;
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $app->get('/temap', function (Request $request, Response $response, $args) {//顯示站名
+        //列出所有站牌
+        $routes = DB::fetchAll('route');
+        $row = array_map(function($route){
+            return $route['route_name'];
+        }, $routes);
+        //echo $routes;
+        var_dump($row);
+        return $response;
+    });
+    $app->get('/', function (Request $request, Response $response, $args) {//顯示站名
+        $routes = DB::fetchAll('route');
+        render('index', [
+            'msg' => 'HAHA',
+            'rows' => $routes,
+        ]);
+        return $response;
+    });  
+
+    $app->get('/test/{id}', function (Request $request, Response $response, $args) {
+        //列出收藏站牌
+        $passengerId = $args['id'];
+        var_dump(DB::find('collect',$passengerId,'passenger_id'));
+        render('test');
+        return $response;
+    });
+
+    $app->get('/test2', function (Request $request, Response $response, $args) {
+        //列出收藏站牌
+        $passengerId = 3;
+        var_dump(DB::find('collect',$passengerId,'passenger_id'));
+        render('test2');
+        return $response;
+    });
+
+
+
+    $app->get('/deletcollect', function (Request $request, Response $response, $args) {
+        //刪除收藏站牌
+        $passengerId = 3;
+        var_dump(DB::delete('collect',$passengerId,'passenger_id'));
+        return $response;
+    });
+
+
+
+
+
+
+
+    $app->get('/collect', function (Request $request, Response $response, $args) {
+
+        render('collect', ['msg' => '輸入要新增修改的資料',]);
+
+        return $response;
+    });
+    $app->post('/collect/add', function (Request $request, Response $response, $args) {
+
+        $data = $request->getParsedBody();//$_POST
+
+        $result = DB::create('collect', $data);
+
+        render('collect', ['msg' => $result ? '增加收藏站牌資訊成功':'增加收藏站牌資訊失敗',]);
+
+        return $response;
+    });
+    $app->post('/collect/update', function (Request $request, Response $response, $args) {
+
+        $data = $request->getParsedBody();
+
+        $passengerId = $data['passenger_id'];
+
+        $result = DB::update('collect', "`passenger_id` = {$passengerId}", $data);
+
+        render('collect', ['msg' => $result ? '修改站牌資訊成功':'修改站牌資訊失敗',]);
 
         return $response;
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    $app->get('/test2', function (Request $request, Response $response, $args) {
+        //新增
+        var_dump(DB::creat('collect',$data);
+        return $response;
+    });
+*/
     $app->post('/login', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody(); //$_POST
@@ -36,14 +205,15 @@ return function (App $app) {
         } else {
             render('index', ['msg' => 'wrong',]);
         }
-
         return $response;
     });
+
 
     /* =========================================================================
     * = DRIVER
     * =========================================================================
     **/
+    /*
     $app->get('/driver', function (Request $request, Response $response, $args) {
 
         var_dump(DB::fetchAll('driver'));
@@ -63,7 +233,7 @@ return function (App $app) {
 
         return $response;
     });
-
+    */
     /* =========================================================================
     * = STOP
     * =========================================================================
@@ -77,9 +247,19 @@ return function (App $app) {
 
     $app->post('/stop/add', function (Request $request, Response $response, $args) {
 
-        $data = $request->getParsedBody();
+        $data = $request->getParsedBody();//$_POST
+        
+        //$data['STOP_TIME'] = date('Y-m-d H:i:s');
+        $data['stop_longitude'] = 0;
+        $data['stop_latitude'] = 0;
 
         $result = DB::create('stop', $data);
+        /*
+            [
+                'stop_id' => '1',
+                'stop_name' => 'name'
+            ]
+        */
 
         render('stop', ['msg' => $result ? '增加站牌資訊成功':'增加站牌資訊失敗',]);
 
@@ -90,12 +270,13 @@ return function (App $app) {
 
         $data = $request->getParsedBody();
 
-        $stopId = $data['STOP_ID'];
+        $stopId = $data['stop_id'];
 
-        $result = DB::update('stop', "`STOP_ID` = {$stopId}", $data);
+        $result = DB::update('stop', "`stop_id` = {$stopId}", $data);
 
         render('stop', ['msg' => $result ? '修改站牌資訊成功':'修改站牌資訊失敗',]);
 
         return $response;
     });
+
 };

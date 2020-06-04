@@ -1,4 +1,0 @@
-<div>
-    TEST
-    <?= $msg ?>
-</div>
