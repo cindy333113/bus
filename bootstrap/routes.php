@@ -71,24 +71,22 @@ return function (App $app) {
         return $response;
     });
 //預約上車
-    $app->post('/stop/add', function (Request $request, Response $response, $args) {
+    $app->post('/geton', function (Request $request, Response $response, $args) {
 
-        $data = $request->getParsedBody();
+        
 
-        $result = DB::create('geton', $data);
+        $result = DB::fetchAll('geton');
 
-        render('geton', ['msg' => $result ? '增加站牌成功' : '增加站牌失敗',]);
+        render('geton', ['msg' => $result ]);
 
         return $response;
     });
 //預約下車
-    $app->post('/stop/add', function (Request $request, Response $response, $args) {
+    $app->post('/getoff', function (Request $request, Response $response, $args) {
 
-        $data = $request->getParsedBody();
+        $result = DB::fetchAll('getoff');
 
-        $result = DB::create('getoff', $data);
-
-        render('getoff', ['msg' => $result ? '增加站牌成功' : '增加站牌失敗',]);
+        render('getoff', ['msg' => $result ]);
 
         return $response;
     });
