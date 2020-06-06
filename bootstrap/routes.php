@@ -11,7 +11,7 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
-        render('index', [
+        render('index1', [
             'msg' => 'hello',
         ]);
 
