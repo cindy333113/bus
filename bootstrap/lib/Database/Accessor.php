@@ -45,7 +45,7 @@ class Accessor
         $host = $config['host'] ?? '127.0.0.1';
         $port = $config['port'] ?? '8889';
         $charset = $config['charset'] ?? 'utf8';
-        $database = $config['database'] ?? 'sa';
+        $database = $config['database'] ?? 'heybus';
         $username = $config['username'] ?? 'root';
         $password = $config['password'] ?? 'root';
 
