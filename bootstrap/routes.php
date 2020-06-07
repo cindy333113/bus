@@ -11,16 +11,16 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
-        $request->getAttribute('session');
-        echo '<pre>';var_dump($request->getAttribute('session'));
-
-        $response->getBody()->write(json_encode(['msg'=>'hello']));
-        /*
-        render('index', [
+        $request = $request->withAttribute('session', ['account'=>'tiny']);
+        $session = $request->getAttribute('session');
+        
+        $view = render('index', [
+            'session' => $session,
             'msg' => 'hello',
         ]);
-        */
 
+        $response->getBody()->write($view);
+        
         return $response;
     });
 
