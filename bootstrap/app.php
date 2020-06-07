@@ -18,5 +18,4 @@ $config = require __DIR__ . '/config/database.php';
 DB::connect($config);
 
 $routes = require __DIR__ . '/routes.php';
-$response = require __DIR__ . '/response.php';
 $middleware = require __DIR__ . '/middleware.php';

@@ -9,8 +9,6 @@ require __DIR__ . '/_bootstrap.php';
 
 $app = AppFactory::create();
 
-$app->add($response);
-
 // Register middleware
 $middleware($app);
 
