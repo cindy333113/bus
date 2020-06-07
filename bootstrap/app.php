@@ -9,6 +9,7 @@ require __DIR__ . '/lib/Database/DB.php';
 
 require __DIR__ . '/lib/Middleware/SessionMiddleware.php';
 
+require __DIR__ . '/lib/ResponseEmitter/ResponseEmitter.php';
 require __DIR__ . '/view.php';
 require __DIR__ . '/services.php';
 

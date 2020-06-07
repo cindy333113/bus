@@ -14,9 +14,12 @@ return function (App $app) {
         $request->getAttribute('session');
         echo '<pre>';var_dump($request->getAttribute('session'));
 
+        $response->getBody()->write(json_encode(['msg'=>'hello']));
+        /*
         render('index', [
             'msg' => 'hello',
         ]);
+        */
 
         return $response;
     });
