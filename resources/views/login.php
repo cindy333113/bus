@@ -104,17 +104,11 @@
 											</label>
 										</div>
 									</div>
-									<div class="col-md-12 text-left">
-										<a href="#">forgot password?</a>
-									</div>
 								</div>
 								<div class="row mb-3">
 									<div class="col-lg-12 text-right"><button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin"><span>Login</span></button></div>
 								</div>
                             </form>
-							<div class="naw-text mb-3">
-								<h5>New to Cloud?</h5>
-							</div>
 							<div class="row mb-3">
 								<div class="col-lg-6">
 									<a href="#" class="btn btn-primary btn-wd fb btn-block">

@@ -22,7 +22,8 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/customise.css">
+	<link rel="stylesheet" href="css/customise.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
@@ -61,17 +62,20 @@
             <tr>
                 <td>公車號</td>
                 <td>方向</td>
-                <td>站牌</td>
+				<td>站牌</td>
+				<td> 刪除</td>
             </tr>
             <tr>
                 <td>299</td>
                 <td>迴龍</td>
-                <td>捷運輔大站</td>
+				<td>捷運輔大站</td>
+				<td><span class="material-icons">delete</span></td>
             </tr>
             <tr>
                 <td>235</td>
                 <td>土城</td>
-                <td>新泰路口</td>
+				<td>新泰路口</td>
+				<td><span class="material-icons">delete</span></td>
             </tr>
             </table>
         </div><br>
