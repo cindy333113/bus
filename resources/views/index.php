@@ -1,7 +1,8 @@
 <?php
-foreach($stopList as $key => $stop){
-    echo $stop['stop_name'].'<br>';
+foreach($rows as $key => $stop){
+    echo $stop['route_name'].'<br>';
 };
+
 ?>
 
 

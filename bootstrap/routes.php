@@ -83,21 +83,6 @@ return function (App $app) {
         return $response;
     });  
 
-    $app->get('/test/{id}', function (Request $request, Response $response, $args) {
-        //列出收藏站牌
-        $passengerId = $args['id'];
-        var_dump(DB::find('collect',$passengerId,'passenger_id'));
-        render('test');
-        return $response;
-    });
-
-    $app->get('/test2', function (Request $request, Response $response, $args) {
-        //列出收藏站牌
-        $passengerId = 3;
-        var_dump(DB::find('collect',$passengerId,'passenger_id'));
-        render('test2');
-        return $response;
-    });
 
     $app->get('/deletcollect', function (Request $request, Response $response, $args) {
         //刪除收藏站牌
@@ -106,10 +91,13 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/collect', function (Request $request, Response $response, $args) {
-
-        render('collect', ['msg' => '輸入要新增修改的資料',]);
-
+    $app->get('/collect/{id}', function (Request $request, Response $response, $args) {
+        $passengerId = $args['id'];
+        $collectlist=DB::find('collect',$passengerId,'passenger_id');
+        render('collect', [
+            'msg' => '輸入要新增修改的資料',
+            'collectlist' => $collectlist,        
+        ]);
         return $response;
     });
     $app->post('/collect/add', function (Request $request, Response $response, $args) {
@@ -199,7 +187,7 @@ return function (App $app) {
     });
     
 //預約上車
-    $app->post('/stop/add', function (Request $request, Response $response, $args) {
+    $app->post('/stop/book/geton', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();//$_POST
         
@@ -207,7 +195,7 @@ return function (App $app) {
         $data['stop_longitude'] = 0;
         $data['stop_latitude'] = 0;
 
-        $result = DB::create('stop', $data);
+        $result = DB::create('geton', $data);
         /*
             [
                 'stop_id' => '1',
@@ -220,7 +208,7 @@ return function (App $app) {
         return $response;
     });
 //預約下車
-    $app->post('/stop/add', function (Request $request, Response $response, $args) {
+    $app->post('/stop/book/getoff', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
 
