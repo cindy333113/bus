@@ -8,6 +8,33 @@
         And s.stop_id=rs.stop_id And rs.route_id=r.route_id");
         $stmt->execute();
 
+
+
+
+/*
+function fetchroutename($conn)
+{
+    $stmt = $conn->prepare('SELECT route_name FROM `route`');
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_CLASS, 'route');
+    
+}
+
+
+
+
+
+
+    
+    function fetchAllUser($conn)
+{
+    $stmt = $conn->prepare('SELECT * FROM bus');
+    $stmt->execute();
+    
+    return $stmt->fetchAll(PDO::FETCH_CLASS,'BUS');
+}
+    
+
         $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $stmt;
@@ -142,5 +169,5 @@ function updatenextstop($conn, $d_account, $data=[])
     //var_dump($time);
     return $nextstop;//回傳 新建資料的結果(true or false)
 }
-
+*/
 ?>
