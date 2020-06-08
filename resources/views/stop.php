@@ -1,6 +1,6 @@
 <?php
 
-
+echo'hiiii'
 
 ?>
 
@@ -26,11 +26,11 @@
                         <form name="stopFrom" class="class__form"  action="/stop" method="post">
                             <div class="class__form_textField">
                                 <label class="form__textField_label">站牌id</label>
-                                <input type="text" name="STOP_ID" placeholder="站牌ID" required >
+                                <input type="text" name="stop_id" placeholder="站牌ID" required >
                             </div>
                             <div class="class__form_textField">
                                 <label class="form__textField_label">站牌名稱</label>
-                                <input type="text" name="STOP_NAME" placeholder="站牌名稱" required>
+                                <input type="text" name="stop_name" placeholder="站牌名稱" required>
                             </div>
                             <div class="class__form_btn">
                                 <button type="submit" class="btn submit__btn" onclick="stopFrom.action='/stop/add'">新增</button>

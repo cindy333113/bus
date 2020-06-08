@@ -7,6 +7,12 @@
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+<?php
+foreach($rows as $key => $stop){
+    echo $stop['route_name'].'<br>';
+};
+
+?>
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
@@ -138,6 +144,54 @@
               </div>
             </div>      
           </div>
+
+ <?php //var_dump($rows) 
+ //php -S localhost:8080 -t public public/index.php
+ ?>
+
+</table>
+<!DOCTYPE html>
+
+<html>
+
+
+
+
+<?php ?>
+
+<body class="page__login">
+    <div class="wrapper">
+        <div class="container">
+
+            <div class="class__board">
+                <div class="class__board_inner">
+                    <div class="class__board_logo">
+                        <h1 class="class__board_title">WEB Project</h1>
+                    </div>
+
+                    <p class="class__board_notice"> <?= $msg ?></p>
+
+                    <div class="class__board_block">
+                        <form class="class__form"  action="/login" method="post">
+                            <div class="class__form_textField">
+                                <label class="form__textField_label">使用者帳號</label>
+                                <input type="text" name="account" placeholder="使用者帳號" required >
+                            </div>
+                            <div class="class__form_textField">
+                                <label class="form__textField_label">使用者密碼</label>
+                                <input type="password" name="password" placeholder="使用者密碼" required>
+                            </div>
+                            <div class="class__form_btn">
+                                <button type="submit" class="btn submit__btn">登入</button>
+                                <button type="button" class="btn general__btn" onclick="location.href='register.php'">註冊</button>
+                                <p> hola </p>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
         </div>
 		</div>
     </section>
@@ -170,6 +224,8 @@
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
+
+</html>
 
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
