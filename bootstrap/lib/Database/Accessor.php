@@ -10,6 +10,7 @@
 namespace Database;
 
 use PDO;
+use PDOException;
 
 class Accessor
 {
@@ -170,15 +171,29 @@ class Accessor
      */
     public function update($tableName, $where, $newData)
     {
-        $setArray = function($field) {
+        $setArray = function ($field) {
             return "`{$field}` = :{$field}";
         };
-       
+
         $updateData = implode(",", array_map($setArray, array_keys($newData)));
-        
+
         $query = $this->getConnection()
             ->prepare("UPDATE {$tableName} SET {$updateData} WHERE {$where}");
 
         return $query->execute($newData);
+    }
+
+
+
+
+
+    public function delete($tableName, $data, $fieldName = null)
+    {
+        $table = strtoupper($tableName);
+        $field = strtoupper($fieldName ?? "{$tableName}_id");
+        
+        $query = $this->getConnection()
+            ->prepare("DELETE FROM `{$table}` WHERE $field = {$data}");
+        return $query->execute();
     }
 }

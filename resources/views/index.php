@@ -1,12 +1,23 @@
 <?php
-
-
+foreach($rows as $key => $stop){
+    echo $stop['route_name'].'<br>';
+};
 
 ?>
 
+
+
+ <?php //var_dump($rows) 
+ //php -S localhost:8080 -t public public/index.php
+ ?>
+
+</table>
 <!DOCTYPE html>
 
 <html>
+
+
+
 
 <?php ?>
 
@@ -47,6 +58,7 @@
     </div>
 
 </body>
+
 
 </html>
 
