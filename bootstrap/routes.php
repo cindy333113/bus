@@ -25,6 +25,14 @@ return function (App $app) {
         return $response;
     });
 
+    $app->get('/login', function (Request $request, Response $response, $args) {
+
+        $view = render('login');
+        $response->getBody()->write($view);
+
+        return $response;
+    });
+
     $app->post('/login', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody(); //$_POST
