@@ -11,8 +11,9 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
-        $request = $request->withAttribute('session', ['account'=>'tiny']);
         $session = $request->getAttribute('session');
+        $session->put('user',['name' => 'tiny']);
+        $session->push('user.name','Tiny');
         
         $view = render('index', [
             'session' => $session,
