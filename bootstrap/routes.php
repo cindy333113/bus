@@ -66,6 +66,14 @@ return function (App $app) {
         return $response;
         return $response;
     });
+    $app->post('/geton/delete', function (Request $request, Response $response, $args) {
+        //刪除預約上車
+        $data = $request->getParsedBody();
+        $geton_id = $data['geton_id'];
+        $result = DB::delete('geton', $geton_id, 'geton_id');
+        render('collect', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
+        return $response;
+    });
 /*
     $app->get('/temap', function (Request $request, Response $response, $args) { //顯示站名
         //列出所有站牌
