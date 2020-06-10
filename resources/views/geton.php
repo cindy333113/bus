@@ -36,6 +36,10 @@
                                 <label class="form__textField_label">方向id</label>
                                 <input type="text" name="direction" placeholder="方向id" required >
                             </div>
+                            <div class="class__form_textField">
+                                <label class="form__textField_label">是否需要特殊預約</label>
+                                <input type="text" name="unusal" placeholder="特殊" required >
+                            </div>
                             <div class="class__form_btn">
                                 <button type="submit" class="btn submit__btn" onclick="collectFrom.action='/geton/add'">新增</button>
                             </div>

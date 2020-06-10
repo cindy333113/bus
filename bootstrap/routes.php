@@ -56,8 +56,10 @@ return function (App $app) {
 
         
         $directionId = $data['direction'];
+        $unusal = $data['unusal'];
         $result =$conn = DB::getconnection();
-        $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`) VALUES ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id)");
+        $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
+        ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
