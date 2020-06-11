@@ -12,11 +12,8 @@ return function (App $app) {
     $app->get('/', function (Request $request, Response $response, $args) {
 
         $session = $request->getAttribute('session');
-        $session->put('user',['name' => 'tiny']);
-        $session->push('user.name','Tiny');
         
         $view = render('index', [
-            'session' => $session,
             'msg' => 'hello',
         ]);
 
@@ -26,7 +23,7 @@ return function (App $app) {
     });
 
     $app->get('/login', function (Request $request, Response $response, $args) {
-
+        
         $view = render('login');
         $response->getBody()->write($view);
 

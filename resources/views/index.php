@@ -1,7 +1,5 @@
 <?php
 
-echo '<pre>';var_dump($session);
-
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +32,7 @@ echo '<pre>';var_dump($session);
                             </div>
                             <div class="class__form_btn">
                                 <button type="submit" class="btn submit__btn">登入</button>
-                                <button type="button" class="btn general__btn" onclick="location.href='register.php'">註冊</button>
+                                <button type="button" class="btn general__btn" onclick="location.href='/login'">註冊</button>
                             </div>
 
                         </form>
