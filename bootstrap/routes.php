@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -11,41 +12,58 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
-        $session = $request->getAttribute('session');
-        
         $view = render('index', [
             'msg' => 'hello',
         ]);
 
         $response->getBody()->write($view);
-        
+
         return $response;
     });
 
     $app->get('/login', function (Request $request, Response $response, $args) {
-        
+
         $view = render('login');
         $response->getBody()->write($view);
 
         return $response;
     });
 
-    $app->post('/login', function (Request $request, Response $response, $args) {
+    $app->post('/login', function (Request $request, Response $response, $args) use ($app) {
 
         $data = $request->getParsedBody(); //$_POST
 
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
 
-        $result = verifyPassengerLogin($account, $password);
-        if ($result) {
-            render('index', ['msg' => 'success',]);
-        } else {
-            render('index', ['msg' => 'wrong',]);
+        if ($id = Auth::login($account, $password)) {
+            $_SESSION['auth'] = $id;
         }
 
-        return $response;
+        return $response->withHeader('Location', '/user');;
     });
+
+    $app->post('/logout', function (Request $request, Response $response, $args) use ($app) {
+
+        unset($_SESSION['auth']);
+
+        return $response->withHeader('Location', '/');
+    });
+
+    /* =========================================================================
+    * = DRIVER
+    * =========================================================================
+    **/
+    $app->get('/user', function (Request $request, Response $response, $args) {
+
+        $user = $request->getAttribute('user');
+
+        $view = render('user',['user' => $user]);
+        $response->getBody()->write($view);
+
+        return $response;
+
+    })->add(new AuthMiddleware());
 
     /* =========================================================================
     * = DRIVER
@@ -89,7 +107,7 @@ return function (App $app) {
 
         $result = DB::create('stop', $data);
 
-        render('stop', ['msg' => $result ? '增加站牌資訊成功':'增加站牌資訊失敗',]);
+        render('stop', ['msg' => $result ? '增加站牌資訊成功' : '增加站牌資訊失敗',]);
 
         return $response;
     });
@@ -102,7 +120,7 @@ return function (App $app) {
 
         $result = DB::update('stop', "`STOP_ID` = {$stopId}", $data);
 
-        render('stop', ['msg' => $result ? '修改站牌資訊成功':'修改站牌資訊失敗',]);
+        render('stop', ['msg' => $result ? '修改站牌資訊成功' : '修改站牌資訊失敗',]);
 
         return $response;
     });
