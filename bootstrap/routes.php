@@ -178,15 +178,32 @@ return function (App $app) {
     * =========================================================================
     **/
 
-    $app->get('/stop', function (Request $request, Response $response, $args) {
+    $app->get('/booking', function (Request $request, Response $response, $args) {
 
-        render('stop', ['msg' => '增加站牌資訊',]);
+        render('booking');
+
+        return $response;
+    });
+
+    $app->get('/myfavourite', function (Request $request, Response $response, $args) {
+
+        render('myfavourite');
+
+        return $response;
+    });
+
+
+    $app->post('/booking', function (Request $request, Response $response, $args) {
+
+        $data = $request->getParsedBody();
+
+        var_dump($data);
 
         return $response;
     });
     
 //預約上車
-    $app->post('/stop/book/geton', function (Request $request, Response $response, $args) {
+    $app->post('/booking/geton', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();//$_POST
         
@@ -217,7 +234,7 @@ return function (App $app) {
 
         return $response;
     });
-/*
+
     $app->post('/stop/update', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
@@ -254,5 +271,5 @@ return function (App $app) {
 
         return $response;
     });
-*/
+
 };
