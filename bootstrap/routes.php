@@ -116,6 +116,12 @@ return function (App $app) {
             'msg' => '輸入要新增修改的資料',
             'stopList' => $a,
         ]);
+    });  
+
+    $app->get('/deletcollect', function (Request $request, Response $response, $args){
+        //刪除收藏站牌
+        $passengerId = 3;
+        var_dump(DB::delete('collect',$passengerId,'passenger_id'));
         return $response;
     });
     /*$app->get('/collect', function (Request $request, Response $response, $args) {
@@ -226,15 +232,32 @@ return function (App $app) {
     * =========================================================================
     **/
 
-    $app->get('/stop', function (Request $request, Response $response, $args) {
+    $app->get('/booking', function (Request $request, Response $response, $args) {
 
-        render('stop', ['msg' => '增加站牌資訊',]);
+        render('booking');
 
         return $response;
     });
 
-    //預約上車
-    $app->post('/stop/book/geton', function (Request $request, Response $response, $args) {
+    $app->get('/myfavourite', function (Request $request, Response $response, $args) {
+
+        render('myfavourite');
+
+        return $response;
+    });
+
+
+    $app->post('/booking', function (Request $request, Response $response, $args) {
+
+        $data = $request->getParsedBody();
+
+        var_dump($data);
+
+        return $response;
+    });
+    
+//預約上車
+    $app->post('/booking/geton', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody(); //$_POST
 
@@ -265,7 +288,6 @@ return function (App $app) {
 
         return $response;
     });
-    /*
     $app->post('/stop/update', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
@@ -302,5 +324,5 @@ return function (App $app) {
 
         return $response;
     });
-*/
+
 };
