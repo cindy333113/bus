@@ -1,7 +1,5 @@
 <?php
 
-
-
 ?>
 
 <!DOCTYPE html>
@@ -20,24 +18,11 @@
                         <h1 class="class__board_title">WEB Project</h1>
                     </div>
 
-                    <p class="class__board_notice"> <?= $msg ?></p>
-
                     <div class="class__board_block">
-                        <form class="class__form"  action="/login" method="post">
-                            <div class="class__form_textField">
-                                <label class="form__textField_label">使用者帳號</label>
-                                <input type="text" name="account" placeholder="使用者帳號" required >
-                            </div>
-                            <div class="class__form_textField">
-                                <label class="form__textField_label">使用者密碼</label>
-                                <input type="password" name="password" placeholder="使用者密碼" required>
-                            </div>
-                            <div class="class__form_btn">
-                                <button type="submit" class="btn submit__btn">登入</button>
-                                <button type="button" class="btn general__btn" onclick="location.href='register.php'">註冊</button>
-                            </div>
-
-                        </form>
+                        <h3> <?= $msg??'' ?>歡迎來到首頁 繼續嘗試其他功能？</h3>
+                        <div class="class__form_btn">
+                            <button type="button" class="btn general__btn" onclick="location.href='/login'">前往登入</button>
+                        </div>
                     </div>
                 </div>
 
@@ -48,4 +33,3 @@
 </body>
 
 </html>
-

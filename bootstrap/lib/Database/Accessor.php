@@ -141,4 +141,44 @@ class Accessor
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * 獲取資料陣列新增至指定資料表
+     * 
+     * @param  string  $tableName
+     * @param  array  $data
+     * @return boolean
+     */
+    public function create($tableName, $data)
+    {
+        $insertFields = implode(",", array_keys($data));
+        $insertValues = implode(",:", array_keys($data));
+
+        $query = $this->getConnection()
+            ->prepare("INSERT INTO `{$tableName}`({$insertFields}) VALUES (:{$insertValues})");
+
+        return $query->execute($data);
+    }
+
+    /**
+     * 獲取資料陣列新增至指定資料表
+     * 
+     * @param  string  $tableName
+     * @param  string   $whereData
+     * @param  array   $newData
+     * @return boolean
+     */
+    public function update($tableName, $where, $newData)
+    {
+        $setArray = function($field) {
+            return "`{$field}` = :{$field}";
+        };
+       
+        $updateData = implode(",", array_map($setArray, array_keys($newData)));
+        
+        $query = $this->getConnection()
+            ->prepare("UPDATE {$tableName} SET {$updateData} WHERE {$where}");
+
+        return $query->execute($newData);
+    }
 }

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -11,35 +12,71 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
 
-        render('index', [
+        $view = render('index', [
             'msg' => 'hello',
         ]);
+
+        $response->getBody()->write($view);
 
         return $response;
     });
 
-    $app->post('/login', function (Request $request, Response $response, $args) {
+    $app->get('/login', function (Request $request, Response $response, $args) {
 
-        $data = $request->getParsedBody();
+        $view = render('login');
+        $response->getBody()->write($view);
+
+        return $response;
+    });
+
+    $app->post('/login', function (Request $request, Response $response, $args) use ($app) {
+
+        $data = $request->getParsedBody(); //$_POST
 
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
 
-        $result = verifyPassengerLogin($account, $password);
-        if($result)
-        {
-            render('index', ['msg' => 'success',]);
-        } else {
-            render('index', ['msg' => 'wrong',]);
+        if ($id = Auth::login($account, $password)) {
+            $_SESSION['auth'] = $id;
         }
 
-        return $response;
+        return $response->withHeader('Location', '/user');;
+    });
+
+    $app->post('/logout', function (Request $request, Response $response, $args) use ($app) {
+
+        unset($_SESSION['auth']);
+
+        return $response->withHeader('Location', '/');
     });
 
     /* =========================================================================
     * = DRIVER
     * =========================================================================
     **/
+    $app->get('/user', function (Request $request, Response $response, $args) {
+
+        $user = $request->getAttribute('user');
+
+        $view = render('user',['user' => $user]);
+        $response->getBody()->write($view);
+
+        return $response;
+
+    })->add(new AuthMiddleware());
+
+    /* =========================================================================
+    * = DRIVER
+    * =========================================================================
+    **/
+    $app->get('/driver', function (Request $request, Response $response, $args) {
+
+        echo '<pre>';
+        var_dump(DB::fetchAll('driver'));
+
+        return $response;
+    });
+
     $app->get('/driver/{id}', function (Request $request, Response $response, $args) {
 
         $driverId = $args['id'];
@@ -54,24 +91,37 @@ return function (App $app) {
     });
 
     /* =========================================================================
-    * = USERS
+    * = STOP
     * =========================================================================
     **/
-    $app->get('/users', function (Request $request, Response $response, $args) {
+    $app->get('/stop', function (Request $request, Response $response, $args) {
 
-        $result = DB::fetchAll('users');
-
-        $response->getBody()->write(json_encode($result));
+        render('stop', ['msg' => '增加站牌資訊',]);
 
         return $response;
     });
 
-    $app->get('/users/{id}', function (Request $request, Response $response, $args) {
+    $app->post('/stop/add', function (Request $request, Response $response, $args) {
 
-        $id = $args['id'];
-        $result = DB::find('users', $id);
+        $data = $request->getParsedBody();
 
-        $response->getBody()->write(json_encode($result));
+        $result = DB::create('stop', $data);
+
+        render('stop', ['msg' => $result ? '增加站牌資訊成功' : '增加站牌資訊失敗',]);
+
+        return $response;
+    });
+
+    $app->post('/stop/update', function (Request $request, Response $response, $args) {
+
+        $data = $request->getParsedBody();
+
+        $stopId = $data['STOP_ID'];
+
+        $result = DB::update('stop', "`STOP_ID` = {$stopId}", $data);
+
+        render('stop', ['msg' => $result ? '修改站牌資訊成功' : '修改站牌資訊失敗',]);
+
         return $response;
     });
 };
