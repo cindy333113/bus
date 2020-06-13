@@ -102,7 +102,7 @@ return function (App $app) {
     * =========================================================================
     **/
 
-    $app->get('/collect', function (Request $request, Response $response, $args) {
+    $app->get('/myfavourite', function (Request $request, Response $response, $args) {
         //列出id=?的顧客所收藏的站牌及路線
         //$passengerId = $args['id'];
         $passengerId = 2;
@@ -112,10 +112,11 @@ return function (App $app) {
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         var_dump($a);
         //echo json_encode($a, JSON_UNESCAPED_UNICODE);
-        render('collect', [
+        render('myfavourite', [
             'msg' => '輸入要新增修改的資料',
             'stopList' => $a,
         ]);
+        return $response;
     });  
 
     $app->get('/deletcollect', function (Request $request, Response $response, $args){
@@ -235,13 +236,6 @@ return function (App $app) {
     $app->get('/booking', function (Request $request, Response $response, $args) {
 
         render('booking');
-
-        return $response;
-    });
-
-    $app->get('/myfavourite', function (Request $request, Response $response, $args) {
-
-        render('myfavourite');
 
         return $response;
     });

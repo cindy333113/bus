@@ -62,19 +62,16 @@
            <table class="myList" style="position:relative; margin: 35px;">
             <tr>
                 <td>公車號</td>
-                <td>方向</td>
 				<td>站牌</td>
 				<td>刪除</td>
             </tr>
             <tr>
-                <td>299</td>
-                <td>迴龍</td>
-				<td>捷運輔大站</td>
-				<td><span class="material-icons">delete</span></td>
+                <td><?php $stop_name?></td>
+				<td><?php $bus_name ?></td>
+				<td href="/deletecollect" ><span class="material-icons">delete</span></td>
             </tr>
             <tr>
                 <td>235</td>
-                <td>土城</td>
 				<td>新泰路口</td>
 				<td><span class="material-icons">delete</span></td>
             </tr>
