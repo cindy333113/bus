@@ -130,7 +130,7 @@
 									</div>
 									<div class="col-lg align-items-end">
 										<div class="form-group">
-											<label for="#">是否需要特殊預約</label>
+											<label for="#">是否需要特殊</label>
 											<div class="form-field">
 												<div class="select-wrap">
 													<select name="unusal" id="" class="form-control">
