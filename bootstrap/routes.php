@@ -176,24 +176,39 @@ return function (App $app) {
     $app->get('/test2', function (Request $request, Response $response, $args) {
         //新增
         var_dump(DB::creat('collect',$data);
+        $response->getBody()->write($view);
+
+        return $response;
+    });
+
+    $app->get('/login', function (Request $request, Response $response, $args) {
+
+        $view = render('login');
+        $response->getBody()->write($view);
+
         return $response;
     });
 */
 
-    $app->post('/login', function (Request $request, Response $response, $args) {
+    $app->post('/login', function (Request $request, Response $response, $args) use ($app) {
 
         $data = $request->getParsedBody(); //$_POST
 
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
 
-        $result = verifyPassengerLogin($account, $password);
-        if ($result) {
-            render('index', ['msg' => 'success',]);
-        } else {
-            render('index', ['msg' => 'wrong',]);
+        if ($id = Auth::login($account, $password)) {
+            $_SESSION['auth'] = $id;
         }
-        return $response;
+
+        return $response->withHeader('Location', '/user');;
+    });
+
+    $app->post('/logout', function (Request $request, Response $response, $args) use ($app) {
+
+        unset($_SESSION['auth']);
+
+        return $response->withHeader('Location', '/');
     });
 
 
@@ -202,8 +217,24 @@ return function (App $app) {
     * =========================================================================
     **/
     /*
+    $app->get('/user', function (Request $request, Response $response, $args) {
+
+        $user = $request->getAttribute('user');
+
+        $view = render('user',['user' => $user]);
+        $response->getBody()->write($view);
+
+        return $response;
+
+    })->add(new AuthMiddleware());
+
+    /* =========================================================================
+    * = DRIVER
+    * =========================================================================
+    **/
     $app->get('/driver', function (Request $request, Response $response, $args) {
 
+        echo '<pre>';
         var_dump(DB::fetchAll('driver'));
 
         return $response;
@@ -380,30 +411,16 @@ return function (App $app) {
 
     */
 //預約上車
-   /*$app->post('/booking/geton', function (Request $request, Response $response, $args) {
+    $app->post('/geton', function (Request $request, Response $response, $args) {
 
-        $data = $request->getParsedBody(); //$_POST
-
-        //$data['STOP_TIME'] = date('Y-m-d H:i:s');
-        $data['stop_longitude'] = 0;
-        $data['stop_latitude'] = 0;
-
-        $result = DB::create('geton', $data);
-        /*
-            [
-                'stop_id' => '1',
-                'stop_name' => 'name'
-            ]
-        
+        $result = DB::fetchAll('geton');
 
         render('geton', ['msg' => $result]);
 
         return $response;
-    }); */
-    //預約下車
-    $app->post('/booking/getoff/add', function (Request $request, Response $response, $args) {
-
-        $data = $request->getParsedBody();
+    });
+//預約下車
+    $app->post('/getoff', function (Request $request, Response $response, $args) {
 
         $result = DB::fetchAll('getoff');
 
@@ -432,18 +449,42 @@ return function (App $app) {
         
         $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE:FALSE;
 
-        render('index', ['isBlack' => $isBlack]);
+        render('black_list', ['isBlack' => $isBlack]);
 
         return $response;
     });
     //記黑名單
-    $app->post('/', function (Request $request, Response $response, $args) {
+    $app->post('/blacklist/add', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
 
         $result = DB::create('black_list', $data);
 
         render('black_list', ['msg' => $result ? '黑名單新增一次' : '新增黑名單失敗',]);
+
+        return $response;
+    });
+
+    $app->get('/bus/{id}', function (Request $request, Response $response, $args) {
+
+        $busId = $args['id'];
+
+        $bus = DB::find('bus', $busId);
+        $departureTime = $bus['time'];
+        $countOfStop = countStopBusPassed($departureTime);
+
+        $routeId = $bus['route_id'];
+
+        $amountStopOfRoute = countStopOfRoute($routeId);
+
+        $isGoing = floor($countOfStop/$amountStopOfRoute)/2 == 0 ? '1':'0';
+
+        $StopOfCurrentDrive = $countOfStop%$amountStopOfRoute;
+        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive; 
+
+        $stopList = DB::fetchAll('stop');
+
+        render('bus', ['bus' => $bus, 'departureTime' => $departureTime, 'currentOrder' => $currentOrder]);
 
         return $response;
     });

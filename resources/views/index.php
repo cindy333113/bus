@@ -169,8 +169,6 @@ foreach($rows as $key => $stop){
                         <h1 class="class__board_title">WEB Project</h1>
                     </div>
 
-                    <p class="class__board_notice"> <?= $msg ?></p>
-
                     <div class="class__board_block">
                         <form class="class__form"  action="/login" method="post">
                             <div class="class__form_textField">
