@@ -1,5 +1,4 @@
-
-
+<p class="class__board_notice"> <?= $msg ?></p>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -79,7 +78,7 @@
 								<td><?= $getonResult['stop_id'] ?></td>
 			
 							</tr>
-						<?php// } ?>
+						
 <!--
 						<tr>
 							<td>299</td>
@@ -101,13 +100,12 @@
 					</table>
 				</div><br>
 			</section>
-
-			<form action="/booking" method="POST">
+			<form action="/booking/geton/add" method="POST">
 				<div class="row">
 					<h3>預約上車</h3><br>
 					<div class="col-md-12">
 						<div class="search-wrap-1 ftco-animate p-4">
-							<form action="#" class="search-property-1">
+							<form action="/booking" method="post" class="search-property-1">
 								<div class="row">
 
 									<div class="col-lg align-items-end">
@@ -115,7 +113,7 @@
 
 											<label for="#">公車號</label>
 											<div class="form-field">
-												<input type="text" name="bus_name" class="form-control" placeholder="輸入公車號">
+												<input type="text" name="route_name" class="form-control" placeholder="輸入公車號">
 											</div>
 										</div>
 									</div>
@@ -129,14 +127,28 @@
 										</div>
 									</div>
 
+									</div>
+									<div class="col-lg align-items-end">
+										<div class="form-group">
+											<label for="#">是否需要特殊預約</label>
+											<div class="form-field">
+												<div class="select-wrap">
+													<select name="unusal" id="" class="form-control">
+														<option value="1">是</option>
+														<option value="0">否</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="col-lg align-items-end">
 										<div class="form-group">
 											<label for="#">站牌</label>
 											<div class="form-field">
 												<div class="select-wrap">
-													<select name="bus_stop" id="" class="form-control">
-														<option value="1">捷運輔大站</option>
-														<option value="">盲人重建院</option>
+													<select name="stop_name" id="" class="form-control">
+														<option value="捷運輔大站">捷運輔大站</option>
+														<option value="盲人重建院">盲人重建院</option>
 														<option value="">海山里</option>
 														<option value="">新泰中正路口</option>
 														<option value="">材試所</option>
@@ -158,7 +170,7 @@
 									<div class="col-lg align-self-end">
 										<div class="form-group">
 											<div class="form-field">
-												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/booking/geton">
+												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/booking/geton/add" method="post">
 											</div>
 										</div>
 									</div>
