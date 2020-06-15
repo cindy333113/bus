@@ -58,7 +58,7 @@
 					<h2 class="mb-4">預約清單</h2>
 				</div>
 			</div>
-			<section class="myFav">
+			<section class="booking">
 				<div style="width:800px; height:300px;border-style:dotted;border-size:10px">
 					<table class="myList" style="position:relative; margin: 35px;width:400px">
 						<tr>
@@ -66,20 +66,43 @@
 							<td>方向 </td>
 							<td>站牌 </td>
 							<td>進站時間</td>
+							<td>需要協助</td>
 							<td> 刪除 </td>
 						</tr>
+
+						<?php foreach ($stopList as $key => $stop) { ?>
+							<tr>
+								<td>
+									<?= $stop['route_name'] ?></td>
+
+								<td><?= $stop['stop_name'] ?></td>
+								<td>
+									<form name="deleteForm" action="/myfavourite/delete" method="post">
+										<input type="hidden" name="id" value=<?= $stop['collect_id'] ?> />
+										<button type="submit" style="background:transparent;border:none;">
+											<span class="material-icons">
+												delete
+											</span>
+										</button>
+									</form>
+								</td>
+							</tr>
+						<?php } ?>
+
 						<tr>
 							<td>299</td>
 							<td>迴龍</td>
 							<td>捷運輔大站</td>
 							<td>10 min</td>
-							<td><span class="material-icons">delete</span></td>
+							<td>否</td>
+							<td><span class="material-icons"><a href="/myfavourite/delete">delete</a></span></td>
 						</tr>
 						<tr>
 							<td>235</td>
 							<td>土城</td>
 							<td>新泰路口</td>
 							<td>5 min</td>
+							<td>是</td>
 							<td><span class="material-icons">delete</span></td>
 						</tr>
 					</table>
@@ -142,7 +165,7 @@
 									<div class="col-lg align-self-end">
 										<div class="form-group">
 											<div class="form-field">
-												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/geton">
+												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/booking/geton">
 											</div>
 										</div>
 									</div>
@@ -209,7 +232,7 @@
 									<div class="col-lg align-self-end">
 										<div class="form-group">
 											<div class="form-field">
-												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/geton">
+												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/booking/geton">
 											</div>
 										</div>
 									</div>

@@ -2,22 +2,14 @@
 
 declare(strict_types=1);
 
+use Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    /*$app->get('/', function (Request $request, Response $response, $args) {
-        $routes = DB::fetchAll('route');
-        $route = DB::find('route','842','route_name');
-        render('index', [
-            'msg' => 'HAHA',
-            'rows' => $routes,
-            'row' => $route,
-        ]);
-        return $response;
-    });*/
+
 /*
     $app->get('/sql', function (Request $request, Response $response, $args) {
         $conn = DB::getconnection();
@@ -33,14 +25,28 @@ return function (App $app) {
     * = GETON
     * =========================================================================
     **/
-    $app->get('/geton', function (Request $request, Response $response, $args) {
-        render('geton', [
+    $app->get('/index', function (Request $request, Response $response, $args) {
+        render('index', [
+            'msg' => '首頁',
+            
+        ]);
+        return $response;
+    });
+    $app->get('/english', function (Request $request, Response $response, $args) {
+        render('english', [
             'msg' => '輸入要預約上車的資料',
             
         ]);
         return $response;
     });
-    $app->post('/geton/add', function (Request $request, Response $response, $args) {
+    $app->get('/booking', function (Request $request, Response $response, $args) {
+        render('booking', [
+            'msg' => '輸入要預約上車的資料',
+            
+        ]);
+        return $response;
+    });
+    $app->post('/booking/geton/add', function (Request $request, Response $response, $args) {
         //找出預約的車子
         $data = $request->getParsedBody();
         $passengerId = 3;
@@ -68,7 +74,7 @@ return function (App $app) {
         return $response;
         return $response;
     });
-    $app->post('/geton/delete', function (Request $request, Response $response, $args) {
+    $app->post('/booking/geton/delete', function (Request $request, Response $response, $args) {
         //刪除預約上車
         $data = $request->getParsedBody();
         $geton_id = $data['geton_id'];
@@ -88,26 +94,25 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/', function (Request $request, Response $response, $args) { //顯示站名
-        $routes = DB::fetchAll('route');
-        render('index', [
-            'msg' => 'HAHA',
-            'rows' => $routes,
-        ]);
-        return $response;
-    });
+   
 */
     /* =========================================================================
     * = COLLECT
     * =========================================================================
     **/
+    $app->get('/', function (Request $request, Response $response, $args) { //顯示站名
+        render('index', [
+        ]);
+        return $response;
+    });
 
     $app->get('/myfavourite', function (Request $request, Response $response, $args) {
         //列出id=?的顧客所收藏的站牌及路線
         //$passengerId = $args['id'];
+        //$passengerId=$request->getAttribute('user');
         $passengerId = 2;
         $conn = DB::getconnection();
-        $stmt = $conn->prepare("SELECT stop_name,r.route_name from collect c,stop s,route r where passenger_id=$passengerId and c.stop_id=s.stop_id and c.route_id=r.route_id ");
+        $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id from collect c,stop s,route r where passenger_id=$passengerId and c.stop_id=s.stop_id and c.route_id=r.route_id ");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         var_dump($a);
@@ -117,24 +122,20 @@ return function (App $app) {
             'stopList' => $a,
         ]);
         return $response;
-    });  
+    });//->add(new AuthMiddleware);  
 
-    $app->get('/deletcollect', function (Request $request, Response $response, $args){
+    $app->post('/myfavourite/delete', function (Request $request, Response $response, $args){
         //刪除收藏站牌
-        $passengerId = 3;
-        var_dump(DB::delete('collect',$passengerId,'passenger_id'));
+        $data = $request->getParsedBody(); //$_POST
+        $collectId = $data['id'];
+
+        DB::delete('collect',$collectId,'collect_id');
+        header("Location:/myfavourite");
         return $response;
+        //->withHeader('Location','/myfavourite')->withStatus(301);
     });
-    /*$app->get('/collect', function (Request $request, Response $response, $args) {
-        $passengerId = 2;
-        $collectlist=DB::find('collect',$passengerId,'passenger_id');
-        render('collect', [
-            'msg' => '輸入要新增修改的資料',
-            'collectlist' => $collectlist,        
-        ]);
-        return $response;
-    });*/
-    $app->post('/collect/add', function (Request $request, Response $response, $args) {
+    
+    $app->post('/myfavourite/add', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody(); //$_POST
         var_dump($data);
@@ -156,14 +157,7 @@ return function (App $app) {
 
         return $response;
     });
-    $app->post('/collect/delete', function (Request $request, Response $response, $args) {
-        //刪除收藏站牌
-        $data = $request->getParsedBody();
-        $collectId = $data['passenger_id'];
-        $result = DB::delete('collect', $collectId, 'collect_id');
-        render('collect', ['msg' => $result ? '刪除收藏站牌資訊成功' : '刪除收藏站牌資訊失敗',]);
-        return $response;
-    });
+    
     /*
     $app->post('/collect/update', function (Request $request, Response $response, $args) {
 
@@ -233,25 +227,160 @@ return function (App $app) {
     * =========================================================================
     **/
 
-    $app->get('/booking', function (Request $request, Response $response, $args) {
+   /*  $app->get('/booking', function (Request $request, Response $response, $args) {
 
         render('booking');
 
         return $response;
     });
 
-
-    $app->post('/booking', function (Request $request, Response $response, $args) {
-
-        $data = $request->getParsedBody();
-
-        var_dump($data);
-
-        return $response;
-    });
+/*
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    */
 //預約上車
-    $app->post('/booking/geton', function (Request $request, Response $response, $args) {
+   /*$app->post('/booking/geton', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody(); //$_POST
 
@@ -265,14 +394,14 @@ return function (App $app) {
                 'stop_id' => '1',
                 'stop_name' => 'name'
             ]
-        */
+        
 
         render('geton', ['msg' => $result]);
 
         return $response;
-    });
+    }); */
     //預約下車
-    $app->post('/stop/book/getoff', function (Request $request, Response $response, $args) {
+    $app->post('/booking/getoff/add', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
 
