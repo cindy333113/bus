@@ -43,7 +43,7 @@ return function (App $app) {
     $app->post('/booking/geton/add', function (Request $request, Response $response, $args) {
         //找出預約的車子
         $data = $request->getParsedBody();
-        $passengerId = 3;
+        $passengerId = 2;
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
@@ -56,16 +56,14 @@ return function (App $app) {
 
         
         $directionId = $data['direction'];
-        $unusal = $data['unusal'];
+        $unusal = $data['unusal']?? "";
         $result =$conn = DB::getconnection();
         $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
         ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
-        render('geton', ['msg' => $result ? '預約成功' : '預約失敗',]);
-
-        return $response;
+        render('booking', ['msg' => $result ? '預約成功' : '預約失敗',]);
         return $response;
     });
     $app->post('/booking/geton/delete', function (Request $request, Response $response, $args) {
