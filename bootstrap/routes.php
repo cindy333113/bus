@@ -242,4 +242,28 @@ return function (App $app) {
         return $response;
     });
 
+    $app->get('/bus/{id}', function (Request $request, Response $response, $args) {
+
+        $busId = $args['id'];
+
+        $bus = DB::find('bus', $busId);
+        $departureTime = $bus['time'];
+        $countOfStop = countStopBusPassed($departureTime);
+
+        $routeId = $bus['route_id'];
+
+        $amountStopOfRoute = countStopOfRoute($routeId);
+
+        $isGoing = floor($countOfStop/$amountStopOfRoute)/2 == 0 ? '1':'0';
+
+        $StopOfCurrentDrive = $countOfStop%$amountStopOfRoute;
+        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive; 
+
+        $stopList = DB::fetchAll('stop');
+
+        render('bus', ['bus' => $bus, 'departureTime' => $departureTime, 'currentOrder' => $currentOrder]);
+
+        return $response;
+    });
+
 };

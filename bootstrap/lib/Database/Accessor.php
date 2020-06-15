@@ -196,4 +196,5 @@ class Accessor
             ->prepare("DELETE FROM `{$table}` WHERE $field = {$data}");
         return $query->execute();
     }
+    
 }
