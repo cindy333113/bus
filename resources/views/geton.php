@@ -23,7 +23,7 @@
                     <p class="class__board_notice"> <?= $msg ?></p>
 
                     <div class="class__board_block">
-                        <form name="collectFrom" class="class__form"  action="/collect" method="post">
+                        <form name="collectFrom" class="class__form"  action="/booking" method="post">
                             <div class="class__form_textField">
                                 <label class="form__textField_label">站牌name</label>
                                 <input type="text" name="stop_name" placeholder="站牌name" required >
@@ -41,7 +41,7 @@
                                 <input type="text" name="unusal" placeholder="特殊" required >
                             </div>
                             <div class="class__form_btn">
-                                <button type="submit" class="btn submit__btn" onclick="collectFrom.action='/geton/add'">新增</button>
+                                <button type="submit" class="btn submit__btn" onclick="collectFrom.action='/booking/geton/add'">新增</button>
                             </div>
 
                         </form>
