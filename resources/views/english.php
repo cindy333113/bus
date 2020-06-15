@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Ecoland - Free Bootstrap 4 Template by Colorlib</title>
+    <title>HeyBus</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -33,13 +33,13 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav ml-auto">
-	          <li class="nav-item"><a href="english.php" class="nav-link"><span>Home</span></a></li>
-	          <li class="nav-item"><a href="myfavorite.php" class="nav-link"><span>My Favorite</span></a></li>
-	          <li class="nav-item"><a href="booking.php" class="nav-link"><span>Reservation</span></a></li>
-	          <li class="nav-item"><a href="route.php" class="nav-link"><span>Route Planning</span></a></li>
-	          <li class="nav-item"><a href="login.php" class="nav-link"><span>Login/Register</span></a></li>
+	          <li class="nav-item"><a href="/english" class="nav-link"><span>Home</span></a></li>
+	          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>My Favorite</span></a></li>
+	          <li class="nav-item"><a href="/booking" class="nav-link"><span>Reservation</span></a></li>
+	          <li class="nav-item"><a href="/planroute" class="nav-link"><span>Route Planning</span></a></li>
+	          <li class="nav-item"><a href="/login" class="nav-link"><span>Login/Register</span></a></li>
               <li class="nav-item"><a class="nav-link"><span>|</span></a>
-              <li class="nav-item"><a href="index.php" class="nav-link"><span>中文</span></a>
+              <li class="nav-item"><a href="/index" class="nav-link"><span>中文</span></a>
 	        </ul>
 	      </div>
 	    </div>

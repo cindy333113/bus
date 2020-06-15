@@ -39,13 +39,7 @@ return function (App $app) {
         ]);
         return $response;
     });
-    $app->get('/booking', function (Request $request, Response $response, $args) {
-        render('booking', [
-            'msg' => '輸入要預約上車的資料',
-            
-        ]);
-        return $response;
-    });
+    
     $app->post('/booking/geton/add', function (Request $request, Response $response, $args) {
         //找出預約的車子
         $data = $request->getParsedBody();
@@ -131,6 +125,9 @@ return function (App $app) {
 
         DB::delete('collect',$collectId,'collect_id');
         header("Location:/myfavourite");
+        render('myfavourite', [
+            'msg' => '刪除成功',
+        ]);
         return $response;
         //->withHeader('Location','/myfavourite')->withStatus(301);
     });
@@ -153,7 +150,8 @@ return function (App $app) {
             "route_id" => $route_id
         ];
         $result = DB::create('collect', $data2);
-        render('collect', ['msg' => $result ? '增加收藏站牌資訊成功' : '增加收藏站牌資訊失敗',]);
+        header("Location:/myfavourite");
+        render('/myfavourite', ['msg' => $result ? '增加收藏站牌資訊成功' : '增加收藏站牌資訊失敗',]);
 
         return $response;
     });
@@ -189,7 +187,11 @@ return function (App $app) {
         return $response;
     });
 */
-
+    $app->get('/login', function (Request $request, Response $response, $args) { //顯示站名
+        render('login', [
+        ]);
+        return $response;
+    });
     $app->post('/login', function (Request $request, Response $response, $args) use ($app) {
 
         $data = $request->getParsedBody(); //$_POST
@@ -232,6 +234,11 @@ return function (App $app) {
     * = DRIVER
     * =========================================================================
     **/
+    $app->get('/driverlogin', function (Request $request, Response $response, $args) { //顯示站名
+        render('driverlogin', [
+        ]);
+        return $response;
+    });
     $app->get('/driver', function (Request $request, Response $response, $args) {
 
         echo '<pre>';
@@ -252,182 +259,42 @@ return function (App $app) {
 
         return $response;
     });
-    */
+    
     /* =========================================================================
     * = STOP
     * =========================================================================
     **/
 
-   /*  $app->get('/booking', function (Request $request, Response $response, $args) {
-
-        render('booking');
-
-        return $response;
-    });
-
-/*
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    */
-//預約上車
-    $app->post('/geton', function (Request $request, Response $response, $args) {
-
-        $result = DB::fetchAll('geton');
+//列出預約上車
+$app->get('/booking', function (Request $request, Response $response, $args) {
+    $passengerId = 2;
+    $getonResult = DB::find('geton',$passengerId,'passenger_id');
+    $getoffResult = DB::find('getoff',$passengerId,'passenger_id');
+    var_dump($getonResult,$getoffResult);
+    render('/booking', [
+        'msg' => '輸入要預約上車的資料',
+        'getonResult'=>$getonResult,
+        'getoffResult'=>$getoffResult,
+    ]);
+    return $response;
+});
+   /* $app->get('/geton', function (Request $request, Response $response, $args) {
+        
+        
 
         render('geton', ['msg' => $result]);
 
         return $response;
     });
 //預約下車
-    $app->post('/getoff', function (Request $request, Response $response, $args) {
-
-        $result = DB::fetchAll('getoff');
+    $app->get('/getoff', function (Request $request, Response $response, $args) {
+        $passengerId = 3;
+        
 
         render('getoff', ['msg' => $result]);
 
         return $response;
-    });
+    });**/
     $app->post('/stop/update', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
@@ -438,6 +305,13 @@ return function (App $app) {
 
         return $response;
     });
+
+    $app->get('/blacklist', function (Request $request, Response $response, $args) { //顯示站名
+        render('/blacklist', [
+        ]);
+        return $response;
+    });
+
     //抓黑名單
     $app->get('/black_list/{id}', function (Request $request, Response $response, $args) {
         $black_List = DB::fetchAll('black_list');
@@ -449,7 +323,7 @@ return function (App $app) {
         
         $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE:FALSE;
 
-        render('black_list', ['isBlack' => $isBlack]);
+        render('/blacklist', ['isBlack' => $isBlack]);
 
         return $response;
     });
@@ -464,7 +338,7 @@ return function (App $app) {
 
         return $response;
     });
-
+//計算公車站牌
     $app->get('/bus/{id}', function (Request $request, Response $response, $args) {
 
         $busId = $args['id'];
@@ -488,5 +362,19 @@ return function (App $app) {
 
         return $response;
     });
-
+    $app->get('/manage', function (Request $request, Response $response, $args) { //顯示站名
+        render('/manage', [
+        ]);
+        return $response;
+    });
+    $app->get('/signup', function (Request $request, Response $response, $args) { //顯示站名
+        render('signup', [
+        ]);
+        return $response;
+    });
+    $app->get('/destination1', function (Request $request, Response $response, $args) { //顯示站名
+        render('destination1', [
+        ]);
+        return $response;
+    });
 };

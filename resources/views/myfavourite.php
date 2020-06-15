@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-	<title>Ecoland - Free Bootstrap 4 Template by Colorlib</title>
+	<title>HeyBus</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -98,16 +98,17 @@
 				<h3>新增我的最愛</h3><br>
 				<div class="col-md-12">
 					<div class="search-wrap-1 ftco-animate p-4">
-						<form action="#" class="search-property-1">
+						<form action="/myfavourite/add" class="search-property-1" method="post">
 							<div class="row">
 
 								<div class="col-lg align-items-end">
 									<div class="form-group">
 
-										<label for="#">公車號</label>
+										<flabel for="#">公車號</label>
 										<div class="form-field">
 											<div class="icon"><span class="ion-ios-search"></span></div>
-											<input type="text" class="form-control" placeholder="輸入公車號">
+											
+											<input type="text" class="form-control" name="route_name" placeholder="輸入公車號" >
 										</div>
 									</div>
 								</div>
@@ -118,8 +119,9 @@
 										<div class="form-field">
 											<div class="select-wrap">
 												<div class="icon"><span class="ion-ios-arrow-down"></span></div>
-												<select name="" id="" class="form-control">
-													<option value="">捷運輔大站</option>
+												<select name="stop_name" id="" class="form-control">
+												
+													<option value="捷運輔大站">捷運輔大站</option>
 													<option value="">盲人重建院</option>
 													<option value="">海山里</option>
 													<option value="">新泰中正路口</option>
@@ -142,7 +144,7 @@
 								<div class="col-lg align-self-end">
 									<div class="form-group">
 										<div class="form-field">
-											<input type="submit" value="新增" class="form-control btn btn-primary">
+											<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/myfavourite/add" method="post">
 										</div>
 									</div>
 								</div>

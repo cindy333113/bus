@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Ecoland - Free Bootstrap 4 Template by Colorlib</title>
+    <title>HeyBus</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-<?php
-foreach($rows as $key => $stop){
-    echo $stop['route_name'].'<br>';
-};
-
-?>
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
@@ -32,20 +26,20 @@ foreach($rows as $key => $stop){
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="index.php">Hey Bus</a>
+	      <a class="navbar-brand" href="/index">Hey Bus</a>
 	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
             
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav ml-auto">
-	          <li class="nav-item"><a href="index.php" class="nav-link"><span>首頁</span></a></li>
-	          <li class="nav-item"><a href="myfavourite.php" class="nav-link"><span>我的最愛</span></a></li>
-	          <li class="nav-item"><a href="booking.php" class="nav-link"><span>預約</span></a></li>
-	          <li class="nav-item"><a href="route.php" class="nav-link"><span>路線規劃</span></a></li>
-	          <li class="nav-item"><a href="login.php" class="nav-link"><span>登入/註冊</span></a></li>
+	          <li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
+	          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
+	          <li class="nav-item"><a href="/booking" class="nav-link"><span>預約</span></a></li>
+	          <li class="nav-item"><a href="/route" class="nav-link"><span>路線規劃</span></a></li>
+	          <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
               <li class="nav-item"><a class="nav-link"><span>|</span></a>
-	          <li class="nav-item"><a href="english.php" class="nav-link"><span>English</span></a></li>
+	          <li class="nav-item"><a href="/english" class="nav-link"><span>English</span></a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -122,7 +116,7 @@ foreach($rows as $key => $stop){
               <div class="icon justify-content-center align-items-center d-flex"><span class="flaticon-world"></span></div>
               <div class="media-body">
                 <h3 class="heading mb-3">公車查詢</h3>
-                <p class="mb-0"><a href="#" class="btn btn-white px-4 py-3">前往...</a></p>
+                <p class="mb-0"><a href="/destination" class="btn btn-white px-4 py-3">前往...</a></p>
               </div>
             </div>      
           </div>
@@ -131,7 +125,7 @@ foreach($rows as $key => $stop){
               <div class="icon justify-content-center align-items-center d-flex"><span class="flaticon-tour-guide"></span></div>
               <div class="media-body">
                 <h3 class="heading mb-3">我的最愛</h3>
-                <p class="mb-0"><a href="#" class="btn btn-white px-4 py-3">前往...</a></p>
+                <p class="mb-0"><a href="/myfavourite" class="btn btn-white px-4 py-3">前往...</a></p>
               </div>
             </div>      
           </div>
@@ -139,15 +133,12 @@ foreach($rows as $key => $stop){
             <div class="media block-6 services text-center d-block">
               <div class="icon justify-content-center align-items-center d-flex"><span class="flaticon-map-of-roads"></span></div>
               <div class="media-body">
-                <h3 class="heading mb-3">附近站牌</h3>
-                <p class="mb-0"><a href="#" class="btn btn-white px-4 py-3">前往...</a></p>
+                <h3 class="heading mb-3">預約上車</h3>
+                <p class="mb-0"><a href="/booking" class="btn btn-white px-4 py-3">前往...</a></p>
               </div>
             </div>      
           </div>
 
- <?php //var_dump($rows) 
- //php -S localhost:8080 -t public public/index.php
- ?>
 
 </table>
 <!DOCTYPE html>

@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>Ecoland - Free Bootstrap 4 Template by Colorlib</title>
+	<title>HeyBus</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -37,19 +39,18 @@
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav nav ml-auto">
-					<li class="nav-item"><a href="index.php" class="nav-link"><span>首頁</span></a></li>
-					<li class="nav-item"><a href="index.html#services-section" class="nav-link"><span>我的最愛</span></a></li>
+					<li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
+					<li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
 					<li class="nav-item"><a href="/booking" class="nav-link"><span>預約</span></a></li>
-					<li class="nav-item"><a href="index.html#destination-section" class="nav-link"><span>路線規劃</span></a></li>
-					<li class="nav-item"><a href="index.html#hotel-section" class="nav-link"><span>登入/註冊</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="index.html"><span>中文</span></a>
+					<li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
+					<li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="/index"><span>中文</span></a>
 					<li class="nav-item"><a class="nav-link"><span>|</span></a>
-					<li class="nav-item"><a class="nav-link" href="english.html"><span>English</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-
 
 	<section class="ftco-section ftco-no-pb ftco-no-pt" style="position:relative; top: 100px">
 		<div class="container">
@@ -60,40 +61,31 @@
 			</div>
 			<section class="booking">
 				<div style="width:800px; height:300px;border-style:dotted;border-size:10px">
-					<table class="myList" style="position:relative; margin: 35px;width:400px">
+					<table class="myList" style="position:relative; margin: 35px;width:400px" action="/booking" method="post">
 						<tr>
 							<td>公車號</td>
 							<td>方向 </td>
 							<td>站牌 </td>
-							<td>進站時間</td>
+							<td>公車現在位置</td>
 							<td>需要協助</td>
 							<td> 刪除 </td>
 						</tr>
-
-						<?php foreach ($stopList as $key => $stop) { ?>
+						
+						<?php //foreach ($getonResult as $key => $stop) { ?>
 							<tr>
 								<td>
-									<?= $stop['route_name'] ?></td>
+									<?= $getonResult['bus_id'] ?></td>
 
-								<td><?= $stop['stop_name'] ?></td>
-								<td>
-									<form name="deleteForm" action="/myfavourite/delete" method="post">
-										<input type="hidden" name="id" value=<?= $stop['collect_id'] ?> />
-										<button type="submit" style="background:transparent;border:none;">
-											<span class="material-icons">
-												delete
-											</span>
-										</button>
-									</form>
-								</td>
+								<td><?= $getonResult['stop_id'] ?></td>
+			
 							</tr>
-						<?php } ?>
-
+						<?php// } ?>
+<!--
 						<tr>
 							<td>299</td>
 							<td>迴龍</td>
 							<td>捷運輔大站</td>
-							<td>10 min</td>
+							<td>海山里</td>
 							<td>否</td>
 							<td><span class="material-icons"><a href="/myfavourite/delete">delete</a></span></td>
 						</tr>
@@ -105,6 +97,7 @@
 							<td>是</td>
 							<td><span class="material-icons">delete</span></td>
 						</tr>
+					-->
 					</table>
 				</div><br>
 			</section>

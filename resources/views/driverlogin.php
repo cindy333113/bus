@@ -36,7 +36,7 @@
 	          <li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
 	          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
 	          <li class="nav-item"><a href="/booking" class="nav-link"><span>預約</span></a></li>
-	          <li class="nav-item"><a href="/route" class="nav-link"><span>路線規劃</span></a></li>
+	          <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
 	          <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
               <li class="nav-item"><a class="nav-link"><span>|</span></a>
 	          <li class="nav-item"><a href="/english" class="nav-link"><span>English</span></a></li>
@@ -55,7 +55,7 @@
     
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="mb-0">註冊</h3>
+                            <h3 class="mb-0">管理者登入</h3>
                         </div>
                         <div class="card-body">
                             <form id="formLogin" method="POST" class="formLogin">
@@ -67,25 +67,18 @@
                                     <input for="password" type="password" class="form-control" placeholder="Password" id="pwd" required="">
 									<i class="fa fa-lock"></i>
                                 </div>
-								
+								<div class="row mb-3">
+									<div class="col-md-12 text-left">
+										<a href="#">forgot password?</a>
+									</div>
 								</div>
 								<div class="row mb-3">
 									<div class="col-lg-12 text-right">
-                                        <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin"><span>Sign up</span></button>
-                                    </div>
+                      <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin"><span>Login</span></button>
+                  </div>
 								</div>
-                            </form>
-				
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="create-box text-block text-center my-0">
-										<span class="text-small font-weight-semibold">已經是會員?</span>
-										<a href="/login">login</a><br>
-										<p></p>
-                                
-									</div>
-								</div>
-							</div>
+              </form>
+			
                         </div>
 
 						</div>
