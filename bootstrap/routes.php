@@ -257,30 +257,16 @@ return function (App $app) {
     });
     
 //預約上車
-    $app->post('/booking/geton', function (Request $request, Response $response, $args) {
+    $app->post('/geton', function (Request $request, Response $response, $args) {
 
-        $data = $request->getParsedBody(); //$_POST
-
-        //$data['STOP_TIME'] = date('Y-m-d H:i:s');
-        $data['stop_longitude'] = 0;
-        $data['stop_latitude'] = 0;
-
-        $result = DB::create('geton', $data);
-        /*
-            [
-                'stop_id' => '1',
-                'stop_name' => 'name'
-            ]
-        */
+        $result = DB::fetchAll('geton');
 
         render('geton', ['msg' => $result]);
 
         return $response;
     });
-    //預約下車
-    $app->post('/stop/book/getoff', function (Request $request, Response $response, $args) {
-
-        $data = $request->getParsedBody();
+//預約下車
+    $app->post('/getoff', function (Request $request, Response $response, $args) {
 
         $result = DB::fetchAll('getoff');
 
@@ -309,18 +295,42 @@ return function (App $app) {
         
         $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE:FALSE;
 
-        render('index', ['isBlack' => $isBlack]);
+        render('black_list', ['isBlack' => $isBlack]);
 
         return $response;
     });
     //記黑名單
-    $app->post('/', function (Request $request, Response $response, $args) {
+    $app->post('/blacklist/add', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
 
         $result = DB::create('black_list', $data);
 
         render('black_list', ['msg' => $result ? '黑名單新增一次' : '新增黑名單失敗',]);
+
+        return $response;
+    });
+
+    $app->get('/bus/{id}', function (Request $request, Response $response, $args) {
+
+        $busId = $args['id'];
+
+        $bus = DB::find('bus', $busId);
+        $departureTime = $bus['time'];
+        $countOfStop = countStopBusPassed($departureTime);
+
+        $routeId = $bus['route_id'];
+
+        $amountStopOfRoute = countStopOfRoute($routeId);
+
+        $isGoing = floor($countOfStop/$amountStopOfRoute)/2 == 0 ? '1':'0';
+
+        $StopOfCurrentDrive = $countOfStop%$amountStopOfRoute;
+        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive; 
+
+        $stopList = DB::fetchAll('stop');
+
+        render('bus', ['bus' => $bus, 'departureTime' => $departureTime, 'currentOrder' => $currentOrder]);
 
         return $response;
     });
