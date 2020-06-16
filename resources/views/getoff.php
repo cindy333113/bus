@@ -31,7 +31,7 @@
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 		<div class="container">
-			<a class="navbar-brand" href="index.html">heyBUS</a>
+			<a class="navbar-brand" href="/index">heyBUS</a>
 			<button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
 			</button>
@@ -40,7 +40,8 @@
 				<ul class="navbar-nav nav ml-auto">
 					<li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
 					<li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
-					<li class="nav-item"><a href="/booking" class="nav-link"><span>預約</span></a></li>
+                    <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
+                    <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
 					<li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
 					<li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="/index"><span>中文</span></a>
@@ -55,11 +56,11 @@
 		<div class="container">
 			<div class="row justify-content-center pb-0 pb-mb-5 pt-5 pt-md-0">
 				<div class="col-md-12 heading-section ftco-animate">
-					<h2 class="mb-4">預約清單</h2>
+					<h2 class="mb-4">預約下車清單</h2>
 				</div>
 			</div>
 			<section class="booking">
-				<div style="width:800px; height:300px;border-style:dotted;border-size:10px">
+				<div style="width:800px; height:auto;border-style:dotted;border-size:10px">
 					<table class="myList" style="position:relative; margin: 35px;width:400px" action="/booking" method="post">
 						<tr>
 							<td>公車號</td>
@@ -78,34 +79,17 @@
 								<td><?= $getonResult['stop_id'] ?></td>
 			
 							</tr>
-						
-<!--
-						<tr>
-							<td>299</td>
-							<td>迴龍</td>
-							<td>捷運輔大站</td>
-							<td>海山里</td>
-							<td>否</td>
-							<td><span class="material-icons"><a href="/myfavourite/delete">delete</a></span></td>
-						</tr>
-						<tr>
-							<td>235</td>
-							<td>土城</td>
-							<td>新泰路口</td>
-							<td>5 min</td>
-							<td>是</td>
-							<td><span class="material-icons">delete</span></td>
-						</tr>
-					-->
 					</table>
-				</div><br>
+				</div>
 			</section>
-			<form action="/booking/geton/add" method="POST">
+
+
+			<form action="/getoff/add" method="POST">
 				<div class="row">
-					<h3>預約上車</h3><br>
+					<h3>預約下車</h3><br>
 					<div class="col-md-12">
 						<div class="search-wrap-1 ftco-animate p-4">
-							<form action="/booking" method="post" class="search-property-1">
+							<form action="/getoff" method="post" class="search-property-1">
 								<div class="row">
 
 									<div class="col-lg align-items-end">
@@ -171,73 +155,6 @@
 										<div class="form-group">
 											<div class="form-field">
 												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/booking/geton/add" method="post">
-											</div>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-			</form>
-
-
-			<form action="/booking" method="POST">
-				<div class="row">
-					<h3>預約下車</h3><br>
-					<div class="col-md-12">
-						<div class="search-wrap-1 ftco-animate p-4">
-							<form action="#" class="search-property-1">
-								<div class="row">
-
-									<div class="col-lg align-items-end">
-										<div class="form-group">
-
-											<label for="#">公車號</label>
-											<div class="form-field">
-												<input type="text" name="bus_name" class="form-control" placeholder="輸入公車號">
-											</div>
-										</div>
-									</div>
-
-									<div class="col-lg align-items-end">
-										<div class="form-group">
-											<label for="#">方向</label>
-											<div class="form-field">
-												<input type="text" name="direction" class="form-control checkin_date" placeholder="選擇方向">
-											</div>
-										</div>
-									</div>
-
-									<div class="col-lg align-items-end">
-										<div class="form-group">
-											<label for="#">站牌</label>
-											<div class="form-field">
-												<div class="select-wrap">
-													<select name="bus_stop" id="" class="form-control">
-														<option value="1">捷運輔大站</option>
-														<option value="">盲人重建院</option>
-														<option value="">海山里</option>
-														<option value="">新泰中正路口</option>
-														<option value="">材試所</option>
-														<option value="">新泰國中南站</option>
-														<option value="">新莊棒球場</option>
-														<option value="">新莊體育場</option>
-														<option value="">新莊田徑場</option>
-														<option value="">財元廣場</option>
-														<option value="">中華路</option>
-														<option value="">正邦社區</option>
-														<option value="">幸福中華路口</option>
-														<option value="">幸福新城</option>
-
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-lg align-self-end">
-										<div class="form-group">
-											<div class="form-field">
-												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/booking/geton">
 											</div>
 										</div>
 									</div>
