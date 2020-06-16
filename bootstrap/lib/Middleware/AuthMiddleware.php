@@ -18,7 +18,7 @@ class AuthMiddleware implements Middleware
 
     function __construct($authIdentity)
     {
-        $this->$authIdentity = $authIdentity;
+        $this->authIdentity = $authIdentity;
     }
 
     /**
@@ -28,6 +28,7 @@ class AuthMiddleware implements Middleware
     {
         $auth = $_SESSION['auth'] ?? [];
         $authIdentity = $this->authIdentity;
+
         $user = Auth::authenticate($auth, $authIdentity);
 
         $request = $request->withAttribute('user',$user);
