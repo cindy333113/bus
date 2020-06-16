@@ -34,8 +34,9 @@
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav ml-auto">
 	          <li class="nav-item"><a href="/english" class="nav-link"><span>Home</span></a></li>
-	          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>My Favorite</span></a></li>
-	          <li class="nav-item"><a href="/booking" class="nav-link"><span>Reservation</span></a></li>
+            <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>My Favorite</span></a></li>
+            <li class="nav-item"><a href="/geton" class="nav-link"><span>Get On</span></a></li>
+            <li class="nav-item"><a href="/getoff" class="nav-link"><span>Get Off</span></a></li>
 	          <li class="nav-item"><a href="/planroute" class="nav-link"><span>Route Planning</span></a></li>
 	          <li class="nav-item"><a href="/login" class="nav-link"><span>Login/Register</span></a></li>
               <li class="nav-item"><a class="nav-link"><span>|</span></a>

@@ -54,7 +54,8 @@
          <ul class="navbar-nav nav ml-auto">
            <li class="nav-item"><a href="index.html#home-section" class="nav-link"><span>首頁</span></a></li>
            <li class="nav-item"><a href="index.html#services-section" class="nav-link"><span>我的最愛</span></a></li>
-           <li class="nav-item"><a href="index.html#about-section" class="nav-link"><span>預約</span></a></li>
+           <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
+            <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
            <li class="nav-item"><a href="index.html#destination-section" class="nav-link"><span>路線規劃</span></a></li>
            <li class="nav-item"><a href="index.html#hotel-section" class="nav-link"><span>登入/註冊</span></a></li>
            <li class="nav-item"><a class="nav-link" href="index.html"><span>中文</span></a>

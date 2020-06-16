@@ -40,7 +40,7 @@ return function (App $app) {
         return $response;
     });
     
-    $app->post('/booking/geton/add', function (Request $request, Response $response, $args) {
+    $app->post('/geton/add', function (Request $request, Response $response, $args) {
         //找出預約的車子
         $data = $request->getParsedBody();
         $passengerId = 2;
@@ -63,15 +63,49 @@ return function (App $app) {
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
-        render('booking', ['msg' => $result ? '預約成功' : '預約失敗',]);
+        render('geton', ['msg' => $result ? '預約成功' : '預約失敗',]);
         return $response;
     });
-    $app->post('/booking/geton/delete', function (Request $request, Response $response, $args) {
+    $app->post('/geton/delete', function (Request $request, Response $response, $args) {
         //刪除預約上車
         $data = $request->getParsedBody();
         $geton_id = $data['geton_id'];
         $result = DB::delete('geton', $geton_id, 'geton_id');
-        render('collect', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
+        render('geton', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
+        return $response;
+    });
+    $app->post('/getoff/add', function (Request $request, Response $response, $args) {
+        //找出預約的車子
+        $data = $request->getParsedBody();
+        $passengerId = 2;
+        $stopname = $data['stop_name'];
+        $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
+        $stop_id = $stopOfCollect['stop_id'];
+        var_dump($stopname,$stop_id);
+
+        $routename = $data['route_name'];
+        $routeOfColllect = DB::find('route', $routename, 'route_name');
+        $route_id = $routeOfColllect['route_id'];
+        var_dump($routename,$route_id);
+
+        
+        $directionId = $data['direction'];
+        $unusal = $data['unusal']?? "";
+        $result =$conn = DB::getconnection();
+        $stmt = $conn->prepare("INSERT INTO `getoff`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
+        ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
+        $stmt->execute();
+        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        render('getoff', ['msg' => $result ? '預約成功' : '預約失敗',]);
+        return $response;
+    });
+    $app->post('/getoff/delete', function (Request $request, Response $response, $args) {
+        //刪除預約上車
+        $data = $request->getParsedBody();
+        $getoff_id = $data['getoff_id'];
+        $result = DB::delete('getoff', $getoff_id, 'getoff_id');
+        render('getoff', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
         return $response;
     });
 /*
@@ -264,14 +298,48 @@ return function (App $app) {
     **/
 
 //列出預約上車
-$app->get('/booking', function (Request $request, Response $response, $args) {
+$app->get('/geton', function (Request $request, Response $response, $args) {
     $passengerId = 2;
+    $conn = DB::getconnection();
+    $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
+    $stmt->execute();
+    $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    var_dump($a);
+    //echo json_encode($a, JSON_UNESCAPED_UNICODE);
+    render('geton', [
+        'msg' => '輸入要新增修改的資料',
+        'List' => $a,
+    ]);
+    return $response;
+
+
+
+/*
     $getonResult = DB::find('geton',$passengerId,'passenger_id');
-    $getoffResult = DB::find('getoff',$passengerId,'passenger_id');
-    var_dump($getonResult,$getoffResult);
-    render('/booking', [
+    var_dump($getonResult);
+    render('/geton', [
         'msg' => '輸入要預約上車的資料',
         'getonResult'=>$getonResult,
+    ]);
+    return $response;*/
+});
+/*
+$app->get('/geton', function (Request $request, Response $response, $args) {
+    $passengerId = 2;
+    $getonResult = DB::find('geton',$passengerId,'passenger_id');
+    var_dump($getonResult);
+    render('/geton', [
+        'msg' => '輸入要預約上車的資料',
+        'getonResult'=>$getonResult,
+    ]);
+    return $response;
+});*/
+$app->get('/getoff', function (Request $request, Response $response, $args) {
+    $passengerId = 2;
+    $getoffResult = DB::find('getoff',$passengerId,'passenger_id');
+    var_dump($getoffResult);
+    render('/getoff', [
+        'msg' => '輸入要預約上車的資料',
         'getoffResult'=>$getoffResult,
     ]);
     return $response;
