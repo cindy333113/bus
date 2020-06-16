@@ -10,17 +10,25 @@ use Psr\Http\Server\MiddlewareInterface as Middleware;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 use Auth;
-use DB;
 
 class AuthMiddleware implements Middleware
 {
+
+    private $authIdentity;
+
+    function __construct($authIdentity)
+    {
+        $this->$authIdentity = $authIdentity;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function process(Request $request, RequestHandler $handler): Response
     {
-        $id = $_SESSION['auth'] ?? '';
-        $user = Auth::authenticate($id);
+        $auth = $_SESSION['auth'] ?? [];
+        $authIdentity = $this->authIdentity;
+        $user = Auth::authenticate($auth, $authIdentity);
 
         $request = $request->withAttribute('user',$user);
         $response = $handler->handle($request);

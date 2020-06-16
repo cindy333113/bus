@@ -17,10 +17,12 @@
                     </div>
 
                     <div class="class__board_block">
-                        <form class="class__form"  action="/login" method="post">
+                        <form class="class__form" action="/login" method="post">
+                            <input type="radio" name="identity" value="driver">司機登入</input>
+                            <input type="radio" name="identity" value="passenger">乘客登入</input>
                             <div class="class__form_textField">
                                 <label class="form__textField_label">使用者帳號</label>
-                                <input type="text" name="account" placeholder="使用者帳號" required >
+                                <input type="text" name="account" placeholder="使用者帳號" required>
                             </div>
                             <div class="class__form_textField">
                                 <label class="form__textField_label">使用者密碼</label>
@@ -41,4 +43,3 @@
 </body>
 
 </html>
-

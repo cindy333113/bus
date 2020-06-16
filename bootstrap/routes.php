@@ -33,14 +33,15 @@ return function (App $app) {
 
         $data = $request->getParsedBody(); //$_POST
 
+        $identity = $data['identity'] ?? '';
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
 
-        if ($id = Auth::login($account, $password)) {
-            $_SESSION['auth'] = $id;
+        if ($id = Auth::login($account, $password, $identity)) {
+            $_SESSION['auth'] = ['id' => $id, 'identity' => $identity];
         }
 
-        return $response->withHeader('Location', '/user');;
+        return $response->withHeader('Location', '/user');
     });
 
     $app->post('/logout', function (Request $request, Response $response, $args) use ($app) {
@@ -58,12 +59,11 @@ return function (App $app) {
 
         $user = $request->getAttribute('user');
 
-        $view = render('user',['user' => $user]);
+        $view = render('user', ['user' => $user]);
         $response->getBody()->write($view);
 
         return $response;
-
-    })->add(new AuthMiddleware());
+    })->add(new AuthMiddleware('passenger'));
 
     /* =========================================================================
     * = DRIVER
@@ -71,11 +71,14 @@ return function (App $app) {
     **/
     $app->get('/driver', function (Request $request, Response $response, $args) {
 
-        echo '<pre>';
-        var_dump(DB::fetchAll('driver'));
+        $user = $request->getAttribute('user');
+
+        $view = render('user', ['user' => $user]);
+        $response->getBody()->write($view);
 
         return $response;
-    });
+
+    })->add(new AuthMiddleware('driver'));
 
     $app->get('/driver/{id}', function (Request $request, Response $response, $args) {
 
