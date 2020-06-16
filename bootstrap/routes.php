@@ -52,7 +52,7 @@ return function (App $app) {
     });
 
     /* =========================================================================
-    * = DRIVER
+    * = User Group
     * =========================================================================
     **/
     $app->get('/user', function (Request $request, Response $response, $args) {
@@ -66,32 +66,38 @@ return function (App $app) {
     })->add(new AuthMiddleware('passenger'));
 
     /* =========================================================================
-    * = DRIVER
+    * = DRIVER Group
     * =========================================================================
     **/
-    $app->get('/driver', function (Request $request, Response $response, $args) {
 
-        $user = $request->getAttribute('user');
+    $app->group('/driver', function (Group $group) {
 
-        $view = render('user', ['user' => $user]);
-        $response->getBody()->write($view);
+        $group->get('', function (Request $request, Response $response, $args) {
 
-        return $response;
+            $user = $request->getAttribute('user');
 
-    })->add(new AuthMiddleware('driver'));
+            $view = render('user', ['user' => $user]);
+            $response->getBody()->write($view);
+    
+            return $response;
+    
+        });
 
-    $app->get('/driver/{id}', function (Request $request, Response $response, $args) {
+        $group->get('/{id}', function (Request $request, Response $response, $args) {
 
-        $driverId = $args['id'];
+            $driverId = $args['id'];
 
-        //司機駕駛的公車
-        $bus = DB::find('bus', $driverId, 'driver_id');
-        $departTime = $bus['DEPART_TIME'];
+            //司機駕駛的公車
+            $bus = DB::find('bus', $driverId, 'driver_id');
+            $departTime = $bus['DEPART_TIME'];
 
-        var_dump(countTimeToArriveNextStop($departTime));
+            $body = $response->getBody();
+            $body->write(countTimeToArriveNextStop($departTime));
 
-        return $response;
-    });
+            return $response;
+        });
+        
+    })->add(new AuthMiddleware('driver'));;
 
     /* =========================================================================
     * = STOP
