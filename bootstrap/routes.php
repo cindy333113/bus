@@ -23,6 +23,11 @@ return function (App $app) {
 
     $app->get('/login', function (Request $request, Response $response, $args) {
 
+        //如有登入則跳回使用者頁面
+        if($identity = $_SESSION['auth']['identity'] ?? ''){
+            $response = $response->withHeader('Location', "/{$identity}");
+        }
+
         $view = render('login');
         $response->getBody()->write($view);
 
@@ -41,7 +46,7 @@ return function (App $app) {
             $_SESSION['auth'] = ['id' => $id, 'identity' => $identity];
         }
 
-        return $response->withHeader('Location', '/user');
+        return $response->withHeader('Location', "/{$identity}");
     });
 
     $app->post('/logout', function (Request $request, Response $response, $args) use ($app) {
@@ -55,7 +60,7 @@ return function (App $app) {
     * = User Group
     * =========================================================================
     **/
-    $app->get('/user', function (Request $request, Response $response, $args) {
+    $app->get('/passenger', function (Request $request, Response $response, $args) {
 
         $user = $request->getAttribute('user');
 

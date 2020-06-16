@@ -31,7 +31,6 @@
                             <div class="class__form_btn">
                                 <button type="submit" class="btn submit__btn">登入</button>
                             </div>
-
                         </form>
                     </div>
                 </div>
