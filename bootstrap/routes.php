@@ -18,7 +18,7 @@ return function (App $app) {
         ]);
         return $response;
     });*/
-/*
+    /*
     $app->get('/sql', function (Request $request, Response $response, $args) {
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT route_name from `route` ");
@@ -36,7 +36,7 @@ return function (App $app) {
     $app->get('/geton', function (Request $request, Response $response, $args) {
         render('geton', [
             'msg' => '輸入要預約上車的資料',
-            
+
         ]);
         return $response;
     });
@@ -47,17 +47,17 @@ return function (App $app) {
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
-        var_dump($stopname,$stop_id);
+        var_dump($stopname, $stop_id);
 
         $routename = $data['route_name'];
         $routeOfColllect = DB::find('route', $routename, 'route_name');
         $route_id = $routeOfColllect['route_id'];
-        var_dump($routename,$route_id);
+        var_dump($routename, $route_id);
 
-        
+
         $directionId = $data['direction'];
         $unusal = $data['unusal'];
-        $result =$conn = DB::getconnection();
+        $result = $conn = DB::getconnection();
         $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
         ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
         $stmt->execute();
@@ -76,7 +76,7 @@ return function (App $app) {
         render('collect', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
         return $response;
     });
-/*
+    /*
     $app->get('/temap', function (Request $request, Response $response, $args) { //顯示站名
         //列出所有站牌
         $routes = DB::fetchAll('route');
@@ -116,12 +116,12 @@ return function (App $app) {
             'msg' => '輸入要新增修改的資料',
             'stopList' => $a,
         ]);
-    });  
+    });
 
-    $app->get('/deletcollect', function (Request $request, Response $response, $args){
+    $app->get('/deletcollect', function (Request $request, Response $response, $args) {
         //刪除收藏站牌
         $passengerId = 3;
-        var_dump(DB::delete('collect',$passengerId,'passenger_id'));
+        var_dump(DB::delete('collect', $passengerId, 'passenger_id'));
         return $response;
     });
     /*$app->get('/collect', function (Request $request, Response $response, $args) {
@@ -255,8 +255,8 @@ return function (App $app) {
 
         return $response;
     });
-    
-//預約上車
+
+    //預約上車
     $app->post('/geton', function (Request $request, Response $response, $args) {
 
         $result = DB::fetchAll('geton');
@@ -265,7 +265,7 @@ return function (App $app) {
 
         return $response;
     });
-//預約下車
+    //預約下車
     $app->post('/getoff', function (Request $request, Response $response, $args) {
 
         $result = DB::fetchAll('getoff');
@@ -284,18 +284,24 @@ return function (App $app) {
 
         return $response;
     });
+    $app->get('/blacklist', function (Request $request, Response $response, $args) {
+
+        render('blacklist');
+
+        return $response;
+    });
     //抓黑名單
     $app->get('/black_list/{id}', function (Request $request, Response $response, $args) {
         $black_List = DB::fetchAll('black_list');
-        $passengerId=$args['id'];
+        $passengerId = $args['id'];
 
-        $blackListbypassengerId = array_filter($black_List,function($black)use($passengerId){
+        $blackListbypassengerId = array_filter($black_List, function ($black) use ($passengerId) {
             return $black['passenger_id'] == $passengerId;
-        }); 
-        
-        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE:FALSE;
+        });
 
-        render('black_list', ['isBlack' => $isBlack]);
+        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
+
+        render('blacklist', ['isBlack' => $isBlack]);
 
         return $response;
     });
@@ -310,7 +316,7 @@ return function (App $app) {
 
         return $response;
     });
-
+    //計算站牌
     $app->get('/bus/{id}', function (Request $request, Response $response, $args) {
 
         $busId = $args['id'];
@@ -323,16 +329,19 @@ return function (App $app) {
 
         $amountStopOfRoute = countStopOfRoute($routeId);
 
-        $isGoing = floor($countOfStop/$amountStopOfRoute)/2 == 0 ? '1':'0';
+        $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
 
-        $StopOfCurrentDrive = $countOfStop%$amountStopOfRoute;
-        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive; 
-
+        $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
+        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
         $stopList = DB::fetchAll('stop');
 
-        render('bus', ['bus' => $bus, 'departureTime' => $departureTime, 'currentOrder' => $currentOrder]);
+        render('bus', [
+            'bus' => $bus,
+            'departureTime' => $departureTime,
+            'currentOrder' => $currentOrder,
+            'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)
+        ]);
 
         return $response;
     });
-
 };
