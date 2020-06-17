@@ -23,6 +23,11 @@ return function (App $app) {
 
     $app->get('/login', function (Request $request, Response $response, $args) {
 
+        //如有登入則跳回使用者頁面
+        if($identity = $_SESSION['auth']['identity'] ?? ''){
+            $response = $response->withHeader('Location', "/{$identity}");
+        }
+
         $view = render('login');
         $response->getBody()->write($view);
 
@@ -33,14 +38,15 @@ return function (App $app) {
 
         $data = $request->getParsedBody(); //$_POST
 
+        $identity = $data['identity'] ?? '';
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
 
-        if ($id = Auth::login($account, $password)) {
-            $_SESSION['auth'] = $id;
+        if ($id = Auth::login($account, $password, $identity)) {
+            $_SESSION['auth'] = ['id' => $id, 'identity' => $identity];
         }
 
-        return $response->withHeader('Location', '/user');;
+        return $response->withHeader('Location', "/{$identity}");
     });
 
     $app->post('/logout', function (Request $request, Response $response, $args) use ($app) {
@@ -51,44 +57,52 @@ return function (App $app) {
     });
 
     /* =========================================================================
-    * = DRIVER
+    * = User Group
     * =========================================================================
     **/
-    $app->get('/user', function (Request $request, Response $response, $args) {
+    $app->get('/passenger', function (Request $request, Response $response, $args) {
 
         $user = $request->getAttribute('user');
 
-        $view = render('user',['user' => $user]);
+        $view = render('user', ['user' => $user]);
         $response->getBody()->write($view);
 
         return $response;
-
-    })->add(new AuthMiddleware());
+    })->add(new AuthMiddleware('passenger'));
 
     /* =========================================================================
-    * = DRIVER
+    * = DRIVER Group
     * =========================================================================
     **/
-    $app->get('/driver', function (Request $request, Response $response, $args) {
 
-        echo '<pre>';
-        var_dump(DB::fetchAll('driver'));
+    $app->group('/driver', function (Group $group) {
 
-        return $response;
-    });
+        $group->get('', function (Request $request, Response $response, $args) {
 
-    $app->get('/driver/{id}', function (Request $request, Response $response, $args) {
+            $user = $request->getAttribute('user');
 
-        $driverId = $args['id'];
+            $view = render('user', ['user' => $user]);
+            $response->getBody()->write($view);
+    
+            return $response;
+    
+        });
 
-        //司機駕駛的公車
-        $bus = DB::find('bus', $driverId, 'driver_id');
-        $departTime = $bus['DEPART_TIME'];
+        $group->get('/{id}', function (Request $request, Response $response, $args) {
 
-        var_dump(countTimeToArriveNextStop($departTime));
+            $driverId = $args['id'];
 
-        return $response;
-    });
+            //司機駕駛的公車
+            $bus = DB::find('bus', $driverId, 'driver_id');
+            $departTime = $bus['DEPART_TIME'];
+
+            $body = $response->getBody();
+            $body->write(countTimeToArriveNextStop($departTime));
+
+            return $response;
+        });
+        
+    })->add(new AuthMiddleware('driver'));;
 
     /* =========================================================================
     * = STOP

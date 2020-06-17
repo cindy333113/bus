@@ -6,8 +6,6 @@
 
 <html>
 
-<?php ?>
-
 <body class="page__login">
     <div class="wrapper">
         <div class="container">
