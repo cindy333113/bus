@@ -13,10 +13,6 @@ use DB;
 
 class Accessor
 {
-    /**
-     * @var boolean
-     */
-    private $authenticate;
 
     /**
      * @var array
@@ -37,23 +33,46 @@ class Accessor
     }
 
     /**
-     * 認證使用者
-     * 
-     * @param string $account
-     * @param string $password
+     * @param string $identity
      */
-    public function authenticate(string $id)
+    public function configByIdentify(string $identity)
     {
-        $table = $this->config['authTable'];
+        $table = strtoupper($identity);
+        $this->config([
+            'authTable' => $table,
+            'idField' => "{$table}_ID",
+            'accountField' => "{$table}_ACCOUNT",
+            'passwordField' => "{$table}_PASSWORD",
+        ]);
+    }
 
-        $user = DB::find($table, $id);
+    /**
+     * 認證使用者身份別
+     * 
+     * @param array $auth
+     * @param string $authIdentity
+     * 
+     */
+    public function authenticate(array $auth, string $authIdentity)
+    {
+        $authenticate = FALSE;
 
-        if (!$user) {
-            return $this->authenticate = FALSE;
+        //驗證是否有 $auth 資訊
+        if ($auth && $auth['identity'] === $authIdentity) {
+            $id = $auth['id'];
+            $identity = $auth['identity'];
+
+            $this->configByIdentify($identity);
+            $table = $this->config['authTable'];
+            $user = DB::find($table, $id);
+
+            //確認 $auth 資訊
+            if ($user) return $user;
+
         }
-        $this->authenticate = TRUE;
 
-        return $user;
+        return $authenticate;
+
     }
 
     /**
@@ -62,40 +81,23 @@ class Accessor
      * @param string $account
      * @param string $password
      */
-    public function login(string $account, string $password)
+    public function login(string $account, string $password, string $identity)
     {
+        $this->configByIdentify($identity);
+
         $table = $this->config['authTable'];
+        $idField = $this->config['idField'];
         $accountField = $this->config['accountField'];
         $passwordField = $this->config['passwordField'];
 
         $user = DB::find($table, $account, $accountField);
 
         if ($user && $user[$passwordField] === $password) {
-            $idField = $this->config['idField'];
             return $user[$idField];
         }
 
         return FALSE;
+
     }
 
-
-    /**
-     * 確認認證
-     * 
-     * @return Boolean
-     * 
-     */
-    public function check()
-    {
-        return $this->authenticate;
-    }
-
-    /**
-     * 重新設定認證
-     * 
-     */
-    public function unset()
-    {
-        $this->authenticate = NULL;
-    }
 }
