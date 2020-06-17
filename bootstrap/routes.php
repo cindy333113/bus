@@ -9,7 +9,20 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-
+    $app->get('/index', function (Request $request, Response $response, $args) {
+        render('index', [
+            'msg' => '首頁',
+            
+        ]);
+        return $response;
+    });
+    $app->get('/english', function (Request $request, Response $response, $args) {
+        render('english', [
+            'msg' => '輸入要預約上車的資料',
+            
+        ]);
+        return $response;
+    });
 /*
     $app->get('/sql', function (Request $request, Response $response, $args) {
         $conn = DB::getconnection();
@@ -25,20 +38,31 @@ return function (App $app) {
     * = GETON
     * =========================================================================
     **/
-    $app->get('/index', function (Request $request, Response $response, $args) {
-        render('index', [
-            'msg' => '首頁',
-            
+    $app->get('/geton', function (Request $request, Response $response, $args) {
+        $passengerId = 2;
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
+        $stmt->execute();
+        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        var_dump($a);
+        //echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        render('geton', [
+            'msg' => '輸入要新增修改的資料',
+            'List' => $a,
         ]);
-        return $response;
-    });
-    $app->get('/english', function (Request $request, Response $response, $args) {
-        render('english', [
+        return $response;});
+    /*
+    $app->get('/geton', function (Request $request, Response $response, $args) {
+        $passengerId = 2;
+        $getonResult = DB::find('geton',$passengerId,'passenger_id');
+        var_dump($getonResult);
+        render('/geton', [
             'msg' => '輸入要預約上車的資料',
-            
+            'getonResult'=>$getonResult,
         ]);
         return $response;
-    });
+    });*/
+
     
     $app->post('/geton/add', function (Request $request, Response $response, $args) {
         //找出預約的車子
@@ -47,12 +71,12 @@ return function (App $app) {
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
-        var_dump($stopname,$stop_id);
+        //var_dump($stopname,$stop_id);
 
         $routename = $data['route_name'];
         $routeOfColllect = DB::find('route', $routename, 'route_name');
         $route_id = $routeOfColllect['route_id'];
-        var_dump($routename,$route_id);
+        //var_dump($routename,$route_id);
 
         
         $directionId = $data['direction'];
@@ -62,7 +86,7 @@ return function (App $app) {
         ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        //echo json_encode($a, JSON_UNESCAPED_UNICODE);
         render('geton', ['msg' => $result ? '預約成功' : '預約失敗',]);
         return $response;
     });
@@ -90,7 +114,7 @@ return function (App $app) {
    
 */
     /* =========================================================================
-    * = COLLECT
+    * = myfavourite
     * =========================================================================
     **/
     $app->get('/', function (Request $request, Response $response, $args) { //顯示站名
@@ -186,6 +210,10 @@ return function (App $app) {
         return $response;
     });
 */
+    /* =========================================================================
+    * = 註冊登入
+    * =========================================================================
+    **/
     $app->get('/login', function (Request $request, Response $response, $args) { //顯示站名
         render('login', [
         ]);
@@ -227,12 +255,7 @@ return function (App $app) {
 
         return $response;
 
-    })->add(new AuthMiddleware());
-
-    /* =========================================================================
-    * = DRIVER
-    * =========================================================================
-    **/
+    })->add(new AuthMiddleware());*/
     $app->get('/driverlogin', function (Request $request, Response $response, $args) { //顯示站名
         render('driverlogin', [
         ]);
@@ -265,30 +288,7 @@ return function (App $app) {
     **/
 
 //列出預約上車
-$app->get('/geton', function (Request $request, Response $response, $args) {
-    $passengerId = 2;
-    $conn = DB::getconnection();
-    $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
-    $stmt->execute();
-    $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    var_dump($a);
-    //echo json_encode($a, JSON_UNESCAPED_UNICODE);
-    render('geton', [
-        'msg' => '輸入要新增修改的資料',
-        'List' => $a,
-    ]);
-    return $response;});
-/*
-$app->get('/geton', function (Request $request, Response $response, $args) {
-    $passengerId = 2;
-    $getonResult = DB::find('geton',$passengerId,'passenger_id');
-    var_dump($getonResult);
-    render('/geton', [
-        'msg' => '輸入要預約上車的資料',
-        'getonResult'=>$getonResult,
-    ]);
-    return $response;
-});*/
+
 
     /* =========================================================================
     * = getoff
