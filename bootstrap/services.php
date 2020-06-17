@@ -65,7 +65,7 @@ function countStopBusPassed($departureTime)
  * = 計算公車站牌總數
  * =============================================================================
  *
- * @param String $departureTime  
+ * @param String $routeId  
  * @return Int
  *
  **/
@@ -77,4 +77,25 @@ function countStopOfRoute($routeId)
     });
 
     return count($routeStopListByRoute);
+}
+
+/**
+ * =============================================================================
+ * = 依路線及順序找到站牌
+ * =============================================================================
+ *
+ * @param String $departureTime  
+ * @return String
+ *
+ **/
+function findStopNameByRouteOrder($routeId, $stopOrder)
+{
+    $routeStopList = DB::fetchAll('route_stop');
+    $nowStop = array_filter($routeStopList, function ($routeStop) use ($routeId, $stopOrder) {
+        return $routeId == $routeStop['route_id'] && $stopOrder == $routeStop['route_order'];
+    });
+
+    $stop = DB::find('stop', array_values($nowStop)[0]['stop_id']);
+
+    return $stop['stop_name'];
 }
