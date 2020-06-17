@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-	<title>HeyBus</title>
+	<title>HeyBus 預約上車</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -73,12 +73,21 @@
 						
                         <?php foreach ($List as $key => $getondata) { ?>
 							<tr>
-								<td>
-                                    <?= $getondata['route_name'] ?></td>
-                                    <td>
-                                    <?= $getondata['direction'] ?></td>
-
-								<td><?= $getondata['stop_name'] ?></td>
+								<td><?= $getondata['route_name'] ?></td>
+                                <td><?= $getondata['direction'] ?></td>
+                                <td><?= $getondata['stop_name'] ?></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <form name="deleteForm" action="/geton/delete" method="post">
+										<input type="hidden" name="id" value=<?= $stop['geton_id'] ?> />
+										<button type="submit" style="background:transparent;border:none;">
+											<span class="material-icons">
+												delete
+											</span>
+										</button>
+                                    </form>
+                                </td>
 			
                             </tr>
                             <?php } ?>
@@ -128,7 +137,12 @@
 										<div class="form-group">
 											<label for="#">方向</label>
 											<div class="form-field">
-												<input type="text" name="direction" class="form-control checkin_date" placeholder="選擇方向">
+                                                <div class="select-wrap">
+                                                    <select name="direction" class="form-control" placeholder="選擇方向">
+                                                        <option value="0">迴龍</option>
+                                                        <option value="1">土城</option>
+                                                    </select>
+                                                </div>
 											</div>
 										</div>
 									</div>

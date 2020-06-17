@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-	<title>HeyBus</title>
+	<title>HeyBus 預約下車</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -71,12 +71,23 @@
 							<td> 刪除 </td>
 						</tr>
 						
-						<?php //foreach ($getonResult as $key => $stop) { ?>
+						<?php //foreach ($getoffResult as $key => $stop) { ?>
 							<tr>
-								<td>
-									<?= $getonResult['bus_id'] ?></td>
-
-								<td><?= $getonResult['stop_id'] ?></td>
+								<td><?= $getoffResult['bus_id'] ?></td>
+                                <td><?= $getoffdata['direction'] ?></td>
+                                <td><?= $getoffResult['stop_id'] ?></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+									<form name="deleteForm" action="/getoff/delete" method="post">
+										<input type="hidden" name="id" value=<?= $stop['getoff_id'] ?> />
+										<button type="submit" style="background:transparent;border:none;">
+											<span class="material-icons">
+												delete
+											</span>
+										</button>
+									</form>
+								</td>
 			
 							</tr>
 					</table>
@@ -106,7 +117,15 @@
 										<div class="form-group">
 											<label for="#">方向</label>
 											<div class="form-field">
-												<input type="text" name="direction" class="form-control checkin_date" placeholder="選擇方向">
+                                                <div class="select-wrap">
+                                                    <select name="direction" class="form-control" placeholder="選擇方向">
+                                                        <option value="0">迴龍</option>
+                                                        <option value="1">土城</option>
+                                                    </select>
+                                                </div>
+
+                                                
+												<!--<input type="text" name="direction" class="form-control checkin_date" placeholder="選擇方向">-->
 											</div>
 										</div>
 									</div>
@@ -133,7 +152,7 @@
 													<select name="stop_name" id="" class="form-control">
 														<option value="捷運輔大站">捷運輔大站</option>
 														<option value="盲人重建院">盲人重建院</option>
-														<option value="">海山里</option>
+														<option value="海山里">海山里</option>
 														<option value="">新泰中正路口</option>
 														<option value="">材試所</option>
 														<option value="">新泰國中南站</option>
@@ -154,7 +173,7 @@
 									<div class="col-lg align-self-end">
 										<div class="form-group">
 											<div class="form-field">
-												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/booking/geton/add" method="post">
+												<input type="submit" value="新增" class="form-control btn btn-primary" onclick="/getoff/add" method="post">
 											</div>
 										</div>
 									</div>
