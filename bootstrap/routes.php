@@ -9,8 +9,18 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-
-/*
+    /*
+    $app->get('/', function (Request $request, Response $response, $args) {
+        $routes = DB::fetchAll('route');
+        $route = DB::find('route','842','route_name');
+        render('index', [
+            'msg' => 'HAHA',
+            'rows' => $routes,
+            'row' => $route,
+        ]);
+        return $response;
+    });*/
+    /*
     $app->get('/sql', function (Request $request, Response $response, $args) {
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT route_name from `route` ");
@@ -35,7 +45,7 @@ return function (App $app) {
     $app->get('/english', function (Request $request, Response $response, $args) {
         render('english', [
             'msg' => '輸入要預約上車的資料',
-            
+
         ]);
         return $response;
     });
@@ -47,17 +57,17 @@ return function (App $app) {
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
-        var_dump($stopname,$stop_id);
+        var_dump($stopname, $stop_id);
 
         $routename = $data['route_name'];
         $routeOfColllect = DB::find('route', $routename, 'route_name');
         $route_id = $routeOfColllect['route_id'];
-        var_dump($routename,$route_id);
+        var_dump($routename, $route_id);
 
-        
+
         $directionId = $data['direction'];
-        $unusal = $data['unusal']?? "";
-        $result =$conn = DB::getconnection();
+        $unusal = $data['unusal'];
+        $result = $conn = DB::getconnection();
         $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
         ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
         $stmt->execute();
@@ -74,8 +84,7 @@ return function (App $app) {
         render('geton', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
         return $response;
     });
-
-/*
+    /*
     $app->get('/temap', function (Request $request, Response $response, $args) { //顯示站名
         //列出所有站牌
         $routes = DB::fetchAll('route');
@@ -126,6 +135,21 @@ return function (App $app) {
         header("Location:/myfavourite");
         render('myfavourite', [
             'msg' => '刪除成功',
+        ]);
+    });
+
+    $app->get('/deletcollect', function (Request $request, Response $response, $args) {
+        //刪除收藏站牌
+        $passengerId = 3;
+        var_dump(DB::delete('collect', $passengerId, 'passenger_id'));
+        return $response;
+    });
+    /*$app->get('/collect', function (Request $request, Response $response, $args) {
+        $passengerId = 2;
+        $collectlist=DB::find('collect',$passengerId,'passenger_id');
+        render('collect', [
+            'msg' => '輸入要新增修改的資料',
+            'collectlist' => $collectlist,        
         ]);
         return $response;
         //->withHeader('Location','/myfavourite')->withStatus(301);
@@ -341,15 +365,22 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
    /* $app->get('/geton', function (Request $request, Response $response, $args) {
         
         
+        return $response;
+    });
+
+    //預約上車
+    $app->post('/geton', function (Request $request, Response $response, $args) {
+
+        $result = DB::fetchAll('geton');
 
         render('geton', ['msg' => $result]);
 
         return $response;
     });
-//預約下車
-    $app->get('/getoff', function (Request $request, Response $response, $args) {
-        $passengerId = 3;
-        
+    //預約下車
+    $app->post('/getoff', function (Request $request, Response $response, $args) {
+
+        $result = DB::fetchAll('getoff');
 
         render('getoff', ['msg' => $result]);
 
@@ -375,15 +406,15 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
     //抓黑名單
     $app->get('/black_list/{id}', function (Request $request, Response $response, $args) {
         $black_List = DB::fetchAll('black_list');
-        $passengerId=$args['id'];
+        $passengerId = $args['id'];
 
-        $blackListbypassengerId = array_filter($black_List,function($black)use($passengerId){
+        $blackListbypassengerId = array_filter($black_List, function ($black) use ($passengerId) {
             return $black['passenger_id'] == $passengerId;
-        }); 
-        
-        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE:FALSE;
+        });
 
-        render('/blacklist', ['isBlack' => $isBlack]);
+        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
+
+        render('blacklist', ['isBlack' => $isBlack]);
 
         return $response;
     });
@@ -394,7 +425,7 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
 
         $result = DB::create('black_list', $data);
 
-        render('black_list', ['msg' => $result ? '黑名單新增一次' : '新增黑名單失敗',]);
+        render('blacklist', ['msg' => $result ? '黑名單新增一次' : '新增黑名單失敗',]);
 
         return $response;
     });
@@ -411,14 +442,18 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
 
         $amountStopOfRoute = countStopOfRoute($routeId);
 
-        $isGoing = floor($countOfStop/$amountStopOfRoute)/2 == 0 ? '1':'0';
+        $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
 
-        $StopOfCurrentDrive = $countOfStop%$amountStopOfRoute;
-        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive; 
-
+        $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
+        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
         $stopList = DB::fetchAll('stop');
 
-        render('bus', ['bus' => $bus, 'departureTime' => $departureTime, 'currentOrder' => $currentOrder]);
+        render('bus', [
+            'bus' => $bus,
+            'departureTime' => $departureTime,
+            'currentOrder' => $currentOrder,
+            'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)
+        ]);
 
         return $response;
     });
