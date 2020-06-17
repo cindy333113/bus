@@ -35,6 +35,59 @@ return function (App $app) {
     });
 */
     /* =========================================================================
+    * = blacklist
+    * =========================================================================
+    **/
+$app->get('/blacklist', function (Request $request, Response $response, $args) { //顯示站名
+    $conn = DB::getconnection();
+        $stmt = $conn->prepare("SELECT * from `black_list` ");
+        $stmt->execute();
+
+        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        
+        render('/blacklist', [
+            'a'=>$a,
+    ]);
+    return $response;
+});
+
+//抓黑名單
+$app->get('/blacklist/{id}', function (Request $request, Response $response, $args) {
+    $black_List = DB::fetchAll('black_list');
+    $passengerId=$args['id'];
+
+    $blackListbypassengerId = array_filter($black_List,function($black)use($passengerId){
+        return $black['passenger_id'] == $passengerId;
+    }); 
+    $blacktime= count($blackListbypassengerId);
+    $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE:FALSE;
+    var_dump($blacktime);
+    if ($isBlack = (count($blackListbypassengerId) >= 3)){
+        $thispassenger='是黑名單';
+    }else{
+        $thispassenger='不是黑名單';
+    }
+    var_dump($thispassenger);
+    render('/blacklist', [
+        'isBlack' => $isBlack,
+        'thispassenger' => $thispassenger,
+        'blacktime'=>$blacktime,
+        ]);
+    return $response;
+});
+//記黑名單
+$app->post('/blacklist/add', function (Request $request, Response $response, $args) {
+
+    $data = $request->getParsedBody();
+
+    $result = DB::create('black_list', $data);
+
+    render('blacklist', ['msg' => $result ? '黑名單新增一次' : '新增黑名單失敗',]);
+
+    return $response;
+});
+    /* =========================================================================
     * = GETON
     * =========================================================================
     **/
@@ -44,8 +97,6 @@ return function (App $app) {
         $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        var_dump($a);
-        //echo json_encode($a, JSON_UNESCAPED_UNICODE);
         render('geton', [
             'msg' => '輸入要新增修改的資料',
             'List' => $a,
@@ -366,38 +417,7 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         return $response;
     });
 
-    $app->get('/blacklist', function (Request $request, Response $response, $args) { //顯示站名
-        render('/blacklist', [
-        ]);
-        return $response;
-    });
 
-    //抓黑名單
-    $app->get('/black_list/{id}', function (Request $request, Response $response, $args) {
-        $black_List = DB::fetchAll('black_list');
-        $passengerId=$args['id'];
-
-        $blackListbypassengerId = array_filter($black_List,function($black)use($passengerId){
-            return $black['passenger_id'] == $passengerId;
-        }); 
-        
-        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE:FALSE;
-
-        render('/blacklist', ['isBlack' => $isBlack]);
-
-        return $response;
-    });
-    //記黑名單
-    $app->post('/blacklist/add', function (Request $request, Response $response, $args) {
-
-        $data = $request->getParsedBody();
-
-        $result = DB::create('black_list', $data);
-
-        render('black_list', ['msg' => $result ? '黑名單新增一次' : '新增黑名單失敗',]);
-
-        return $response;
-    });
 //計算公車站牌
     $app->get('/bus/{id}', function (Request $request, Response $response, $args) {
 
