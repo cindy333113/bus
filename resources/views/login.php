@@ -61,11 +61,11 @@
                         <div class="card-body">
                             <form id="formLogin" method="POST" class="formLogin">
                                 <div class="form-group">
-                                    <input for="username" class="form-control" id="name" name="name" placeholder="Username" type="text" required="">
+                                    <input class="form-control" id="name" name="account" placeholder="帳號" type="text" required autocapitalize="off" autocorrect="off" spellcheck="false">
 									<i class="fa fa-user"></i>
                                 </div>
                                 <div class="form-group">
-                                    <input for="password" type="password" class="form-control" placeholder="Password" id="pwd" required="">
+                                    <input type="password" class="form-control" placeholder="密碼"  required>
 									<i class="fa fa-lock"></i>
                                 </div>
 								<div class="row mb-3">
@@ -75,7 +75,7 @@
 								</div>
 								<div class="row mb-3">
 									<div class="col-lg-12 text-right">
-                      <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin"><span>Login</span></button>
+                      <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin" onclick="locaiton.href='/login'"><span>登入</span></button>
                   </div>
 								</div>
               </form>

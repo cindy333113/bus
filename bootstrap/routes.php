@@ -438,8 +438,13 @@ $app->get('/getoff', function (Request $request, Response $response, $args) {
         ]);
         return $response;
     });
-    $app->get('/destination1', function (Request $request, Response $response, $args) { //顯示站名
-        render('destination1', [
+    $app->get('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+        render('planroute', [
+        ]);
+        return $response;
+    });
+    $app->get('/destination', function (Request $request, Response $response, $args) { //顯示站名
+        render('destination', [
         ]);
         return $response;
     });

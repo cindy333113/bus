@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Ecoland - Free Bootstrap 4 Template by Colorlib</title>
+    <title>HeyBus 路線規劃</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
     input[type="submit"]{padding:5px 15px; background:#ccc; border:0 none;
     cursor:pointer;
@@ -56,11 +57,11 @@
            <li class="nav-item"><a href="index.html#services-section" class="nav-link"><span>我的最愛</span></a></li>
            <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
            <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
-           <li class="nav-item"><a href="index.html#destination-section" class="nav-link"><span>路線規劃</span></a></li>
-           <li class="nav-item"><a href="index.html#hotel-section" class="nav-link"><span>登入/註冊</span></a></li>
-           <li class="nav-item"><a class="nav-link" href="index.html"><span>中文</span></a>
+           <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
+           <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
+           <li class="nav-item"><a class="nav-link" href="/index"><span>中文</span></a>
            <li class="nav-item"><a class="nav-link"><span>|</span></a>
-           <li class="nav-item"><a class="nav-link"href="english.html"><span>English</span></a></li>
+           <li class="nav-item"><a class="nav-link"href="/english"><span>English</span></a></li>
          </ul>
        </div>
      </div>
@@ -70,32 +71,43 @@
 <br>
 <br>
 <br>
-      <table border="1">
-        <tr hight="190%">
-            <td width="50%">
-               <h1>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp轉乘規劃</h1>
-                <a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    &nbsp&nbsp&nbsp<a>
-                <input type="text" placeholder="請輸入起點站牌名稱">
-                
-                <br>
-                        <a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-                <image src="images/image3.png"></image>
-               <a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-                    <a href="#"><image src="images/image4.png" ></image></a>
 
-                   
-                <br>
-                <a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    &nbsp&nbsp&nbsp</a>
-                <input type="text" placeholder="請輸入終點站牌名稱" >  
+<div>
+<h1 class="mb-4" style="position: relative; left:10%">轉乘規劃</h1>
+
+
+<table align="center" style="text_align:center">
+<tr>
+<td>
+  <input type="text" placeholder="請輸入起點站牌名稱" style="margin: 10px;"><br>
+  <span class="material-icons" style="color: black; position:relative;left:100px;top:5px">arrow_downward</span><br>
+  <input type="text" placeholder="請輸入終點站牌名稱" style="margin: 10px">
+</td>
+<td><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255423.3793886854!2d121.38428615039757!3d25.03870377727416!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ac72bce20a99%3A0x3f6a35cedd0ac2e0!2z5Y-w5YyX!5e0!3m2!1szh-TW!2stw!4v1590044977742!5m2!1szh-TW!2stw" width="800" height="520" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></td>
+    
+    
+</tr>
+<td></td>
+  <tr>
+    
+  </tr>
+</table>
+
+<!--
+      <table border="1">
+        <td hight="190%">
+            <td width="50%">
+               <h1></h1>
+                <a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    &nbsp&nbsp&nbsp<a></tr>
+                <tr><input type="text" placeholder="請輸入起點站牌名稱"><br></tr>
+                <a href="#"><image src="images/image4.png" ></image></a><br>
+                <tr><input type="text" placeholder="請輸入終點站牌名稱" >  </td>
             
-                </ul>
-            </td>
-            <td></td>
-            <td width="120%" bgcolor="white">
+            <td width="120%" background-color="white">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255423.3793886854!2d121.38428615039757!3d25.03870377727416!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ac72bce20a99%3A0x3f6a35cedd0ac2e0!2z5Y-w5YyX!5e0!3m2!1szh-TW!2stw!4v1590044977742!5m2!1szh-TW!2stw" width="800" height="520" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
             </td>
-        </tr>
-    </table>
+      </tr>
+    </table>-->
 
          
 
