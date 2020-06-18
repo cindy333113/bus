@@ -202,12 +202,6 @@ $app->post('/blacklist/add', function (Request $request, Response $response, $ar
         ]);
     });
 
-    $app->get('/deletcollect', function (Request $request, Response $response, $args) {
-        //刪除收藏站牌
-        $passengerId = 3;
-        var_dump(DB::delete('collect', $passengerId, 'passenger_id'));
-        return $response;
-    });
     /*$app->get('/collect', function (Request $request, Response $response, $args) {
         $passengerId = 2;
         $collectlist=DB::find('collect',$passengerId,'passenger_id');
@@ -495,7 +489,12 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         ]);
         return $response;
     });
-    $app->get('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+    $app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+        $data = $request->getParsedBody();
+        $start=$data['start'];
+        $goal=$data['goal'];
+        
+        
         render('planroute', [
         ]);
         return $response;
