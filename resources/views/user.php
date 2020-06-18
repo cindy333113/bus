@@ -20,9 +20,10 @@
                         <div class="class__board_block">
                             <h3>使用者資訊</h3>
                             <div class="class__text">
-                                <p>乘客ID:<?= $user['PASSENGER_ID']??'' ?></p>
-                                <p>乘客帳號:<?= $user['PASSENGER_ACCOUNT']??'' ?></p>
-                                <p>乘客姓名:<?= $user['PASSENGER_NAME']??'' ?></p>
+                                <?php $identity = strtoupper($_SESSION['auth']['identity']); ?>
+                                <p>乘客ID:<?= $user["{$identity}_ID"]??'' ?></p>
+                                <p>乘客帳號:<?= $user["{$identity}_ACCOUNT"]??'' ?></p>
+                                <p>乘客姓名:<?= $user["{$identity}_NAME"]??'' ?></p>
                             </div>
                             <button type="submit">登出</button>
                         </div>

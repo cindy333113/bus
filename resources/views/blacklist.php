@@ -71,27 +71,21 @@
 <br>
 <br>
   <thead class="thead-dark">
+
+                          
     <tr>
-      <th scope="col">使用者名稱</th>
-      <th scope="col">____</th>
-	  <th scope="col">____</th>
-	  <th scope="col">____</th>
+      <th scope="col">使用者id</th>
+      <th scope="col">違規日期</th>
     </tr>
   </thead>
 
-  <tbody>
+  <tbody>  <?php foreach ($a as $key => $blacklistdata) { ?>
     <tr>
-      <td bgcolor="#dadad8"></td>
-      <td bgcolor="#dadad8"></td>
-	  <td bgcolor="#dadad8"></td>
-	  <td bgcolor="#dadad8"></td>
+      <td ><?= $blacklistdata['passenger_id'] ?></td>
+      <td><?= $blacklistdata['black_time'] ?></td>
     </tr>
-    <tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-	  <td></td>
-    </tr>
+    <?php } ?></tbody>
+<!--
 	<tr>
       <td bgcolor="#dadad8"></td>
       <td bgcolor="#dadad8"></td>
@@ -99,8 +93,7 @@
 	  <td bgcolor="#dadad8"></td>
     </tr>
 
-
-	
+	-->
 
 </table>    
       
