@@ -505,4 +505,9 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         ]);
         return $response;
     });
+    $app->get('/tplan', function (Request $request, Response $response, $args) { //顯示站名
+        render('test_planroute', [
+        ]);
+        return $response;
+    });
 };
