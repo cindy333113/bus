@@ -493,6 +493,12 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         $data = $request->getParsedBody();
         $start=$data['start'];
         $goal=$data['goal'];
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("select rt.route_id,route_name from route_stop rt,route r where rt.stop_id in ($start,$goal) and rt.route_id=r.route_id group by rt.route_id having count(rt.route_id)=2 ");
+        $stmt->execute();
+
+        $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
         
         
         render('planroute', [
@@ -505,8 +511,31 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         return $response;
     });
     $app->get('/tplan', function (Request $request, Response $response, $args) { //顯示站名
-        render('test_planroute', [
+        $view = render('test_planroute', [
         ]);
+        $response->getBody()->write($view);
         return $response;
     });
+    $app->post('/tplan/add', function (Request $request, Response $response, $args) { //顯示站名
+        $data = $request->getParsedBody();
+        $start=$data['start'];
+        $goal=$data['goal'];
+        
+        $startdata = DB::find('stop',$start,'stop_name');
+        $goaldata = DB::find('stop',$goal,'stop_name');
+        $startid=$startdata['stop_id'];
+        $goalid=$goaldata['stop_id'];
+        //var_dump($startid,$goalid);
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("select rt.route_id,route_name from route_stop rt,route r where rt.stop_id in ($startid,$goalid) and rt.route_id=r.route_id group by rt.route_id having count(rt.route_id)=2 ");
+        $stmt->execute();
+
+        $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
+        $view = render('test_planroute', [
+        ]);
+        $response->getBody()->write($view);
+        return $response;
+    });
+
 };
