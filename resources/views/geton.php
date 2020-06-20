@@ -61,7 +61,7 @@
 			</div>
 			<section class="booking">
 				<div style="width:800px; height:auto;border-style:dotted;border-size:10px">
-					<table class="myList" style="position:relative; margin: 35px;width:400px" action="/booking" method="post">
+					<table class="myList" style="position:relative; margin: 35px;width:400px" action="/geton" method="post">
 						<tr>
 							<td>公車號</td>
 							<td>方向 </td>
@@ -76,11 +76,11 @@
 								<td><?= $getondata['route_name'] ?></td>
                                 <td><?= $getondata['direction'] ?></td>
                                 <td><?= $getondata['stop_name'] ?></td>
-                                <td></td>
+                                <td><?= $getondata['currentStopName']?></td>
                                 <td></td>
                                 <td>
                                     <form name="deleteForm" action="/geton/delete" method="post">
-										<input type="hidden" name="id" value=<?= $stop['geton_id'] ?> />
+										<input type="hidden" name="geton_id" value=<?= $getondata['geton_id'] ?> />
 										<button type="submit" style="background:transparent;border:none;">
 											<span class="material-icons">
 												delete
@@ -120,7 +120,7 @@
 					<h3>預約上車</h3><br>
 					<div class="col-md-12">
 						<div class="search-wrap-1 ftco-animate p-4">
-							<form action="/booking" method="post" class="search-property-1">
+							<form action="/geton" method="post" class="search-property-1">
 								<div class="row">
 
 									<div class="col-lg align-items-end">
