@@ -64,7 +64,6 @@ return function (App $app) {
     * = blacklist
     * =========================================================================
     **/
-
     $app->get('/blacklist', function (Request $request, Response $response, $args) { //顯示站名
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT * from `black_list` ");
@@ -328,7 +327,7 @@ return function (App $app) {
 
         $user = $request->getAttribute('user');
 
-        $view = render('user', ['user' => $user]);
+        $view = render('/user', ['user' => $user]);
         $response->getBody()->write($view);
 
         return $response;
@@ -378,6 +377,31 @@ return function (App $app) {
     **/
 
     //列出預約上車
+    $app->post('/stop/update', function (Request $request, Response $response, $args) {
+
+        $data = $request->getParsedBody();
+
+        $stopId = $data['stop_id'];
+
+        $result = DB::update('stop', "`stop_id` = {$stopId}", $data);
+
+        return $response;
+    });
+
+    $app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+        $data = $request->getParsedBody();
+        $start=$data['start'];
+        $goal=$data['goal'];
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("select rt.route_id,route_name from route_stop rt,route r where rt.stop_id in ($start,$goal) and rt.route_id=r.route_id group by rt.route_id having count(rt.route_id)=2 ");
+        $stmt->execute();
+
+        $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
+        
+        render('/planroute', []);
+        return $response;
+    });
 
     //計算公車站牌
     $app->get('/bus/{id}', function (Request $request, Response $response, $args) {
@@ -398,29 +422,94 @@ return function (App $app) {
         $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
         $stopList = DB::fetchAll('stop');
 
-        render('bus', [
-            'bus' => $bus,
-            'departureTime' => $departureTime,
-            'currentOrder' => $currentOrder,
-            'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)
+        render('/planroute', []);
+        return $response;
+    });
+
+    $app->get('/destination', function (Request $request, Response $response, $args) { //顯示站名
+        render('destination', []);
+        return $response;
+    });
+    /* =========================================================================
+    * = search
+    * =========================================================================
+    **/
+    //用站牌尋找公車
+    $app->get('/destination/routesearch/{stop_id}', function (Request $request, Response $response, $args) {
+        $stopId =$args['stop_id'];
+        $stop = DB::find('route_stop', $stopId);
+        $stopId = $stop['stop_id'];
+        $routeListByStop = findRouteByStop($stopId);
+        $stopdata=DB::find('stop',$stopId);
+        $stopname=$stopdata['stop_name'];
+        //var_dump($stopname);
+        render('stoproute', [
+            'routeListByStop' => $routeListByStop,
+            'stop_name'=>$stopname,
+            'msg'=>$routeListByStop['route_id']
         ]);
 
         return $response;
     });
-    $app->get('/manage', function (Request $request, Response $response, $args) { //顯示站名
-        render('/manage', []);
+    /*
+        //example
+        foreach($routeListByStop as $key => $route){
+            echo $route['route_name'].'<br>';
+        }
+        */
+    //搜尋公車列出站牌
+    $app->get('/destination/searchstop', function (Request $request, Response $response, $args) {
+
+        $view = render('destination');
+        $response->getBody()->write($view);
         return $response;
     });
-    $app->get('/signup', function (Request $request, Response $response, $args) { //顯示站名
-        render('signup', []);
+    //搜尋公車列出站牌
+    $app->post('/destination/searchstop', function (Request $request, Response $response, $args) {
+        $data = $request->getParsedBody();
+
+        $routename = $data['route_name'];
+        $route = DB::find('route', $routename, 'route_name');
+        $routeId = $route['route_id'];
+        $stop = DB::find('route_stop', $routeId);
+        $routeStopId = $stop['route_id'];
+        $stopNameByRoute = findStopListByRoute($routeStopId);
+        $view = render('destination', [
+            'stopNameByRoute' => $stopNameByRoute,
+        ]);
+
+        $response->getBody()->write($view);
+
         return $response;
     });
-    $app->get('/planroute', function (Request $request, Response $response, $args) { //顯示站名
-        render('planroute', []);
+
+    $app->post('/planroute/add', function (Request $request, Response $response, $args) { //顯示站名
+        $data = $request->getParsedBody();
+        $start = $data['start'];
+        $goal = $data['goal'];
+
+        $startdata = DB::find('stop', $start, 'stop_name');
+        $goaldata = DB::find('stop', $goal, 'stop_name');
+        $startid = $startdata['stop_id'];
+        $goalid = $goaldata['stop_id'];
+        //var_dump($startid,$goalid);
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("select rt.route_id,route_name from route_stop rt,route r where rt.stop_id in ($startid,$goalid) and rt.route_id=r.route_id group by rt.route_id having count(rt.route_id)=2 ");
+        $stmt->execute();
+
+        $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
+        $view = render('planroute', [
+            'msg' => $planroute,
+        ]);
+        $response->getBody()->write($view);
         return $response;
     });
-    $app->get('/destination', function (Request $request, Response $response, $args) { //顯示站名
-        render('destination', []);
+
+    $app->get('/addblack', function (Request $request, Response $response, $args) {
+    
+        $view = render('/addblack');
+        $response->getBody()->write($view);
         return $response;
     });
 };

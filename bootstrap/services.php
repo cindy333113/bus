@@ -43,6 +43,31 @@ function countTimeToArriveNextStop($departTime)
     return date("Y-m-d H:i:s", strtotime($departTime . "+10 minute"));
 }
 
+/**
+ * =============================================================================
+ * = 現在位置
+ * =============================================================================
+ *
+ * @param String $busId
+ * @return String
+ *
+ **/
+function findStopNameByBus($busId)
+{
+    $bus = DB::find('bus', $busId);
+    $departureTime = $bus['time'];
+    $countOfStop = countStopBusPassed($departureTime);
+
+    $routeId = $bus['route_id'];
+    $amountStopOfRoute = countStopOfRoute($routeId);
+
+    $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
+
+    $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
+    $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
+    return findStopNameByRouteOrder($routeId, $currentOrder);
+}
+
 
 /**
  * =============================================================================
@@ -84,7 +109,8 @@ function countStopOfRoute($routeId)
  * = 依路線及順序找到站牌
  * =============================================================================
  *
- * @param String $departureTime  
+ * @param String $routeId
+ * @param String $stopOrder 
  * @return String
  *
  **/
@@ -98,4 +124,49 @@ function findStopNameByRouteOrder($routeId, $stopOrder)
     $stop = DB::find('stop', array_values($nowStop)[0]['stop_id']);
 
     return $stop['stop_name'];
+}
+
+/**
+ * =============================================================================
+ * = 依站牌找路線
+ * =============================================================================
+ *
+ * @param String $stopId  
+ * @return String
+ *
+ **/
+function findRouteByStop($stopId)
+{
+    $routeStopList = DB::fetchAll('route_stop');
+    $routeStopListByStop = array_filter($routeStopList, function ($routeStop) use ($stopId) {
+        return $stopId == $routeStop['stop_id'];
+    });
+
+    $routeListByStop = array_map(function ($routeStop) {
+        return DB::find('route', $routeStop['route_id']);
+    }, $routeStopListByStop);
+
+    return $routeListByStop;
+}
+/**
+ * =============================================================================
+ * = 搜尋路線顯示站牌
+ * =============================================================================
+ *
+ * @param String $routeId  
+ * @return String
+ *
+ **/
+function findStopListByRoute($routeId)
+{
+    $routeStopList = DB::fetchAll('route_stop');
+    $routeStopListByRoute = array_filter($routeStopList, function ($routeStop) use ($routeId) {
+        return $routeId == $routeStop['route_id'];
+    });
+
+    $stopNameByRoute = array_map(function ($routeStop) {
+        return DB::find('stop', $routeStop['stop_id']);
+    }, $routeStopListByRoute);
+
+    return $stopNameByRoute;
 }

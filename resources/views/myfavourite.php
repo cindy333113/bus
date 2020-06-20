@@ -1,6 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
+<?php
+if (empty($userdata)) {
+	render("/login");
+	die;
+}
+?>
 
 <head>
 	<title>HeyBus 我的最愛</title>
@@ -39,14 +44,14 @@
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav nav ml-auto">
 					<li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
-					<li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
+					<li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
 					<li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
-                    <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
-					<li class="nav-item"><a href="index.html#destination-section" class="nav-link"><span>路線規劃</span></a></li>
-					<li class="nav-item"><a href="index.html#hotel-section" class="nav-link"><span>登入/註冊</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="index.html"><span>中文</span></a>
-					<li class="nav-item"><a class="nav-link"><span>|</span></a>
-					<li class="nav-item"><a class="nav-link" href="english.html"><span>English</span></a></li>
+					<li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
+					<li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
+					<?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
+					<?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
+					<li class="nav-item"><a class="nav-link"><span>|</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
 				</ul>
 			</div>
 		</div>
@@ -106,11 +111,11 @@
 									<div class="form-group">
 
 										<flabel for="#">公車號</label>
-										<div class="form-field">
-											<div class="icon"><span class="ion-ios-search"></span></div>
-											
-											<input type="text" class="form-control" name="route_name" placeholder="輸入公車號" >
-										</div>
+											<div class="form-field">
+												<div class="icon"><span class="ion-ios-search"></span></div>
+
+												<input type="text" class="form-control" name="route_name" placeholder="輸入公車號">
+											</div>
 									</div>
 								</div>
 
@@ -121,11 +126,11 @@
 											<div class="select-wrap">
 												<div class="icon"><span class="ion-ios-arrow-down"></span></div>
 												<select name="stop_name" id="" class="form-control">
-												
+
 													<option value="捷運輔大站">捷運輔大站</option>
-													<option value="">盲人重建院</option>
-													<option value="">海山里</option>
-													<option value="">新泰中正路口</option>
+													<option value="盲人重建院">盲人重建院</option>
+													<option value="海山里">海山里</option>
+													<option value="新泰中正路口">新泰中正路口</option>
 													<option value="">材試所</option>
 													<option value="">新泰國中南站</option>
 													<option value="">新莊棒球場</option>
