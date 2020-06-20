@@ -45,7 +45,7 @@ function countTimeToArriveNextStop($departTime)
 
 /**
  * =============================================================================
- * = 預估抵達下站時間
+ * = 現在位置
  * =============================================================================
  *
  * @param String $busId
@@ -65,7 +65,6 @@ function findStopNameByBus($busId)
 
     $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
     $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
-
     return findStopNameByRouteOrder($routeId, $currentOrder);
 }
 
@@ -143,7 +142,7 @@ function findRouteByStop($stopId)
         return $stopId == $routeStop['stop_id'];
     });
 
-    $routeListByStop = array_map(function($routeStop){
+    $routeListByStop = array_map(function ($routeStop) {
         return DB::find('route', $routeStop['route_id']);
     }, $routeStopListByStop);
 
@@ -151,7 +150,7 @@ function findRouteByStop($stopId)
 }
 /**
  * =============================================================================
- * = 顯示目前站牌
+ * = 搜尋路線顯示站牌
  * =============================================================================
  *
  * @param String $routeId  
@@ -164,7 +163,8 @@ function findStopListByRoute($routeId)
     $routeStopListByRoute = array_filter($routeStopList, function ($routeStop) use ($routeId) {
         return $routeId == $routeStop['route_id'];
     });
-    $stopNameByRoute = array_map(function($routeStop){
+
+    $stopNameByRoute = array_map(function ($routeStop) {
         return DB::find('stop', $routeStop['stop_id']);
     }, $routeStopListByRoute);
 
