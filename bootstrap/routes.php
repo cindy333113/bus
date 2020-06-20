@@ -356,11 +356,11 @@ return function (App $app) {
         return $response->withHeader('Location', "/{$identity}");
     });
 
-    $app->post('/logout', function (Request $request, Response $response, $args) use ($app) {
+    $app->get('/logout', function (Request $request, Response $response, $args) use ($app) {
 
         unset($_SESSION['auth']);
 
-        return $response->withHeader('Location', '/');
+        return $response->withHeader('Location', '/index');
     });
     //註冊
     $app->post('/register/add', function (Request $request, Response $response, $args) {
@@ -535,6 +535,10 @@ return function (App $app) {
         render('signup', []);
         return $response;
     });
+    $app->get('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+        render('/planroute', []);
+        return $response;
+    });
     $app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
         $data = $request->getParsedBody();
         $start=$data['start'];
@@ -547,7 +551,7 @@ return function (App $app) {
         echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
         
         
-        render('planroute', [
+        render('/planroute', [
         ]);
         return $response;
     });
