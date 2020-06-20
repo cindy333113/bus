@@ -46,6 +46,10 @@ return function (App $app) {
     * =========================================================================
     **/
     $app->get('/blacklist', function (Request $request, Response $response, $args) { //顯示站名
+        $user = $request->getAttribute('user');
+        var_dump($user);
+        $isdriver=$user['driver_id'];
+        var_dump($isdriver);
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT * from `black_list` ");
         $stmt->execute();
@@ -54,34 +58,12 @@ return function (App $app) {
 
         render('/blacklist', [
             'a' => $showblack,
+            'isdriver'=>$isdriver,
         ]);
         return $response;
-    });
+    })->add(new AuthMiddleware('driver'));;
 
-    //抓黑名單
-    $app->get('/blacklist/{id}', function (Request $request, Response $response, $args) {
-        $black_List = DB::fetchAll('black_list');
-        $passengerId = $args['id'];
-
-        $blackListbypassengerId = array_filter($black_List, function ($black) use ($passengerId) {
-            return $black['passenger_id'] == $passengerId;
-        });
-        $blacktime = count($blackListbypassengerId);
-        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
-        var_dump($blacktime);
-        if ($isBlack = (count($blackListbypassengerId) >= 3)) {
-            $thispassenger = '是黑名單';
-        } else {
-            $thispassenger = '不是黑名單';
-        }
-        var_dump($thispassenger);
-        render('/blacklist', [
-            'isBlack' => $isBlack,
-            'thispassenger' => $thispassenger,
-            'blacktime' => $blacktime,
-        ]);
-        return $response;
-    });
+    
     //記黑名單
     $app->post('/blacklist/add', function (Request $request, Response $response, $args) {
 
@@ -393,12 +375,21 @@ return function (App $app) {
         return $response;
     });
 
+    $app->get('/driver', function (Request $request, Response $response, $args) {
+
+        $user = $request->getAttribute('user');
+
+        $view = render('/manage', ['user' => $user]);
+        $response->getBody()->write($view);
+
+        return $response;
+    })->add(new AuthMiddleware('passenger'));
     /* =========================================================================
     * = DRIVER Group
     * =========================================================================
     **/
 
-    $app->group('/driver', function (Group $group) {
+    /*$app->group('/driver', function (Group $group) {
 
         $group->get('', function (Request $request, Response $response, $args) {
 
@@ -410,7 +401,7 @@ return function (App $app) {
             return $response;
         });
 
-        $group->get('/{id}', function (Request $request, Response $response, $args) {
+        $group->get('/driver/{id}', function (Request $request, Response $response, $args) {
 
             $driverId = $args['id'];
 

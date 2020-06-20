@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+if(empty($isdriver)){
+	render("/login");
+	die;
+}
+?>
   <head>
     <title>黑名單</title>
     <meta charset="utf-8">
