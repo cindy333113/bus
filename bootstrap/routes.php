@@ -146,19 +146,22 @@ return function (App $app) {
         $stmt->execute();
         $getonadd = $stmt->fetchAll(PDO::FETCH_ASSOC);
         //echo json_encode($a, JSON_UNESCAPED_UNICODE);
-        render('geton', ['msg' => $result ? '預約成功' : '預約失敗',]);
+        render('geton', ['msg' => $result ? '預約成功' : 
+        '預約失敗','userdata'=>$user,]);
         return $response;
     })->add(new AuthMiddleware('passenger'));;
     $app->post('/geton/delete', function (Request $request, Response $response, $args) {
         //刪除預約上車
+        $user = $request->getAttribute('user');
         $data = $request->getParsedBody();
         var_dump($data);
         $geton_id = $data['geton_id'];
         DB::delete('geton', $geton_id, 'geton_id');
         header("Location:/geton");
-        render('geton', ['msg' =>'取消預約成功']);
+        render('geton', ['msg' =>'取消預約成功',
+        'userdata'=>$user,]);
         
-    });
+    })->add(new AuthMiddleware('passenger'));;
  
 
       /* =========================================================================
@@ -175,7 +178,7 @@ return function (App $app) {
         });
         $blacktime = count($blackListbypassengerId);
         $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
-        var_dump($blacktime);
+        //var_dump($blacktime);
         if ($isBlack = (count($blackListbypassengerId) >= 3)) {
             //thispassenger = '是黑名單';
             render('/ublack', [
@@ -225,17 +228,23 @@ return function (App $app) {
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
-        render('getoff', ['msg' => $result ? '預約成功' : '預約失敗',]);
+        render('getoff', ['msg' => $result ? '預約成功' : '預約失敗',
+        'userdata' =>$user]);
         return $response;
     })->add(new AuthMiddleware('passenger'));;
     $app->post('/getoff/delete', function (Request $request, Response $response, $args) {
         //刪除預約上車
+        $user = $request->getAttribute('user');
         $data = $request->getParsedBody();
+        
         $getoff_id = $data['getoff_id'];
+        
         $result = DB::delete('getoff', $getoff_id, 'getoff_id');
-        render('getoff', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
+        render('getoff', ['msg' => $result ? '取消預約成功' : '取消預約失敗',
+        'userdata' =>$user
+        ]);
         return $response;
-    });
+    })->add(new AuthMiddleware('passenger'));;
 
 
     /* =========================================================================
@@ -251,6 +260,7 @@ return function (App $app) {
         //列出id=?的顧客所收藏的站牌及路線
         //$passengerId = $args['id'];
         $user = $request->getAttribute('user');
+
         $passengerId=$user['passenger_id'];
         //$passengerId = 2;
         $conn = DB::getconnection();
@@ -272,18 +282,21 @@ return function (App $app) {
 
     $app->post('/myfavourite/delete', function (Request $request, Response $response, $args) {
         //刪除收藏站牌
+        $user = $request->getAttribute('user');
         $data = $request->getParsedBody(); //$_POST
         $collectId = $data['id'];
         DB::delete('collect', $collectId, 'collect_id');
         header("Location:/myfavourite");
         render('myfavourite', [
             'msg' => '刪除成功',
+            'userdata' => $user
         ]);
-    });
+    })->add(new AuthMiddleware('passenger'));;  
     $app->post('/myfavourite/add', function (Request $request, Response $response, $args) {
-
+        $user = $request->getAttribute('user');
         $data = $request->getParsedBody(); //$_POST
-        var_dump($data);
+        $passengerId=$user['passenger_id'];
+    
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
@@ -293,16 +306,19 @@ return function (App $app) {
         $route_id = $routeOfColllect['route_id'];
 
         $data2 = [
-            "passenger_id" => 2,
+            "passenger_id" => $passengerId,
             "stop_id" => $stop_id,
-            "route_id" => $route_id
+            "route_id" => $route_id,
         ];
         $result = DB::create('collect', $data2);
-        header("Location:/myfavourite");
-        render('/myfavourite', ['msg' => $result ? '增加收藏站牌資訊成功' : '增加收藏站牌資訊失敗',]);
+        //header("Location:/myfavourite");
+        render('/myfavourite', ['
+        msg' => $result ? '增加收藏站牌資訊成功' : '增加收藏站牌資訊失敗',
+        'userdata' => $user
+        ]);
 
         return $response;
-    });
+    })->add(new AuthMiddleware('passenger'));;
 
     /*$app->get('/collect', function (Request $request, Response $response, $args) {
         $passengerId = 2;
@@ -406,13 +422,12 @@ return function (App $app) {
         return $response->withHeader('Location', '/index');
     });
     //註冊
-    $app->post('/register/add', function (Request $request, Response $response, $args) {
+    $app->post('/signup/add', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
-
         $result = DB::create('passenger', $data);
-
-        render('passenger', ['msg' => $result ? '註冊成功' : '註冊失敗',]);
+        //var_dump($data);
+        render('/login', ['msg' => $result ? '註冊成功' : '註冊失敗',]);
 
         return $response;
     });

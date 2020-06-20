@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <title>HeyBus</title>
   <meta charset="utf-8">
@@ -36,11 +35,12 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav nav ml-auto">
           <li class="nav-item"><a href="/index" class="nav-link"><span>Home</span></a></li>
-          <li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>My Favourite</span></a></li>
+          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>My Favourite</span></a></li>
           <li class="nav-item"><a href="/geton" class="nav-link"><span>Get On</span></a></li>
           <li class="nav-item"><a href="/getoff" class="nav-link"><span>Get Off</span></a></li>
           <li class="nav-item"><a href="/planroute" class="nav-link"><span>Plan Route</span></a></li>
-          <?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>Login/Sign Up/span></a></li><?php } ?>
+          <li class="nav-item"><a href="/destination" class="nav-link"><span>Search</span></a></li>
+          <?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>Login/Sign Up</span></a></li><?php } ?>
           <?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>Logout</span></a></li> <?php } ?>
           <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
           <li class="nav-item"><a class="nav-link" href="/index"><span>中文</span></a></li>
@@ -161,24 +161,6 @@
       </div>
     </div>
   </section>
-
-  <footer class="ftco-footer ftco-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-center">
-
-          <p>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script>
-              document.write(new Date().getFullYear());
-            </script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
 
 
   <!-- loader -->

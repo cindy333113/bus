@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+if (empty($userdata)) {
+	render("/login");
+	die;
+}
+?>
 
 <head>
   <title>HeyBus 註冊</title>
@@ -36,10 +42,11 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav nav ml-auto">
           <li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
-          <li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
+          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
           <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
           <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
           <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
+          <li class="nav-item"><a href="/destination" class="nav-link"><span>公車查詢</span></a></li>
           <?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
           <?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
           <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
@@ -62,14 +69,17 @@
                 <h3 class="mb-0">註冊</h3>
               </div>
               <div class="card-body">
-                <form id="formLogin" method="POST" class="formLogin">
-                  <div class="form-group">
-                    <input for="username" class="form-control" id="name" name="name" placeholder="Username" type="text" required="">
-                    <i class="fa fa-user"></i>
+                <form id="formLogin" action="/signup/add" method="POST" class="formLogin">
+                <div class="form-group">
+                    <input for="username" class="form-control" id="name" name="passenger_name" placeholder="User Name" type="text" required="">
                   </div>
+
                   <div class="form-group">
-                    <input for="password" type="password" class="form-control" placeholder="Password" id="pwd" required="">
-                    <i class="fa fa-lock"></i>
+                    <input for="username" class="form-control" id="account" name="passenger_account" placeholder="Account" type="text" required="">
+                  </div>
+
+                  <div class="form-group">
+                    <input for="password" type="password" name="passenger_password" class="form-control" placeholder="Password" id="pwd" required="">
                   </div>
 
               </div>
