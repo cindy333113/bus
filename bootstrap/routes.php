@@ -519,6 +519,10 @@ return function (App $app) {
         render('signup', []);
         return $response;
     });
+    $app->get('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+        render('/planroute', []);
+        return $response;
+    });
     $app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
         $data = $request->getParsedBody();
         $start=$data['start'];
@@ -531,7 +535,7 @@ return function (App $app) {
         echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
         
         
-        render('planroute', [
+        render('/planroute', [
         ]);
         return $response;
     });
