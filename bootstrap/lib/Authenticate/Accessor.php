@@ -18,10 +18,10 @@ class Accessor
      * @var array
      */
     protected $config = [
-        'authTable' => 'PASSENGER',
-        'idField' => 'PASSENGER_ID',
-        'accountField' => 'PASSENGER_ACCOUNT',
-        'passwordField' => 'PASSENGER_PASSWORD',
+        'authTable' => 'passenger',
+        'idField' => 'passenger_id',
+        'accountField' => 'passenger_account',
+        'passwordField' => 'passenger_password',
     ];
 
     /**
@@ -37,12 +37,12 @@ class Accessor
      */
     public function configByIdentify(string $identity)
     {
-        $table = strtoupper($identity);
+        $table = $identity;
         $this->config([
             'authTable' => $table,
-            'idField' => "{$table}_ID",
-            'accountField' => "{$table}_ACCOUNT",
-            'passwordField' => "{$table}_PASSWORD",
+            'idField' => "{$table}_id",
+            'accountField' => "{$table}_account",
+            'passwordField' => "{$table}_password",
         ]);
     }
 

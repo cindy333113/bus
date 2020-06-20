@@ -26,15 +26,15 @@ return function (App $app) {
     * =========================================================================
     **/
 
-    $app->get('/login', function (Request $request, Response $response, $args) { //顯示站名
-        $view = render('login', []);
+    $app->get('/login', function (Request $request, Response $response, $args) {
+        $view = render('login');
 
         $response->getBody()->write($view);
 
         return $response;
     });
 
-    $app->post('/login', function (Request $request, Response $response, $args) use ($app) {
+    $app->post('/login', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody(); //$_POST
 
@@ -44,12 +44,16 @@ return function (App $app) {
 
         if ($id = Auth::login($account, $password, $identity)) {
             $_SESSION['auth'] = ['id' => $id, 'identity' => $identity];
+            return $response->withHeader('Location', "/{$identity}");
+        } else {
+            $view = render('login', ['msg'=>'帳號或密碼錯誤']);
+            $response->getBody()->write($view);
         }
 
-        return $response->withHeader('Location', "/{$identity}");
+        return $response;
     });
 
-    $app->get('/logout', function (Request $request, Response $response, $args) use ($app) {
+    $app->get('/logout', function (Request $request, Response $response, $args) {
 
         unset($_SESSION['auth']);
 
@@ -129,7 +133,12 @@ return function (App $app) {
             return $response;
         });
 
-        $group->get('/info/{id}', function (Request $request, Response $response, $args) {
+        /* =========================================================================
+        * = Bus
+        * =========================================================================
+        **/
+
+        $group->get('/bus/{id}', function (Request $request, Response $response, $args) {
 
             $driverId = $args['id'];
 

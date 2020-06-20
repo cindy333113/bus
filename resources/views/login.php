@@ -41,13 +41,16 @@
                 <form action="/login" method="post">
                   <input type="hidden" name="identity" value="passenger" />
                   <div class="single-input-item">
-                    <input type="account" placeholder="請輸入使用者帳號" required />
+                    <input type="text"  name="account" placeholder="請輸入使用者帳號" required />
                   </div>
                   <div class="single-input-item">
-                    <input type="password" placeholder="請輸入密碼" required />
+                    <input type="password" name="password" placeholder="請輸入密碼" required />
                   </div>
                   <div class="single-input-item">
                     <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
+                      <div class="remember-meta" style="color: #CC2121;">
+                        <?= $msg ?? '' ?>
+                      </div>
                       <!--
                       <div class="remember-meta">
                         <div class="custom-control custom-checkbox">
