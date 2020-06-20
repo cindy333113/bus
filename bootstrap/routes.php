@@ -92,7 +92,9 @@ return function (App $app) {
     * =========================================================================
     **/
     $app->get('/geton', function (Request $request, Response $response, $args) {
-        $passengerId = 2;
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,g.bus_id,stop_name,r.route_name from geton g,stop s,
         route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id
@@ -105,8 +107,7 @@ return function (App $app) {
             'List' => $a,
         ]);
         return $response;
-    });
-
+    })->add(new AuthMiddleware('passenger'));;
     /*
     $app->get('/geton', function (Request $request, Response $response, $args) {
         $passengerId = 2;
@@ -179,7 +180,7 @@ return function (App $app) {
     $app->get('/myfavourite', function (Request $request, Response $response, $args) {
         //列出id=?的顧客所收藏的站牌及路線
         //$passengerId = $args['id'];
-        //$passengerId=$request->getAttribute('user');
+        //$passengerId=$request->getAttribute('user'
         $passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id from collect c,stop s,route r where passenger_id=$passengerId and c.stop_id=s.stop_id and c.route_id=r.route_id ");
@@ -206,12 +207,6 @@ return function (App $app) {
         ]);
     });
 
-    $app->get('/deletcollect', function (Request $request, Response $response, $args) {
-        //刪除收藏站牌
-        $passengerId = 3;
-        var_dump(DB::delete('collect', $passengerId, 'passenger_id'));
-        return $response;
-    });
     /*$app->get('/collect', function (Request $request, Response $response, $args) {
         $passengerId = 2;
         $collectlist=DB::find('collect',$passengerId,'passenger_id');
@@ -302,6 +297,9 @@ return function (App $app) {
         if ($id = Auth::login($account, $password, $identity)) {
             $_SESSION['auth'] = ['id' => $id, 'identity' => $identity];
         }
+
+        //$response->getBody()->write(json_encode(['data'=>$data,'id'=>$id]));
+
 
         return $response->withHeader('Location', "/{$identity}");
     });
@@ -492,8 +490,20 @@ return function (App $app) {
         render('signup', []);
         return $response;
     });
-    $app->get('/planroute', function (Request $request, Response $response, $args) { //顯示站名
-        render('planroute', []);
+    $app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+        $data = $request->getParsedBody();
+        $start=$data['start'];
+        $goal=$data['goal'];
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("select rt.route_id,route_name from route_stop rt,route r where rt.stop_id in ($start,$goal) and rt.route_id=r.route_id group by rt.route_id having count(rt.route_id)=2 ");
+        $stmt->execute();
+
+        $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
+        
+        
+        render('planroute', [
+        ]);
         return $response;
     });
     $app->get('/destination', function (Request $request, Response $response, $args) { //顯示站名
@@ -553,4 +563,32 @@ return function (App $app) {
         }*/
         return $response;
     });
+    $app->get('/tplan', function (Request $request, Response $response, $args) { //顯示站名
+        $view = render('test_planroute', [
+        ]);
+        $response->getBody()->write($view);
+        return $response;
+    });
+    $app->post('/tplan/add', function (Request $request, Response $response, $args) { //顯示站名
+        $data = $request->getParsedBody();
+        $start=$data['start'];
+        $goal=$data['goal'];
+        
+        $startdata = DB::find('stop',$start,'stop_name');
+        $goaldata = DB::find('stop',$goal,'stop_name');
+        $startid=$startdata['stop_id'];
+        $goalid=$goaldata['stop_id'];
+        //var_dump($startid,$goalid);
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("select rt.route_id,route_name from route_stop rt,route r where rt.stop_id in ($startid,$goalid) and rt.route_id=r.route_id group by rt.route_id having count(rt.route_id)=2 ");
+        $stmt->execute();
+
+        $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
+        $view = render('test_planroute', [
+        ]);
+        $response->getBody()->write($view);
+        return $response;
+    });
+
 };
