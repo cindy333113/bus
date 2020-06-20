@@ -43,11 +43,10 @@ return function (App $app) {
         $stmt = $conn->prepare("SELECT * from `black_list` ");
         $stmt->execute();
 
-        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        $showblack = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         render('/blacklist', [
-            'a' => $a,
+            'a' => $showblack,
         ]);
         return $response;
     });
@@ -100,11 +99,11 @@ return function (App $app) {
         route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id
          and b.route_id=r.route_id");
         $stmt->execute();
-        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $getondata = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         render('geton', [
             'msg' => '輸入要新增修改的資料',
-            'List' => $a,
+            'List' => $getondata,
         ]);
         return $response;
     })->add(new AuthMiddleware('passenger'));;
@@ -141,7 +140,7 @@ return function (App $app) {
         $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
         ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
         $stmt->execute();
-        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $getonadd = $stmt->fetchAll(PDO::FETCH_ASSOC);
         //echo json_encode($a, JSON_UNESCAPED_UNICODE);
         render('geton', ['msg' => $result ? '預約成功' : '預約失敗',]);
         return $response;
@@ -191,12 +190,12 @@ return function (App $app) {
         where passenger_id=$passengerId and
          c.stop_id=s.stop_id and c.route_id=r.route_id ");
         $stmt->execute();
-        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        var_dump($a);
+        $collect = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
         //echo json_encode($a, JSON_UNESCAPED_UNICODE);
         render('myfavourite', [
             'msg' => '輸入要新增修改的資料',
-            'stopList' => $a,
+            'stopList' => $collect,
         ]);
         return $response;
     }); //->add(new AuthMiddleware);  
