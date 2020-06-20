@@ -36,13 +36,14 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav nav ml-auto">
           <li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
-          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
+          <li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
           <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
           <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
           <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
-          <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
-          <li class="nav-item"><a class="nav-link"><span>|</span></a>
-          <li class="nav-item"><a href="/english" class="nav-link"><span>English</span></a></li>
+          <?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
+          <?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
+          <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
         </ul>
       </div>
     </div>
@@ -62,9 +63,9 @@
               </div>
               <div class="card-body">
                 <form action="/login" id="formLogin" method="POST" class="formLogin">
-                <input type="hidden" name="identity" value="passenger">
-                  
-                <div class="form-group">
+                  <input type="hidden" name="identity" value="passenger">
+
+                  <div class="form-group">
                     <input class="form-control" id="account" name="account" placeholder="帳號" type="text" required autocapitalize="off" autocorrect="off" spellcheck="false">
                     <i class="fa fa-user"></i>
                   </div>

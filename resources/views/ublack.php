@@ -40,12 +40,12 @@
 				<ul class="navbar-nav nav ml-auto">
 					<li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
 					<li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
-                    <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
-                    <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
+					<li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
+					<li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
 					<li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
-					<li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="/index"><span>中文</span></a>
-					<li class="nav-item"><a class="nav-link"><span>|</span></a>
+					<?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
+					<?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
+					<li class="nav-item"><a class="nav-link"><span>|</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
 				</ul>
 			</div>
@@ -60,30 +60,29 @@
 				</div>
 			</div>
 
-	<!-- loader -->
-	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
-			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
+			<!-- loader -->
+			<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+					<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+					<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
 
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery-migrate-3.0.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.easing.1.3.js"></script>
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/jquery.stellar.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/aos.js"></script>
-	<script src="js/jquery.animateNumber.min.js"></script>
-	<script src="js/scrollax.min.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="js/google-map.js"></script>
+			<script src="js/jquery.min.js"></script>
+			<script src="js/jquery-migrate-3.0.1.min.js"></script>
+			<script src="js/popper.min.js"></script>
+			<script src="js/bootstrap.min.js"></script>
+			<script src="js/jquery.easing.1.3.js"></script>
+			<script src="js/jquery.waypoints.min.js"></script>
+			<script src="js/jquery.stellar.min.js"></script>
+			<script src="js/owl.carousel.min.js"></script>
+			<script src="js/jquery.magnific-popup.min.js"></script>
+			<script src="js/aos.js"></script>
+			<script src="js/jquery.animateNumber.min.js"></script>
+			<script src="js/scrollax.min.js"></script>
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+			<script src="js/google-map.js"></script>
 
-	<script src="js/main.js"></script>
+			<script src="js/main.js"></script>
 
 </body>
 
 </html>
-
