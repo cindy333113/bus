@@ -1,4 +1,3 @@
-<p class="class__board_notice"> <?= $msg ?></p>
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -48,9 +47,9 @@ if(empty($userdata)){
                     <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
                     <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
      <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
-     <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
-     <li class="nav-item"><a class="nav-link" href="/index"><span>中文</span></a>
-     <li class="nav-item"><a class="nav-link"><span>|</span></a>
+     <?php if(empty($userdata)){ ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php }?>
+     <?php if(!empty($userdata)){ ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php }?>
+     <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
      <li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
     </ul>
    </div>
@@ -82,7 +81,7 @@ if(empty($userdata)){
                                 <td><?= $getondata['direction'] ?></td>
                                 <td><?= $getondata['stop_name'] ?></td>
                                 <td><?= findStopNameByBus($getondata['bus_id']) ?></td>
-                                <td><?= $getondata['unusal']?></td>
+                                <td><?= $getondata['bus_id']?></td>
                                 <td>
                                     <form name="deleteForm" action="/geton/delete" method="post">
           <input type="hidden" name="id" value=<?= $stop['geton_id'] ?> />
@@ -142,12 +141,12 @@ if(empty($userdata)){
           <div class="form-group">
            <label for="#">方向</label>
            <div class="form-field">
-                                                <div class="select-wrap">
-                                                    <select name="direction" class="form-control" placeholder="選擇方向">
-                                                        <option value="0">迴龍</option>
-                                                        <option value="1">土城</option>
-                                                    </select>
-                                                </div>
+             <div class="select-wrap">
+               <select name="direction" class="form-control" placeholder="選擇方向">
+                 <option value="0">迴龍</option>
+                 <option value="1">土城</option>
+                </select>
+              </div>
            </div>
           </div>
          </div>
@@ -163,9 +162,9 @@ if(empty($userdata)){
               <option value="0">否</option>
              </select>
             </div>
-           </div>
           </div>
-         </div>
+        </div>
+         
          <div class="col-lg align-items-end">
           <div class="form-group">
            <label for="#">站牌</label>
@@ -189,7 +188,6 @@ if(empty($userdata)){
 
              </select>
             </div>
-           </div>
           </div>
          </div>
          <div class="col-lg align-self-end">
@@ -198,18 +196,10 @@ if(empty($userdata)){
             <input type="submit" value="新增" class="form-control btn btn-primary" onclick="geton/add" method="post">
            </div>
           </div>
-         </div>
         </div>
        </form>
       </div>
-     </div>
    </form>
-
- <!-- loader -->
- <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
-   <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-   <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
-
 
  <script src="js/jquery.min.js"></script>
  <script src="js/jquery-migrate-3.0.1.min.js"></script>
@@ -227,44 +217,5 @@ if(empty($userdata)){
  <script src="js/google-map.js"></script>
 
  <script src="js/main.js"></script>
-
 </body>
-
 </html>
-<?php
-
-echo 'hiiii'
-
-?>
-
-<!DOCTYPE html>
-
-<html>
-
-<?php ?>
-
-<body class="page__login">
- <div class="wrapper">
-  <div class="container">
-
-   <div class="class__board">
-    <div class="class__board_inner">
-     <div class="class__board_logo">
-      <h1 class="class__board_title">WEB Project</h1>
-     </div>
-
-     <p class="class__board_notice"> <?= $msg ?></p>
-
-     <div class="class__board_block">
-      <form name="stopFrom" class="class__form" action="/stop" method="post">
-       <div class="class__form_textField">
-        <label class="form__textField_label">站牌id</label>
-        <input type="text" name="stop_id" placeholder="站牌ID" required>
-       </div>
-       <div class="class__form_textField">
-        <label class="form__textField_label">站牌名稱</label>
-        <input type="text" name="stop_name" placeholder="站牌名稱" required>
-       </div>
-       <div class="class__form_btn">
-        <button type="submit" class="btn submit__btn" onclick="stopFrom.action='/stop/add'">新增</button>
-        <button type="submit" class="btn submit__btn" onclick="stopFrom.action=
