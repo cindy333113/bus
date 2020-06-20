@@ -164,7 +164,6 @@ function findStopListByRoute($routeId)
     $routeStopListByRoute = array_filter($routeStopList, function ($routeStop) use ($routeId) {
         return $routeId == $routeStop['route_id'];
     });
-var_dump($routeStopListByRoute);
     $stopNameByRoute = array_map(function($routeStop){
         return DB::find('stop', $routeStop['stop_id']);
     }, $routeStopListByRoute);
