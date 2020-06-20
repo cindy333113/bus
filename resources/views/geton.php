@@ -1,7 +1,12 @@
 <p class="class__board_notice"> <?= $msg ?></p>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+if(!isset($userdata)){
+	render("/login");
+	die;
+}
+?>
 <head>
 	<title>HeyBus 預約上車</title>
 	<meta charset="utf-8">

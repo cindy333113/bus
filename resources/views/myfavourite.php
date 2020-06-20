@@ -1,7 +1,12 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+if(!isset($userdata)){
+	render("/login");
+	die;
+}
+?>
 <head>
 	<title>HeyBus 我的最愛</title>
 	<meta charset="utf-8">
