@@ -46,6 +46,8 @@
 	    </div>
 	  </nav>
 
+    
+
     <section class="ftco-section contact-section ftco-no-pb" id="contact-section">
     <div id="home-section" class="hero"> 
       <div class="container">
@@ -55,68 +57,25 @@
           </div>
         </div>
 
-        <button class="tablink" onclick="openCity('235', this, 'grey')" id="defaultOpen">235</button>
-        <button class="tablink" onclick="openCity('842', this, 'grey')">842</button>
-
-        <form action="#" class="bg-light p-4 p-md-5 contact-form">
-        <div class="form">
-            
-        <div id="235" class="tabcontent">
-        <table class = "table table-hover">
-        <tr align=center>
-            <td>編號</td>
-            <td>站牌</td>
-        </tr>
-
-        <tr align=center>
-        <td></td>
-        <td></td>
-        </tr>
-          
-        </table>
-        </div>
-            
-        <div id="842" class="tabcontent">
-        <table class = "table table-hover">
-        <tr align=center>
-            <td>編號</td>
-            <td>站牌</td>
-        </tr>
-
-        <tr align=center>
-        <td></td>
-        <td></td>
-        </tr>
-            
-        </table>
-        </div>
-            
-        </div>
+        <form action="/" method="post">
+          <table>
+            <tr>
+              <td><input type="text" name="route_name" placeholder="請輸入路線名稱"></td>
+            </tr>
+            <tr>
+              <td>方向：</td>
+              <td><button type="" name="切換方向" method="post" onclick="/"></td>
+            </tr>
+            <?php foreach{?>
+            <tr>
+              <td><a href="">stop 1</a></td>
+            </tr>
+            <?}?>
+          </table>
         </form>
-      </div>
-     </div>
-    </section>
 
     
   
-<script>
-function openCity(cityName,elmnt,color) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].style.backgroundColor = "";
-  }
-  document.getElementById(cityName).style.display = "block";
-  elmnt.style.backgroundColor = color;
-
-}
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
-</script>
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>

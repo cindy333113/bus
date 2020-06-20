@@ -489,7 +489,7 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         ]);
         return $response;
     });
-    $app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+   /*$app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
         $data = $request->getParsedBody();
         $start=$data['start'];
         $goal=$data['goal'];
@@ -504,19 +504,20 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         render('planroute', [
         ]);
         return $response;
-    });
+    });*/
     $app->get('/destination', function (Request $request, Response $response, $args) { //顯示站名
         render('destination', [
         ]);
         return $response;
     });
-    $app->get('/tplan', function (Request $request, Response $response, $args) { //顯示站名
-        $view = render('test_planroute', [
+    $app->get('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+        $view = render('planroute', [
+            'msg'=>[]
         ]);
         $response->getBody()->write($view);
         return $response;
     });
-    $app->post('/tplan/add', function (Request $request, Response $response, $args) { //顯示站名
+    $app->post('/planroute/add', function (Request $request, Response $response, $args) { //顯示站名
         $data = $request->getParsedBody();
         $start=$data['start'];
         $goal=$data['goal'];
@@ -531,8 +532,9 @@ $app->post('/getoff/delete', function (Request $request, Response $response, $ar
         $stmt->execute();
 
         $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
-        $view = render('test_planroute', [
+        //echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
+        $view = render('planroute', [
+            'msg'=>$planroute,
         ]);
         $response->getBody()->write($view);
         return $response;
