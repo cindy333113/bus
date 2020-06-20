@@ -37,12 +37,12 @@ class Accessor
      */
     public function configByIdentify(string $identity)
     {
-        $table = strtoupper($identity);
+        $table = strtolower($identity);
         $this->config([
             'authTable' => $table,
-            'idField' => "{$table}_ID",
-            'accountField' => "{$table}_ACCOUNT",
-            'passwordField' => "{$table}_PASSWORD",
+            'idField' => "{$table}_id",
+            'accountField' => "{$table}_account",
+            'passwordField' => "{$table}_password",
         ]);
     }
 

@@ -92,7 +92,9 @@ return function (App $app) {
     * =========================================================================
     **/
     $app->get('/geton', function (Request $request, Response $response, $args) {
-        $passengerId = 2;
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name 
         from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
@@ -123,7 +125,7 @@ return function (App $app) {
             'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)*/
         ]);
         return $response;
-    });
+    })->add(new AuthMiddleware('passenger'));;
     /*
     $app->get('/geton', function (Request $request, Response $response, $args) {
         $passengerId = 2;
@@ -198,7 +200,7 @@ return function (App $app) {
     $app->get('/myfavourite', function (Request $request, Response $response, $args) {
         //列出id=?的顧客所收藏的站牌及路線
         //$passengerId = $args['id'];
-        //$passengerId=$request->getAttribute('user');
+        //$passengerId=$request->getAttribute('user'
         $passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id from collect c,stop s,route r where passenger_id=$passengerId and c.stop_id=s.stop_id and c.route_id=r.route_id ");
@@ -338,6 +340,9 @@ return function (App $app) {
         if ($id = Auth::login($account, $password, $identity)) {
             $_SESSION['auth'] = ['id' => $id, 'identity' => $identity];
         }
+
+        //$response->getBody()->write(json_encode(['data'=>$data,'id'=>$id]));
+
 
         return $response->withHeader('Location', "/{$identity}");
     });
@@ -494,6 +499,31 @@ return function (App $app) {
 
     //計算公車站牌
 
+        $busId = $args['id'];
+
+        $bus = DB::find('bus', $busId);
+        $departureTime = $bus['time'];
+        $countOfStop = countStopBusPassed($departureTime);
+
+        $routeId = $bus['route_id'];
+
+        $amountStopOfRoute = countStopOfRoute($routeId);
+
+        $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
+
+        $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
+        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
+        $stopList = DB::fetchAll('stop');
+
+        render('geton', [
+            'bus' => $bus,
+            'departureTime' => $departureTime,
+            'currentOrder' => $currentOrder,
+            'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)
+        ]);
+
+        return $response;
+    });
     $app->get('/manage', function (Request $request, Response $response, $args) { //顯示站名
         render('/manage', []);
         return $response;
@@ -502,7 +532,7 @@ return function (App $app) {
         render('signup', []);
         return $response;
     });
-    /*$app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+    $app->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
         $data = $request->getParsedBody();
         $start=$data['start'];
         $goal=$data['goal'];
@@ -522,6 +552,10 @@ return function (App $app) {
         render('destination', []);
         return $response;
     });
+    /* =========================================================================
+    * = search
+    * =========================================================================
+    **/
     //用站牌尋找公車
     $app->get('/destination/routesearch/{stop_id}', function (Request $request, Response $response, $args) {
         $stopId =$args['stop_id'];

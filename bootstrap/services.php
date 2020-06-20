@@ -43,6 +43,32 @@ function countTimeToArriveNextStop($departTime)
     return date("Y-m-d H:i:s", strtotime($departTime . "+10 minute"));
 }
 
+/**
+ * =============================================================================
+ * = 預估抵達下站時間
+ * =============================================================================
+ *
+ * @param String $busId
+ * @return String
+ *
+ **/
+function findStopNameByBus($busId)
+{
+    $bus = DB::find('bus', $busId);
+    $departureTime = $bus['time'];
+    $countOfStop = countStopBusPassed($departureTime);
+
+    $routeId = $bus['route_id'];
+    $amountStopOfRoute = countStopOfRoute($routeId);
+
+    $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
+
+    $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
+    $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
+
+    return findStopNameByRouteOrder($routeId, $currentOrder);
+}
+
 
 /**
  * =============================================================================
