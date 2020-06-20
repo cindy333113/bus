@@ -35,9 +35,9 @@ class AuthMiddleware implements Middleware
         $response = $handler->handle($request);
 
         if(!$user){
-            $response = $response->withHeader('Location', '/login');
+            return $response->withHeader('Location', '/login');
         }
-        
+
         return $response;
     }
 }
