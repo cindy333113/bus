@@ -100,7 +100,7 @@ return function (App $app) {
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         render('geton', [
-            'msg' => '輸入要新增修改的資料',
+            'msg' => '輸入要新增修改的預約下車的資料',
             'List' => $a,
         ]);
         return $response;
@@ -121,7 +121,9 @@ return function (App $app) {
     $app->post('/geton/add', function (Request $request, Response $response, $args) {
         //找出預約的車子
         $data = $request->getParsedBody();
-        $passengerId = 2;
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
@@ -142,7 +144,7 @@ return function (App $app) {
         //echo json_encode($a, JSON_UNESCAPED_UNICODE);
         render('geton', ['msg' => $result ? '預約成功' : '預約失敗',]);
         return $response;
-    });
+    })->add(new AuthMiddleware('passenger'));;
     $app->post('/geton/delete', function (Request $request, Response $response, $args) {
         //刪除預約上車
         $data = $request->getParsedBody();
@@ -179,8 +181,9 @@ return function (App $app) {
     $app->get('/myfavourite', function (Request $request, Response $response, $args) {
         //列出id=?的顧客所收藏的站牌及路線
         //$passengerId = $args['id'];
-        //$passengerId=$request->getAttribute('user'
-        $passengerId = 2;
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id 
         from collect c,stop s,route r 
@@ -195,7 +198,7 @@ return function (App $app) {
             'stopList' => $collect,
         ]);
         return $response;
-    }); //->add(new AuthMiddleware);  
+    })->add(new AuthMiddleware('passenger'));;  
 
     $app->post('/myfavourite/delete', function (Request $request, Response $response, $args) {
         //刪除收藏站牌
@@ -408,19 +411,28 @@ return function (App $app) {
     * =========================================================================
     **/
     $app->get('/getoff', function (Request $request, Response $response, $args) {
-        $passengerId = 2;
-        $getoffResult = DB::find('getoff', $passengerId, 'passenger_id');
-        var_dump($getoffResult);
-        render('/getoff', [
-            'msg' => '輸入要預約上車的資料',
-            'getoffResult' => $getoffResult,
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,g.bus_id,stop_name,r.route_name from getoff g,stop s,
+        route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id
+         and b.route_id=r.route_id");
+        $stmt->execute();
+        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        render('getoff', [
+            'msg' => '輸入要新增的預約下車的資料',
+            'List' => $a,
         ]);
         return $response;
-    });
+    })->add(new AuthMiddleware('passenger'));;
     $app->post('/getoff/add', function (Request $request, Response $response, $args) {
         //找出預約的車子
         $data = $request->getParsedBody();
-        $passengerId = 2;
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
@@ -442,7 +454,7 @@ return function (App $app) {
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
         render('getoff', ['msg' => $result ? '預約成功' : '預約失敗',]);
         return $response;
-    });
+    })->add(new AuthMiddleware('passenger'));;
     $app->post('/getoff/delete', function (Request $request, Response $response, $args) {
         //刪除預約上車
         $data = $request->getParsedBody();
