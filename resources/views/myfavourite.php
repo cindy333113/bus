@@ -65,7 +65,7 @@
 				<div style="width:800px; height:auto;border-style:dotted;border-size:10px">
 					<table class="myList" style="position:relative; margin: 35px;">
 						<tr>
-							<td>公車號</td>
+							<td>公車號</td> 
 							<td>站牌</td>
 							<td>刪除</td>
 						</tr>
@@ -123,9 +123,9 @@
 												<select name="stop_name" id="" class="form-control">
 												
 													<option value="捷運輔大站">捷運輔大站</option>
-													<option value="">盲人重建院</option>
-													<option value="">海山里</option>
-													<option value="">新泰中正路口</option>
+													<option value="盲人重建院">盲人重建院</option>
+													<option value="海山里">海山里</option>
+													<option value="新泰中正路口">新泰中正路口</option>
 													<option value="">材試所</option>
 													<option value="">新泰國中南站</option>
 													<option value="">新莊棒球場</option>

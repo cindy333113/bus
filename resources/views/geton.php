@@ -80,7 +80,7 @@
                                 <td></td>
                                 <td>
                                     <form name="deleteForm" action="/geton/delete" method="post">
-										<input type="hidden" name="id" value=<?= $stop['geton_id'] ?> />
+										<input type="hidden" name="geton_id" value=<?= $getondata['geton_id'] ?> />
 										<button type="submit" style="background:transparent;border:none;">
 											<span class="material-icons">
 												delete

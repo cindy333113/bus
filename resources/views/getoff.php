@@ -71,7 +71,7 @@
 							<td> 刪除 </td>
 						</tr>
 						
-						<?php //foreach ($getoffResult as $key => $stop) { ?>
+						<?php foreach ($getoffResult as $key => $stop) { ?>
 							<tr>
 								<td><?= $getoffResult['bus_id'] ?></td>
                                 <td><?= $getoffdata['direction'] ?></td>
