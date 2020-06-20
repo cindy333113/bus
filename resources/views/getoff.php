@@ -64,9 +64,9 @@ if(empty($userdata)){
      <h2 class="mb-4">預約上車清單</h2>
     </div>
    </div>
-   <section class="geton">
+   <section class="getoff">
     <div style="width:800px; height:auto;border-style:dotted;border-size:10px">
-     <table class="myList" style="position:relative; margin: 35px;width:400px" action="/geton" method="post">
+     <table class="myList" style="position:relative; margin: 35px;width:400px" action="/getoff" method="post">
       <tr>
        <td>公車號</td>
        <td>方向 </td>
@@ -76,16 +76,16 @@ if(empty($userdata)){
        <td> 刪除 </td>
       </tr>
       
-                        <?php foreach ($List as $key => $getondata) { ?>
+                        <?php foreach ($List as $key => $getoffdata) { ?>
        <tr>
-        <td><?= $getondata['route_name'] ?></td>
-                                <td><?= $getondata['direction'] ?></td>
-                                <td><?= $getondata['stop_name'] ?></td>
-                                <td><?= findStopNameByBus($getondata['bus_id']) ?></td>
-                                <td><?= $getondata['unusal']?></td>
+        <td><?= $getoffdata['route_name'] ?></td>
+                                <td><?= $getoffdata['direction'] ?></td>
+                                <td><?= $getoffdata['stop_name'] ?></td>
+                                <td><?= findStopNameByBus($getoffdata['bus_id']) ?></td>
+                                <td><?= $getoffdata['unusal']?></td>
                                 <td>
-                                    <form name="deleteForm" action="/geton/delete" method="post">
-          <input type="hidden" name="id" value=<?= $stop['geton_id'] ?> />
+                                    <form name="deleteForm" action="/getoff/delete" method="post">
+          <input type="hidden" name="id" value=<?= $stop['getoff_id'] ?> />
           <button type="submit" style="background:transparent;border:none;">
            <span class="material-icons">
             delete
@@ -120,12 +120,12 @@ if(empty($userdata)){
    </section>
 
 
-   <form action="/geton/add" method="POST">
+   <form action="/getoff/add" method="POST">
     <div class="row">
      <h3>預約上車</h3><br>
      <div class="col-md-12">
       <div class="search-wrap-1 ftco-animate p-4">
-       <form action="/geton" method="post" class="search-property-1">
+       <form action="/getoff" method="post" class="search-property-1">
         <div class="row">
 
          <div class="col-lg align-items-end">
@@ -195,7 +195,7 @@ if(empty($userdata)){
          <div class="col-lg align-self-end">
           <div class="form-group">
            <div class="form-field">
-            <input type="submit" value="新增" class="form-control btn btn-primary" onclick="geton/add" method="post">
+            <input type="submit" value="新增" class="form-control btn btn-primary" onclick="getoff/add" method="post">
            </div>
           </div>
          </div>

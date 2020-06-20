@@ -82,7 +82,7 @@ if(empty($userdata)){
                                 <td><?= $getondata['direction'] ?></td>
                                 <td><?= $getondata['stop_name'] ?></td>
                                 <td><?= findStopNameByBus($getondata['bus_id']) ?></td>
-                                <td><?= $getondata['unusal']?></td>
+                                <td><?= $getondata['bus_id']?></td>
                                 <td>
                                     <form name="deleteForm" action="/geton/delete" method="post">
           <input type="hidden" name="id" value=<?= $stop['geton_id'] ?> />

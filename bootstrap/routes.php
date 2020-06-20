@@ -110,11 +110,11 @@ return function (App $app) {
         $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
         var_dump($blacktime);
         if ($isBlack = (count($blackListbypassengerId) >= 3)) {
-            $thispassenger = '是黑名單';
+            //thispassenger = '是黑名單';
             render('/ublack', [
             ]);
         } else {
-            $thispassenger = '不是黑名單';
+            //thispassenger = '不是黑名單';
 
         //$passengerId = 2;
         $conn = DB::getconnection();
@@ -128,7 +128,7 @@ return function (App $app) {
             'userdata'=>$user,
         ]);
         return $response;
-    }})->add(new AuthMiddleware('passenger'));;
+    }})->add(new AuthMiddleware('passenger'));
     /*
     $app->get('/geton', function (Request $request, Response $response, $args) {
         $passengerId = 2;
@@ -181,20 +181,85 @@ return function (App $app) {
         render('geton', ['msg' =>'取消預約成功']);
         
     });
-    /*
-    $app->get('/temap', function (Request $request, Response $response, $args) { //顯示站名
-        //列出所有站牌
-        $routes = DB::fetchAll('route');
-        $row = array_map(function ($route) {
-            return $route['route_name'];
-        }, $routes);
-        //echo $routes;
-        var_dump($row);
+ 
+
+      /* =========================================================================
+    * = getoff
+    * =========================================================================
+    **/
+    $app->get('/getoff', function (Request $request, Response $response, $args) {
+        $black_List = DB::fetchAll('black_list');
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+
+        $blackListbypassengerId = array_filter($black_List, function ($black) use ($passengerId) {
+            return $black['passenger_id'] == $passengerId;
+        });
+        $blacktime = count($blackListbypassengerId);
+        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
+        var_dump($blacktime);
+        if ($isBlack = (count($blackListbypassengerId) >= 3)) {
+            //thispassenger = '是黑名單';
+            render('/ublack', [
+            ]);
+        } else {
+            //thispassenger = '不是黑名單';
+
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
+        $conn = DB::getconnection();
+        $stmt = $conn->prepare("SELECT direction,unusal,g.getoff_id,stop_name,r.route_name,g.bus_id from getoff g,stop s,
+        route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id
+         and b.route_id=r.route_id");
+        $stmt->execute();
+        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        render('getoff', [
+            'msg' => '輸入要新增的預約下車的資料',
+            'List' => $a,
+            'userdata' =>$user
+        ]);
+        return $response;
+    }})->add(new AuthMiddleware('passenger'));;
+    $app->post('/getoff/add', function (Request $request, Response $response, $args) {
+        //找出預約的車子
+        $data = $request->getParsedBody();
+        $user = $request->getAttribute('user');
+        $passengerId=$user['passenger_id'];
+        //$passengerId = 2;
+        $stopname = $data['stop_name'];
+        $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
+        $stop_id = $stopOfCollect['stop_id'];
+        var_dump($stopname, $stop_id);
+
+        $routename = $data['route_name'];
+        $routeOfColllect = DB::find('route', $routename, 'route_name');
+        $route_id = $routeOfColllect['route_id'];
+        var_dump($routename, $route_id);
+
+
+        $directionId = $data['direction'];
+        $unusal = $data['unusal'] ?? "";
+        $result = $conn = DB::getconnection();
+        $stmt = $conn->prepare("INSERT INTO `getoff`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
+    ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
+        $stmt->execute();
+        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($a, JSON_UNESCAPED_UNICODE);
+        render('getoff', ['msg' => $result ? '預約成功' : '預約失敗',]);
+        return $response;
+    })->add(new AuthMiddleware('passenger'));;
+    $app->post('/getoff/delete', function (Request $request, Response $response, $args) {
+        //刪除預約上車
+        $data = $request->getParsedBody();
+        $getoff_id = $data['getoff_id'];
+        $result = DB::delete('getoff', $getoff_id, 'getoff_id');
+        render('getoff', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
         return $response;
     });
 
-   
-*/
+
     /* =========================================================================
     * = myfavourite
     * =========================================================================
@@ -433,88 +498,7 @@ return function (App $app) {
     //列出預約上車
 
 
-    /* =========================================================================
-    * = getoff
-    * =========================================================================
-    **/
-    $app->get('/getoff', function (Request $request, Response $response, $args) {
-        $user = $request->getAttribute('user');
-        $passengerId=$user['passenger_id'];
-        //$passengerId = 2;
-        $conn = DB::getconnection();
-        $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,g.bus_id,stop_name,r.route_name from getoff g,stop s,
-        route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id
-         and b.route_id=r.route_id");
-        $stmt->execute();
-        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        render('getoff', [
-            'msg' => '輸入要新增的預約下車的資料',
-            'List' => $a,
-            'userdata' =>$user
-        ]);
-        return $response;
-    })->add(new AuthMiddleware('passenger'));;
-    $app->post('/getoff/add', function (Request $request, Response $response, $args) {
-        //找出預約的車子
-        $data = $request->getParsedBody();
-        $user = $request->getAttribute('user');
-        $passengerId=$user['passenger_id'];
-        //$passengerId = 2;
-        $stopname = $data['stop_name'];
-        $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
-        $stop_id = $stopOfCollect['stop_id'];
-        var_dump($stopname, $stop_id);
-
-        $routename = $data['route_name'];
-        $routeOfColllect = DB::find('route', $routename, 'route_name');
-        $route_id = $routeOfColllect['route_id'];
-        var_dump($routename, $route_id);
-
-
-        $directionId = $data['direction'];
-        $unusal = $data['unusal'] ?? "";
-        $result = $conn = DB::getconnection();
-        $stmt = $conn->prepare("INSERT INTO `getoff`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
-    ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
-        $stmt->execute();
-        $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($a, JSON_UNESCAPED_UNICODE);
-        render('getoff', ['msg' => $result ? '預約成功' : '預約失敗',]);
-        return $response;
-    })->add(new AuthMiddleware('passenger'));;
-    $app->post('/getoff/delete', function (Request $request, Response $response, $args) {
-        //刪除預約上車
-        $data = $request->getParsedBody();
-        $getoff_id = $data['getoff_id'];
-        $result = DB::delete('getoff', $getoff_id, 'getoff_id');
-        render('getoff', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
-        return $response;
-    });
-    /* $app->get('/geton', function (Request $request, Response $response, $args) {
-        
-        
-        return $response;
-    });
-
-    //預約上車
-    $app->post('/geton', function (Request $request, Response $response, $args) {
-
-        $result = DB::fetchAll('geton');
-
-        render('geton', ['msg' => $result]);
-
-        return $response;
-    });
-    //預約下車
-    $app->post('/getoff', function (Request $request, Response $response, $args) {
-
-        $result = DB::fetchAll('getoff');
-
-        render('getoff', ['msg' => $result]);
-
-        return $response;
-    });**/
+ 
     $app->post('/stop/update', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
