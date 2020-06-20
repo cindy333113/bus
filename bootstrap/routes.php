@@ -126,6 +126,7 @@ return function (App $app) {
         render('geton', [
             'msg' => '輸入要新增修改的預約下車的資料',
             'List' => $a,
+            'userdata'=>$user,
         ]);
         return $response;
     }})->add(new AuthMiddleware('passenger'));;
