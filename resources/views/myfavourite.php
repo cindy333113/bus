@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-if(!isset($userdata)){
+if(empty($userdata)){
 	render("/login");
 	die;
 }

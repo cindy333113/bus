@@ -100,6 +100,7 @@ return function (App $app) {
     $app->get('/geton', function (Request $request, Response $response, $args) {
         $black_List = DB::fetchAll('black_list');
         $user = $request->getAttribute('user');
+        var_dump($user);
         $passengerId=$user['passenger_id'];
 
         $blackListbypassengerId = array_filter($black_List, function ($black) use ($passengerId) {
@@ -114,16 +115,14 @@ return function (App $app) {
             ]);
         } else {
             $thispassenger = '不是黑名單';
-    
-        $user = $request->getAttribute('user');
-        $passengerId=$user['passenger_id'];
+
         //$passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name,g.bus_id 
         from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        render('geton', [
+        render('/geton', [
             'msg' => '輸入要新增修改的預約下車的資料',
             'List' => $a,
             'userdata'=>$user,
@@ -223,6 +222,7 @@ return function (App $app) {
         render('myfavourite', [
             'msg' => '輸入要新增修改的資料',
             'stopList' => $collect,
+            'userdata' => $user
         ]);
         return $response;
     })->add(new AuthMiddleware('passenger'));;  
@@ -382,7 +382,7 @@ return function (App $app) {
 
         $user = $request->getAttribute('user');
 
-        $view = render('index', ['user' => $user]);
+        $view = render('/user', ['user' => $user]);
         $response->getBody()->write($view);
 
         return $response;
@@ -451,6 +451,7 @@ return function (App $app) {
         render('getoff', [
             'msg' => '輸入要新增的預約下車的資料',
             'List' => $a,
+            'userdata' =>$user
         ]);
         return $response;
     })->add(new AuthMiddleware('passenger'));;
