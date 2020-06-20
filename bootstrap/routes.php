@@ -94,15 +94,19 @@ return function (App $app) {
     $app->get('/geton', function (Request $request, Response $response, $args) {
         $passengerId = 2;
         $conn = DB::getconnection();
-        $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
+        $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,g.bus_id,stop_name,r.route_name from geton g,stop s,
+        route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id
+         and b.route_id=r.route_id");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         render('geton', [
             'msg' => '輸入要新增修改的資料',
             'List' => $a,
         ]);
         return $response;
     });
+
     /*
     $app->get('/geton', function (Request $request, Response $response, $args) {
         $passengerId = 2;
@@ -471,7 +475,7 @@ return function (App $app) {
         $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
         $stopList = DB::fetchAll('stop');
 
-        render('bus', [
+        render('geton', [
             'bus' => $bus,
             'departureTime' => $departureTime,
             'currentOrder' => $currentOrder,
@@ -496,6 +500,10 @@ return function (App $app) {
         render('destination', []);
         return $response;
     });
+    /* =========================================================================
+    * = search
+    * =========================================================================
+    **/
     //用站牌尋找公車
     $app->post('/search', function (Request $request, Response $response, $args) {
         $data = $request->getParsedBody();
@@ -515,7 +523,7 @@ return function (App $app) {
             echo $route['route_name'].'<br>';
         }
         */
-        //搜尋公車列出站牌
+    //搜尋公車列出站牌
     $app->get('/searchstop', function (Request $request, Response $response, $args) {
 
         $view = render('index1');
@@ -528,7 +536,7 @@ return function (App $app) {
         $data = $request->getParsedBody();
 
         $routename = $data['route_name'];
-        $route=DB::find('route', $routename, 'route_name');
+        $route = DB::find('route', $routename, 'route_name');
         $routeId = $route['route_id'];
         $stop = DB::find('route_stop', $routeId);
         $routeStopId = $stop['route_id'];
