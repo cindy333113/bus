@@ -7,117 +7,231 @@
 
   <?php include __DIR__ . "/header.php"; ?>
 
-  <section id="home-section" class="hero">
-    <img src="images/blob-shape.svg" class="svg-blob" alt="Colorlib Free Template">
-    <div class="home-slider owl-carousel">
+  <!-- main wrapper start -->
+  <main>
 
-      <div class="slider-item">
-        <div class="overlay"></div>
-        <div class="container-fluid p-0">
-          <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-end" data-scrollax-parent="true">
-            <div class="one-third order-md-last">
-              <div class="img" style="background-image:url(bg_1.jpg);">
-                <div class="overlay"></div>
-              </div>
-              <div class="bg-primary">
-                <div class="vr"><span class="pl-3 py-4" style="background-image: url(images/1.jpg);">Yangming</span></div>
-              </div>
+    <!-- latest news area start -->
+    <section class="latest-news section-space">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="section-title text-center">
+              <h2>最新消息</h2>
+              <p>不要錯過最新資訊！</p>
             </div>
-            <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-              <div class="text">
-                <section class="ftco-section ftco-services-2" id="services-section">
-                  <div class="container">
-                    <div class="row justify-content-center pb-5">
-                      <div class="col-md-12 heading-section text-center ftco-animate">
-                        <h2 class="mb-4">最新消息</h2><br>
-                        <table>
-                          <tr>
-                            <th>2019.3.01</th>
-                            <td>&nbsp;新公車!!!</td>
-                          </tr>
-                          <tr>
-                            <th>2019.2.10</th>
-                            <td>&nbsp;網站最新版本上線</td>
-                          </tr>
-                          <tr>
-                            <th>2019.2.09</th>
-                            <td>&nbsp;搭乘公車需戴口罩</td>
-                          </tr>
-                        </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="latest-blog-carousel slick-arrow-style slick-row-15">
+              <!-- blog sinle post start -->
+              <div class="blog-post-item">
+                <div class="blog-post-thumb">
+                  <a href="blog-details.html">
+                    <img src="/assets/img/bus-cover.jpg" alt="">
+                  </a>
+                  <div class="post-date">
+                    <p class="date">22</p>
+                    <p class="month">June</p>
+                  </div>
+                </div>
+                <div class="post-info-wrapper">
+                  <div class="entry-header">
+                    <h2 class="entry-title">
+                      <a href="#">HEYBUS 新CEO登場?!</a>
+                    </h2>
+                    <div class="post-meta">
+                      <div class="post-author">
+                        Written by: Lyu
                       </div>
                     </div>
                   </div>
-                </section>
+                  <div class="entry-summary">
+                    <p>Hey Bus 神秘接班人登場？？！！<br>
+                      究竟是哪位商業新星，即將接手此年度最佳公車應用開發公司呢？
+                    </p>
+                  </div>
+                </div>
               </div>
+              <!-- blog sinle post end -->
+
+              <!-- blog sinle post start -->
+              <div class="blog-post-item">
+                <div class="blog-post-thumb">
+                  <a href="blog-details.html">
+                    <img src="/assets/img/bus-cover.jpg" alt="">
+                  </a>
+                  <div class="post-date">
+                    <p class="date">19</p>
+                    <p class="month">June</p>
+                  </div>
+                </div>
+                <div class="post-info-wrapper">
+                  <div class="entry-header">
+                    <h2 class="entry-title">
+                      <a href="#">全新樣貌即將推出</a>
+                    </h2>
+                    <div class="post-meta">
+                      <div class="post-author">
+                        Written by: Alex
+                      </div>
+                    </div>
+                  </div>
+                  <div class="entry-summary">
+                    <p>大會報告!大會報告! &nbsp 新樣貌、新功能、新版面<br>
+                      Hey Bus將以全新面貌迎接大眾! &nbsp 嶄新一夏！
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- blog sinle post end -->
+
+              <!-- blog sinle post start -->
+              <div class="blog-post-item">
+                <div class="blog-post-thumb">
+                  <a href="blog-details.html">
+                    <img src="/assets/img/champion-cover.jpg" alt="">
+                  </a>
+                  <div class="post-date">
+                    <p class="date">10</p>
+                    <p class="month">June</p>
+                  </div>
+                </div>
+                <div class="post-info-wrapper">
+                  <div class="entry-header">
+                    <h2 class="entry-title">
+                      <a href="#">恭喜 HEY BUS 榮獲本年度最佳公車應用網頁獎</a>
+                    </h2>
+                    <div class="post-meta">
+                      <div class="post-author">
+                        Written by: Pin Xin
+                      </div>
+                    </div>
+                  </div>
+                  <div class="entry-summary">
+                    <p>最棒的公車應用網頁在這裡！結合本團隊成員血汗淚的經典傑作，你一定不能錯過！
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- blog sinle post end -->
+
+              <!-- blog sinle post start -->
+              <div class="blog-post-item">
+                <div class="blog-post-thumb">
+                  <a href="blog-details.html">
+                    <img src="assets/img/blog/blog-details-3.jpg" alt="">
+                  </a>
+                  <div class="post-date">
+                    <p class="date">20</p>
+                    <p class="month">Mar</p>
+                  </div>
+                </div>
+                <div class="post-info-wrapper">
+                  <div class="entry-header">
+                    <h2 class="entry-title">
+                      <a href="blog-details.html">Flowers daisy pink stick</a>
+                    </h2>
+                    <div class="post-meta">
+                      <div class="post-author">
+                        Written by: <a href="#">Admin</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="entry-summary">
+                    <p>Donec vitae hendrerit arcu, sit amet faucibus nisl. Cras pretium arcu ex. Aenean
+                      posuere libero eu augue.
+                    </p>
+                  </div>
+                  <a href="blog-details.html" class="btn-read">read more...</a>
+                </div>
+              </div>
+              <!-- blog sinle post end -->
             </div>
           </div>
         </div>
       </div>
+    </section>
+    <!-- latest news area end -->
 
-      <div class="slider-item">
-        <div class="overlay"></div>
-        <div class="container-fluid p-0">
-          <div class="row d-flex no-gutters slider-text align-items-center justify-content-end" data-scrollax-parent="true">
-            <div class="one-third order-md-last">
-              <div class="img" style="background-image:url(images/2.jpeg);">
-                <div class="overlay"></div>
-              </div>
-              <div class="vr"><span class="pl-3 py-4" style="background-image: url(images/2.jpeg);">Huashan</span></div>
-            </div>
-            <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-              <div class="text">
-                <section class="ftco-section ftco-services-2" id="services-section">
-                  <div class="container">
-                    <div class="row justify-content-center pb-5">
-                      <div class="col-md-12 heading-section text-center ftco-animate">
-                        <h2 class="mb-4">服務專區</h2>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md d-flex align-self-stretch ftco-animate">
-                        <div class="media block-6 services text-center d-block">
-                          <div class="icon justify-content-center align-items-center d-flex"><span class="flaticon-world"></span></div>
-                          <div class="media-body">
-                            <h3 class="heading mb-3">公車查詢</h3>
-                            <p class="mb-0"><a href="/destination" class="btn btn-white px-4 py-3">前往...</a></p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md d-flex align-self-stretch ftco-animate">
-                        <div class="media block-6 services text-center d-block">
-                          <div class="icon justify-content-center align-items-center d-flex"><span class="flaticon-tour-guide"></span></div>
-                          <div class="media-body">
-                            <h3 class="heading mb-3">我的最愛</h3>
-                            <p class="mb-0"><a href="/myfavourite" class="btn btn-white px-4 py-3">前往...</a></p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md d-flex align-self-stretch ftco-animate">
-                        <div class="media block-6 services text-center d-block">
-                          <div class="icon justify-content-center align-items-center d-flex"><span class="flaticon-map-of-roads"></span></div>
-                          <div class="media-body">
-                            <h3 class="heading mb-3">預約上車</h3>
-                            <p class="mb-0"><a href="/booking" class="btn btn-white px-4 py-3">前往...</a></p>
-                          </div>
-                        </div>
-                      </div>
-                      </table>
-                    </div>
-                  </div>
-                </section>
-              </div>
+
+    <!-- service policy start -->
+    <section class="service-policy-area section-space">
+      <div class="container">
+      <div class="row">
+          <div class="col-12">
+            <div class="section-title text-center">
+              <h2>服務專區</h2>
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <!-- start policy single item -->
+            <div class="service-policy-item">
+              <div class="icons">
+                <img src="assets/img/icon/free_shipping.png" alt="">
+              </div>
+              <div class="policy-terms">
+                <h5>free shipping</h5>
+                <p>Free shipping all order</p>
+              </div>
+            </div>
+            <!-- end policy single item -->
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <!-- start policy single item -->
+            <div class="service-policy-item">
+              <div class="icons">
+                <img src="assets/img/icon/support247.png" alt="">
+              </div>
+              <div class="policy-terms">
+                <h5>我的最愛</h5>
+                <p>會員查看收藏路線</p>
+              </div>
+            </div>
+            <!-- end policy single item -->
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <!-- start policy single item -->
+            <div class="service-policy-item">
+              <div class="icons">
+                <img src="assets/img/icon/money_back.png" alt="">
+              </div>
+              <div class="policy-terms">
+                <h5>預約系統</h5>
+                <p>乘客預約上下車功能</p>
+              </div>
+            </div>
+            <!-- end policy single item -->
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <!-- start policy single item -->
+            <div class="service-policy-item">
+              <div class="icons">
+                <img src="assets/img/icon/promotions.png" alt="">
+              </div>
+              <div class="policy-terms">
+                <h5>路線查詢</h5>
+                <p>查看公車路線相關資訊</p>
+              </div>
+            </div>
+            <!-- end policy single item -->
+          </div>
+        </div>
       </div>
+    </section>
+    <!-- service policy end -->
 
-    </div>
-  </section>
+  </main>
+  <!-- main wrapper end -->
+
+  <?php include __DIR__ . "/footer.php"; ?>
 
   <!--All Vendor Js -->
-  <script src="assets/js/vendor.js"></script>
+  <script src="/assets/js/vendor.js"></script>
   <!-- Active Js -->
-  <script src="assets/js/active.js"></script>
+  <script src="/assets/js/active.js"></script>
 </body>
 
 </html>
