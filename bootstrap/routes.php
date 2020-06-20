@@ -149,10 +149,13 @@ return function (App $app) {
     $app->post('/geton/delete', function (Request $request, Response $response, $args) {
         //刪除預約上車
         $data = $request->getParsedBody();
-        $geton_id = $data['geton_id'];
-        $result = DB::delete('geton', $geton_id, 'geton_id');
-        render('geton', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
-        return $response;
+        $getonId = $data['id'];
+        DB::delete('geton', $getonId, 'geton_id');
+        header("Location:/geton");
+        render(
+            'geton',
+            ['msg' => '取消預約成功',]
+        );
     });
     /*
     $app->get('/temap', function (Request $request, Response $response, $args) { //顯示站名
@@ -183,7 +186,10 @@ return function (App $app) {
         //$passengerId=$request->getAttribute('user'
         $passengerId = 2;
         $conn = DB::getconnection();
-        $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id from collect c,stop s,route r where passenger_id=$passengerId and c.stop_id=s.stop_id and c.route_id=r.route_id ");
+        $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id 
+        from collect c,stop s,route r 
+        where passenger_id=$passengerId and
+         c.stop_id=s.stop_id and c.route_id=r.route_id ");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         var_dump($a);
@@ -199,7 +205,6 @@ return function (App $app) {
         //刪除收藏站牌
         $data = $request->getParsedBody(); //$_POST
         $collectId = $data['id'];
-
         DB::delete('collect', $collectId, 'collect_id');
         header("Location:/myfavourite");
         render('myfavourite', [
@@ -287,9 +292,7 @@ return function (App $app) {
         return $response;
     });
     $app->post('/login', function (Request $request, Response $response, $args) use ($app) {
-
         $data = $request->getParsedBody(); //$_POST
-
         $identity = $data['identity'] ?? '';
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
@@ -310,7 +313,17 @@ return function (App $app) {
 
         return $response->withHeader('Location', '/');
     });
+    //註冊
+    $app->post('/register/add', function (Request $request, Response $response, $args) {
 
+        $data = $request->getParsedBody();
+
+        $result = DB::create('passenger', $data);
+
+        render('passenger', ['msg' => $result ? '註冊成功' : '註冊失敗',]);
+
+        return $response;
+    });
 
     /* =========================================================================
     * = User Group
