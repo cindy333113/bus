@@ -84,7 +84,8 @@ function countStopOfRoute($routeId)
  * = 依路線及順序找到站牌
  * =============================================================================
  *
- * @param String $departureTime  
+ * @param String $routeId
+ * @param String $stopOrder 
  * @return String
  *
  **/
@@ -98,4 +99,49 @@ function findStopNameByRouteOrder($routeId, $stopOrder)
     $stop = DB::find('stop', array_values($nowStop)[0]['stop_id']);
 
     return $stop['stop_name'];
+}
+
+/**
+ * =============================================================================
+ * = 依站牌找路線
+ * =============================================================================
+ *
+ * @param String $stopId  
+ * @return String
+ *
+ **/
+function findRouteByStop($stopId)
+{
+    $routeStopList = DB::fetchAll('route_stop');
+    $routeStopListByStop = array_filter($routeStopList, function ($routeStop) use ($stopId) {
+        return $stopId == $routeStop['stop_id'];
+    });
+
+    $routeListByStop = array_map(function($routeStop){
+        return DB::find('route', $routeStop['route_id']);
+    }, $routeStopListByStop);
+
+    return $routeListByStop;
+}
+/**
+ * =============================================================================
+ * = 依路線列出站牌
+ * =============================================================================
+ *
+ * @param String $routeId  
+ * @return String
+ *
+ **/
+function findStopListByRoute($routeId)
+{
+    $routeStopList = DB::fetchAll('route_stop');
+    $routeStopListByRoute = array_filter($routeStopList, function ($routeStop) use ($routeId) {
+        return $routeId == $routeStop['route_id'];
+    });
+var_dump($routeStopListByRoute);
+    $stopNameByRoute = array_map(function($routeStop){
+        return DB::find('stop', $routeStop['stop_id']);
+    }, $routeStopListByRoute);
+
+    return $stopNameByRoute;
 }
