@@ -74,7 +74,8 @@
 
                           
     <tr>
-      <th scope="col">使用者id</th>
+      <th scope="col">使用者ID</th>
+      <th scope="col">使用者姓名</th>
       <th scope="col">違規日期</th>
     </tr>
   </thead>

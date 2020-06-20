@@ -51,8 +51,27 @@ return function (App $app) {
         ]);
         return $response;
     });
+    $app->get('/blacklist/{id}', function (Request $request, Response $response, $args) {
+        $black_List = DB::fetchAll('black_list');
+        $passengerId = $args['id'];
 
+        $blackListbypassengerId = array_filter($black_List, function ($black) use ($passengerId) {
+            return $black['passenger_id'] == $passengerId;
+        });
+        $blacktime = count($blackListbypassengerId);
+        $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
+        var_dump($blacktime);
+        if ($isBlack = (count($blackListbypassengerId) >= 3)) {
+            render('/myfavourite', [
+                  ] ); 
+        } else {
+            render('/geton', [
+            ]);
+        }
+        
+        return $response;});
     //抓黑名單
+    /*
     $app->get('/blacklist/{id}', function (Request $request, Response $response, $args) {
         $black_List = DB::fetchAll('black_list');
         $passengerId = $args['id'];
@@ -75,7 +94,7 @@ return function (App $app) {
             'blacktime' => $blacktime,
         ]);
         return $response;
-    });
+    });*/
     //記黑名單
     $app->post('/blacklist/add', function (Request $request, Response $response, $args) {
 
@@ -499,31 +518,7 @@ return function (App $app) {
 
     //計算公車站牌
 
-        $busId = $args['id'];
-
-        $bus = DB::find('bus', $busId);
-        $departureTime = $bus['time'];
-        $countOfStop = countStopBusPassed($departureTime);
-
-        $routeId = $bus['route_id'];
-
-        $amountStopOfRoute = countStopOfRoute($routeId);
-
-        $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
-
-        $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
-        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
-        $stopList = DB::fetchAll('stop');
-
-        render('geton', [
-            'bus' => $bus,
-            'departureTime' => $departureTime,
-            'currentOrder' => $currentOrder,
-            'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)
-        ]);
-
-        return $response;
-    });
+       
     $app->get('/manage', function (Request $request, Response $response, $args) { //顯示站名
         render('/manage', []);
         return $response;
@@ -547,7 +542,7 @@ return function (App $app) {
         render('planroute', [
         ]);
         return $response;
-    });*/
+    });
     $app->get('/destination', function (Request $request, Response $response, $args) { //顯示站名
         render('destination', []);
         return $response;
