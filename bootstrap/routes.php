@@ -47,11 +47,9 @@ return function (App $app) {
     **/
     $app->get('/blacklist', function (Request $request, Response $response, $args) { //顯示站名
         $user = $request->getAttribute('user');
-        var_dump($user);
         $isdriver=$user['driver_id'];
-        var_dump($isdriver);
         $conn = DB::getconnection();
-        $stmt = $conn->prepare("SELECT * from `black_list` ");
+        $stmt = $conn->prepare("SELECT b.*,p.passenger_name from black_list b,passenger p where p.passenger_id=b.passenger_id ");
         $stmt->execute();
 
         $showblack = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -82,7 +80,6 @@ return function (App $app) {
     $app->get('/geton', function (Request $request, Response $response, $args) {
         $black_List = DB::fetchAll('black_list');
         $user = $request->getAttribute('user');
-        var_dump($user);
         $passengerId=$user['passenger_id'];
 
         $blackListbypassengerId = array_filter($black_List, function ($black) use ($passengerId) {
@@ -90,7 +87,6 @@ return function (App $app) {
         });
         $blacktime = count($blackListbypassengerId);
         $isBlack = (count($blackListbypassengerId) >= 3) ? TRUE : FALSE;
-        var_dump($blacktime);
         if ($isBlack = (count($blackListbypassengerId) >= 3)) {
             //thispassenger = '是黑名單';
             render('/ublack', [
