@@ -95,33 +95,13 @@ return function (App $app) {
         $passengerId=$user['passenger_id'];
         //$passengerId = 2;
         $conn = DB::getconnection();
-        $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name 
+        $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name,g.bus_id 
         from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //現在站牌
-        /*$busId = DB::find('geton', 'bus_id');
-        $bus = DB::find('bus', $busId);
-        $departureTime = $bus['time'];
-        $countOfStop = countStopBusPassed($departureTime);
-
-        $routeId = $bus['route_id'];
-
-        $amountStopOfRoute = countStopOfRoute($routeId);
-
-        $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
-
-        $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
-        $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
-        $stopList = DB::fetchAll('stop');*/
-
         render('geton', [
             'msg' => '輸入要新增修改的資料',
-            'List' => $a,/*
-            'bus' => $bus,
-            'departureTime' => $departureTime,
-            'currentOrder' => $currentOrder,
-            'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)*/
+            'List' => $a,
         ]);
         return $response;
     })->add(new AuthMiddleware('passenger'));;
