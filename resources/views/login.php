@@ -1,151 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>HeyBus</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-    
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
+<?php include __DIR__ . "/head.php"; ?>
 
-    <link rel="stylesheet" href="css/aos.css">
+<body>
 
-    <link rel="stylesheet" href="css/ionicons.min.css">
-    
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="/index">Hey Bus</a>
-	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
-            
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav nav ml-auto">
-	          <li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
-            <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
-            <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
-            <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
-	          <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
-	          <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li>
-              <li class="nav-item"><a class="nav-link"><span>|</span></a>
-	          <li class="nav-item"><a href="/english" class="nav-link"><span>English</span></a></li>
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-	  
-    <section class="ftco-section" >
-    	<div class="container">
+  <?php include __DIR__ . "/header.php"; ?>
 
-    		<div class="center">
-    			<div class="col-lg-9 p-5 bg-light" align=center>
-    				<div class="search-wrap-1 ftco-animate">
-    					<!-- form card login -->
-    
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="mb-0">登入</h3>
-                        </div>
-                        <div class="card-body">
-                            <form id="formLogin" method="POST" class="formLogin">
-                                <div class="form-group">
-                                    <input class="form-control" id="name" name="account" placeholder="帳號" type="text" required autocapitalize="off" autocorrect="off" spellcheck="false">
-									<i class="fa fa-user"></i>
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" placeholder="密碼"  required>
-									<i class="fa fa-lock"></i>
-                                </div>
-								<div class="row mb-3">
-									<div class="col-md-12 text-left">
-										<a href="#">forgot password?</a>
-									</div>
-								</div>
-								<div class="row mb-3">
-									<div class="col-lg-12 text-right">
-                      <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin" onclick="locaiton.href='/login'"><span>登入</span></button>
-                  </div>
-								</div>
-              </form>
-					
-							<div class="row mb-3">
-								<div class="col-lg-6">
-									<a href="#" class="btn btn-primary btn-wd fb btn-block">
-										<span><i class="fa fa-facebook"></i> &nbsp;&nbsp;&nbsp;Login Facebook</span>
-									</a>
-								</div>
-								<div class="col-lg-6">
-									<a href="#" class="btn btn-info btn-wd gp btn-block">
-										<span><i class="fa fa-google-plus"></i> &nbsp;&nbsp;&nbsp;Login Google</span>
-									</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="create-box text-block text-center my-0">
-										<span class="text-small font-weight-semibold">Not a member ?</span>
-										<a href="#">Create new account</a><br>
-                                        <a href="/driverlogin">管理者登入</a>
-									</div>
-								</div>
-							</div>
-                        </div>
-
-						</div>
-		        </div>
-    			</div> <!-- end -->
-    		</div>
-    	</div>
-    </section>
-
-
-    <footer class="ftco-footer ftco-section">
+  <!-- main wrapper start -->
+  <main>
+    <!-- breadcrumb area start -->
+    <div class="breadcrumb-area common-bg">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 text-center">
-
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          <div class="col-12">
+            <div class="breadcrumb-wrap">
+              <nav aria-label="breadcrumb">
+                <h1>乘客 / 司機登入</h1>
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
+                  <li class="breadcrumb-item active" aria-current="page">使用者登入</li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
-    
-  
+    </div>
+    <!-- breadcrumb area end -->
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+    <!-- login register wrapper start -->
+    <div class="login-register-wrapper section-space pb-0">
+      <div class="container">
+        <div class="member-area-from-wrap">
+          <div class="row">
+            <!-- Passenger Login Content Start -->
+            <div class="col-lg-6">
+              <div class="login-reg-form-wrap">
+                <h2>乘客登入</h2>
+                <form action="/login" method="post">
+                  <input type="hidden" name="identity" value="passenger" />
+                  <div class="single-input-item">
+                    <input type="account" placeholder="請輸入使用者帳號" required />
+                  </div>
+                  <div class="single-input-item">
+                    <input type="password" placeholder="請輸入密碼" required />
+                  </div>
+                  <div class="single-input-item">
+                    <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
+                      <!--
+                      <div class="remember-meta">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="rememberMe">
+                          <label class="custom-control-label" for="rememberMe">Remember Me</label>
+                        </div>
+                      </div>
+                    -->
+                      <a href="/register" class="forget-pwd">還沒有帳號？</a>
+                    </div>
+                  </div>
+                  <div class="single-input-item">
+                    <button class="btn btn__bg">確認登入</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- Passenger Login Content End -->
 
+            <!-- Driver Login Content Start -->
+            <div class="col-lg-6">
+              <div class="login-reg-form-wrap">
+                <h2>司機登入</h2>
+                <form action="/login" method="post">
+                  <input type="hidden" name="identity" value="driver" />
+                  <div class="single-input-item">
+                    <input type="account" placeholder="請輸入使用者帳號" required />
+                  </div>
+                  <div class="single-input-item">
+                    <input type="password" placeholder="請輸入密碼" required />
+                  </div>
+                  <!-- 登入選項
+                  <div class="single-input-item">
+                    <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
+                      <div class="remember-meta">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="rememberMe">
+                          <label class="custom-control-label" for="rememberMe">Remember Me</label>
+                        </div>
+                      </div>
+                      <a href="#" class="forget-pwd">Forget Password?</a>
+                    </div>
+                  </div>
+                  -->
+                  <div class="single-input-item">
+                    <button class="btn btn__bg">確認登入</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- Driver Login Content End -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- login register wrapper end -->
+  </main>
+  <!-- main wrapper end -->
 
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.stellar.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="js/google-map.js"></script>
-  
-  <script src="js/main.js"></script>
-    
-  </body>
+  <!-- Scroll to top start -->
+  <div class="scroll-top not-visible">
+    <i class="fa fa-angle-up"></i>
+  </div>
+  <!-- Scroll to Top End -->
+
+  <!-- All vendor & plugins & active js include here -->
+  <!--All Vendor Js -->
+  <script src="assets/js/vendor.js"></script>
+  <!-- Active Js -->
+  <script src="assets/js/active.js"></script>
+</body>
+
 </html>
