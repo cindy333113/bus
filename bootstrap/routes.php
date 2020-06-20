@@ -11,9 +11,13 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response, $args) {
-        render('index', [
+
+        $view = render('index', [
             'title' => '首頁',
         ]);
+
+        $response->getBody()->write($view);
+
         return $response;
     });
 
@@ -23,7 +27,10 @@ return function (App $app) {
     **/
 
     $app->get('/login', function (Request $request, Response $response, $args) { //顯示站名
-        render('login', []);
+        $view = render('login', []);
+
+        $response->getBody()->write($view);
+
         return $response;
     });
 
@@ -171,8 +178,9 @@ return function (App $app) {
             $directionId = $data['direction'];
             $unusal = $data['unusal'];
             $result = $conn = DB::getconnection();
-            $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
-        ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
+            $sql = "INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
+            ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)";
+            $stmt = $conn->prepare($sql);
             $stmt->execute();
             $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
             //echo json_encode($a, JSON_UNESCAPED_UNICODE);
@@ -299,7 +307,7 @@ return function (App $app) {
                 'msg' => '刪除成功',
             ]);
         });
-    })->add(new AuthMiddleware('passenger'));;
+    })->add(new AuthMiddleware('passenger'));
 
     /* =========================================================================
     * = User Group
