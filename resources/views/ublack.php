@@ -1,7 +1,11 @@
-<p class="class__board_notice"> <?= $msg ?></p>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+if (empty($userdata)) {
+	render("/login");
+	die;
+}
+?>
 <head>
 	<title>HeyYou 就是你</title>
 	<meta charset="utf-8">
@@ -39,10 +43,11 @@
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav nav ml-auto">
 					<li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
-					<li class="nav-item"><a href="i/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
+					<li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
 					<li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
 					<li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
 					<li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
+					<li class="nav-item"><a href="/destination" class="nav-link"><span>公車查詢</span></a></li>
 					<?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
 					<?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
 					<li class="nav-item"><a class="nav-link"><span>|</span></a></li>

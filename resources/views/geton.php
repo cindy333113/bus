@@ -51,7 +51,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <?php var_dump($user);foreach ($List as $key => $getondata) { ?>
+                    <?php var_dump($user);
+                    foreach ($List as $key => $getondata) { ?>
                       <tr>
                         <td class="pro-thumbnail">
                           <a href="#">
@@ -60,7 +61,7 @@
                         </td>
                         <td class="pro-quantity">
                           <a href="#">
-                            <?= $getondata['getonRecord']['direction']??'' ?>
+                            <?= $getondata['getonRecord']['direction'] ?? '' ?>
                           </a>
                         </td>
                         <td class="pro-price">
@@ -74,7 +75,7 @@
                           </span>
                         </td>
                         <td class="pro-subtotal">
-                            <?= $getondata['getonRecord']['unusal'] ? '✔︎':'✗' ?>
+                          <?= $getondata['getonRecord']['unusal'] ? '✔︎' : '✗' ?>
                         </td>
                         <td class="pro-remove">
                           <form name="deleteForm" action="/geton/delete" method="post">
@@ -134,27 +135,8 @@
 
                 </tr>
               <?php } ?>
-
-              <!--
-      <tr>
-       <td>299</td>
-       <td>迴龍</td>
-       <td>捷運輔大站</td>
-       <td>海山里</td>
-       <td>否</td>
-       <td><span class="material-icons"><a href="/myfavourite/delete">delete</a></span></td>
-      </tr>
-      <tr>
-       <td>235</td>
-       <td>土城</td>
-       <td>新泰路口</td>
-       <td>5 min</td>
-       <td>是</td>
-       <td><span class="material-icons">delete</span></td>
-      </tr>
-     -->
             </table>
-          </div><br>
+          </div>
         </section>
 
 
@@ -229,13 +211,39 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-lg align-self-end">
+
+                      <div class="col-lg align-items-end">
                         <div class="form-group">
+                          <label for="#">站牌</label>
                           <div class="form-field">
-                            <input type="submit" value="新增" class="form-control btn btn-primary" onclick="geton/add" method="post">
+                            <div class="select-wrap">
+                              <select name="stop_name" id="" class="form-control">
+                                <option value="捷運輔大站">捷運輔大站</option>
+                                <option value="盲人重建院">盲人重建院</option>
+                                <option value="">海山里</option>
+                                <option value="">新泰中正路口</option>
+                                <option value="">材試所</option>
+                                <option value="">新泰國中南站</option>
+                                <option value="">新莊棒球場</option>
+                                <option value="">新莊體育場</option>
+                                <option value="">新莊田徑場</option>
+                                <option value="">財元廣場</option>
+                                <option value="">中華路</option>
+                                <option value="">正邦社區</option>
+                                <option value="">幸福中華路口</option>
+                                <option value="">幸福新城</option>
+
+                              </select>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                        <div class="col-lg align-self-end">
+                          <div class="form-group">
+                            <div class="form-field">
+                              <input type="submit" value="新增" class="form-control btn btn-primary" onclick="geton/add" method="post">
+                            </div>
+                          </div>
+                        </div>
                 </form>
               </div>
         </form>

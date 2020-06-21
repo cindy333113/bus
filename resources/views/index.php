@@ -106,6 +106,8 @@
                       <div class="post-author">
                         Written by: Pin Xin
                       </div>
+                      <div>
+                      </div>
                     </div>
                   </div>
                   <div class="entry-summary">
