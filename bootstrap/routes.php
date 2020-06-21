@@ -157,15 +157,41 @@ return function (App $app) {
         **/
 
         $group->get('/geton', function (Request $request, Response $response, $args) {
-            $passengerId = 2;
+            $user = $request->getAttribute('user');
+            $passengerId = $user['passenger_id'];
+
+            /*
             $conn = DB::getconnection();
-            $stmt = $conn->prepare("SELECT direction,unusal,g.geton_id,stop_name,r.route_name from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
+            $stmt = $conn->prepare("SELECT direction,unusal,g.bus_id,g.geton_id,stop_name,r.route_name from geton g,stop s,route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
             $stmt->execute();
             $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            render('geton', [
+            */
+
+            $getOnList = DB::fetchAll('geton');
+            $getOnListByPassenger = [];
+
+            foreach ($getOnList as $key => $getOn){
+
+                $stop = DB::find('stop',$getOn['stop_id']);
+                $bus = DB::find('bus',$getOn['bus_id']);
+                $route = DB::find('route',$bus['route_id']);
+
+                array_push($getOnListByPassenger,[
+                    'getonRecord' => $getOn,
+                    'route_name' => $route['route_name'],
+                    'stop_name' => $stop['stop_name']
+                ]);
+            
+            };
+            
+            $view = render('geton', [
+                'user' => $user,
                 'msg' => '輸入要新增修改的資料',
-                'List' => $a,
+                'List' => $getOnListByPassenger,
             ]);
+
+            $response->getBody()->write($view);
+
             return $response;
         });
 
@@ -422,7 +448,13 @@ return function (App $app) {
         $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
         $stopList = DB::fetchAll('stop');
 
-        render('/planroute', []);
+        render('bus', [
+            'bus' => $bus,
+            'departureTime' => $departureTime,
+            'currentOrder' => $currentOrder,
+            'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)
+        ]);
+
         return $response;
     });
 
