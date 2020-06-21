@@ -402,12 +402,14 @@ return function (App $app) {
                 $bus = DB::find('bus', $getOn['bus_id']);
                 $route = DB::find('route', $bus['route_id']);
 
-                array_push($getOnListByPassenger, [
-                    'geton' => $getOn,
-                    'bus'   => $bus,
-                    'route' => $route,
-                    'stop'  => $stop
-                ]);
+                if ($getOn['passenger_id'] == $user['passenger_id']) {
+                    array_push($getOnListByPassenger, [
+                        'geton' => $getOn,
+                        'bus'   => $bus,
+                        'route' => $route,
+                        'stop'  => $stop
+                    ]);
+                }
             };
 
             $view = render('geton', [
@@ -472,13 +474,46 @@ return function (App $app) {
         **/
 
         $group->get('/getoff', function (Request $request, Response $response, $args) {
-            $passengerId = 2;
-            $getoffResult = DB::find('getoff', $passengerId, 'passenger_id');
-            var_dump($getoffResult);
-            render('/getoff', [
-                'msg' => '輸入要預約上車的資料',
-                'getoffResult' => $getoffResult,
+            $user = $request->getAttribute('user');
+            $passengerId = $user['passenger_id'];
+
+            /*
+            $conn = DB::getconnection();
+            $stmt = $conn->prepare("SELECT direction,unusal,g.getoff_id,stop_name,r.route_name,g.bus_id from getoff g,stop s, route r,bus b where g.passenger_id=$passengerId and g.stop_id=s.stop_id and g.bus_id=b.bus_id and b.route_id=r.route_id");
+            $stmt->execute();
+            $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            */
+
+            $getOffList = DB::fetchAll('getoff');
+            $getOffListByPassenger = [];
+
+            foreach ($getOffList as $key => $getOff) {
+
+                //獲得預約記錄之站牌資訊
+                $stop = DB::find('stop', $getOff['stop_id']);
+                $bus = DB::find('bus', $getOff['bus_id']);
+                $route = DB::find('route', $bus['route_id']);
+
+                if ($getOff['passenger_id'] == $user['passenger_id']) {
+                    array_push($getOffListByPassenger, [
+                        'getoff' => $getOff,
+                        'bus'   => $bus,
+                        'route' => $route,
+                        'stop'  => $stop
+                    ]);
+                }
+            };
+
+            $view = render('getoff', [
+                'user' => $user,
+                'List' => $getOffListByPassenger,
+                'routeList' => DB::fetchAll('route'),
+                'stopList' => DB::fetchAll('stop'),
             ]);
+
+            $response->getBody()->write($view);
+
+            return $response;
             return $response;
         });
 
@@ -525,21 +560,45 @@ return function (App $app) {
 
         $group->get('/myfavourite', function (Request $request, Response $response, $args) {
             //列出id=?的顧客所收藏的站牌及路線
-            //$passengerId = $args['id'];
-            //$passengerId=$request->getAttribute('user');
-            $passengerId = 2;
+            $user = $request->getAttribute('user');
+            $passengerId = $user['passenger_id'];
+
+            /*
             $conn = DB::getconnection();
             $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id from collect c,stop s,route r where passenger_id=$passengerId and c.stop_id=s.stop_id and c.route_id=r.route_id ");
             $stmt->execute();
-            $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            var_dump($a);
-            //echo json_encode($a, JSON_UNESCAPED_UNICODE);
-            render('myfavourite', [
+            $collect = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            */
+
+            $collectList = DB::fetchAll('collect');
+            $collectListByPassenger = [];
+
+            foreach ($collectList as $key => $collect) {
+
+                //獲得預約記錄之站牌資訊
+                $stop = DB::find('stop', $collect['stop_id']);
+                $route = DB::find('route', $collect['route_id']);
+
+                if ($collect['passenger_id'] === $user['passenger_id']) {
+                    array_push($collectListByPassenger, [
+                        'collect' => $collect,
+                        'route' => $route,
+                        'stop'  => $stop
+                    ]);
+                }
+            };
+
+            $view = render('myfavourite', [
                 'msg' => '輸入要新增修改的資料',
-                'stopList' => $a,
+                'collectList' => $collectListByPassenger,
+                'routeList' => DB::fetchAll('route'),
+                'stopList' => DB::fetchAll('stop'),
             ]);
+
+            $response->getBody()->write($view);
+
             return $response;
-        }); //->add(new AuthMiddleware);  
+        });
 
         $group->post('/myfavourite/add', function (Request $request, Response $response, $args) {
 
@@ -601,14 +660,14 @@ return function (App $app) {
     */
 
     $app->get('/driver', function (Request $request, Response $response, $args) {
-
         $user = $request->getAttribute('user');
 
         $view = render('/manage', ['user' => $user]);
         $response->getBody()->write($view);
 
         return $response;
-    })->add(new AuthMiddleware('passenger'));
+    })->add(new AuthMiddleware('driver'));
+
     /* =========================================================================
     * = DRIVER Group
     * =========================================================================
@@ -640,7 +699,65 @@ return function (App $app) {
             return $response;
         });
     })->add(new AuthMiddleware('driver'));
-    */
+
+    /* =========================================================================
+    * = Destination Group
+    * =========================================================================
+    **/
+
+    $app->group('/destination', function (Group $group) {
+        //搜尋公車列出站牌
+        $group->get('', function (Request $request, Response $response, $args) {
+            $view = render('destination',[
+                'routeList' => DB::fetchAll('route')
+            ]);
+
+            $response->getBody()->write($view);
+
+            return $response;
+        });
+
+        //搜尋公車列出站牌 TODO:修改站牌
+        $group->post('/routesearch', function (Request $request, Response $response, $args) {
+            $data = $request->getParsedBody();
+
+            $routeId = $data['route_id'];
+            $route = DB::find('route', $routeId);
+
+            $stop = DB::find('route_stop', $routeId);
+            $routeStopId = $stop['route_id'];
+            $stopNameByRoute = findStopListByRoute($routeStopId);
+
+            $view = render('destination', [
+                'routeList' => DB::fetchAll('route'),
+                'routeId' => $routeId,
+                'stopNameByRoute' => $stopNameByRoute,
+            ]);
+
+            $response->getBody()->write($view);
+
+            return $response;
+        });
+
+        //用站牌尋找公車
+        $group->get('/routesearch/{stop_id}', function (Request $request, Response $response, $args) {
+            $stopId = $args['stop_id'];
+            $stop = DB::find('route_stop', $stopId);
+            $stopId = $stop['stop_id'];
+            $routeListByStop = findRouteByStop($stopId);
+            $stopdata = DB::find('stop', $stopId);
+            $stopname = $stopdata['stop_name'];
+            //var_dump($stopname);
+            render('stoproute', [
+                'routeListByStop' => $routeListByStop,
+                'stop_name' => $stopname,
+                'msg' => $routeListByStop['route_id']
+            ]);
+
+            return $response;
+        });
+    });
+
     /* =========================================================================
     * = STOP
     * =========================================================================
@@ -698,63 +815,6 @@ return function (App $app) {
             'currentOrder' => $currentOrder,
             'currentStopName' => findStopNameByRouteOrder($routeId, $currentOrder)
         ]);
-
-        return $response;
-    });
-
-    $app->get('/destination', function (Request $request, Response $response, $args) { //顯示站名
-        render('destination', []);
-        return $response;
-    });
-    /* =========================================================================
-    * = search
-    * =========================================================================
-    **/
-    //用站牌尋找公車
-    $app->get('/destination/routesearch/{stop_id}', function (Request $request, Response $response, $args) {
-        $stopId = $args['stop_id'];
-        $stop = DB::find('route_stop', $stopId);
-        $stopId = $stop['stop_id'];
-        $routeListByStop = findRouteByStop($stopId);
-        $stopdata = DB::find('stop', $stopId);
-        $stopname = $stopdata['stop_name'];
-        //var_dump($stopname);
-        render('stoproute', [
-            'routeListByStop' => $routeListByStop,
-            'stop_name' => $stopname,
-            'msg' => $routeListByStop['route_id']
-        ]);
-
-        return $response;
-    });
-    /*
-        //example
-        foreach($routeListByStop as $key => $route){
-            echo $route['route_name'].'<br>';
-        }
-        */
-    //搜尋公車列出站牌
-    $app->get('/destination/searchstop', function (Request $request, Response $response, $args) {
-
-        $view = render('destination');
-        $response->getBody()->write($view);
-        return $response;
-    });
-    //搜尋公車列出站牌
-    $app->post('/destination/searchstop', function (Request $request, Response $response, $args) {
-        $data = $request->getParsedBody();
-
-        $routename = $data['route_name'];
-        $route = DB::find('route', $routename, 'route_name');
-        $routeId = $route['route_id'];
-        $stop = DB::find('route_stop', $routeId);
-        $routeStopId = $stop['route_id'];
-        $stopNameByRoute = findStopListByRoute($routeStopId);
-        $view = render('destination', [
-            'stopNameByRoute' => $stopNameByRoute,
-        ]);
-
-        $response->getBody()->write($view);
 
         return $response;
     });

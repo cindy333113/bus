@@ -18,7 +18,7 @@
               <nav aria-label="breadcrumb">
                 <h1>預約上車</h1>
                 <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>
                   <li class="breadcrumb-item" aria-current="page">預約系統</li>
                   <li class="breadcrumb-item active" aria-current="page">預約上車</li>
                 </ul>
@@ -73,7 +73,7 @@
                           <?= $getondata['geton']['unusal'] ? '✔︎' : '✗' ?>
                         </td>
                         <td class="pro-remove">
-                          <form name="deleteForm" action="/geton/delete" method="post">
+                          <form name="deleteForm" action="/passenger/geton/delete" method="post">
                             <input type="hidden" name="id" value=<?= $getondata['geton']['geton_id'] ?> />
                             <span><i class="fa fa-trash-o"></i></span>
                           </form>
@@ -122,12 +122,11 @@
 
                   <div class="align-items-end" style="padding-top: 30px;">
                     <div class="form-group">
-                      <label for="#">站牌名稱</label>
+                      <label for="#">方向</label>
                       <div class="form-field">
                         <select name="direction" class="nice-select">
-                          <?php foreach ($stopList as $key => $stop) { ?>
-                            <option value="<?= $stop['stop_id'] ?>"><?= $stop['stop_name'] ?></option>
-                          <?php } ?>
+                          <option value="1">去程</option>
+                          <option value="0">回程</option>
                         </select>
                       </div>
                     </div>
@@ -136,11 +135,12 @@
                 <div class="col-lg-6">
                   <div class="align-items-end" style="padding-top: 5px;">
                     <div class="form-group">
-                      <label for="#">方向</label>
+                      <label for="#">站牌名稱</label>
                       <div class="form-field">
                         <select name="direction" class="nice-select">
-                          <option value="1">去程</option>
-                          <option value="0">回程</option>
+                          <?php foreach ($stopList as $key => $stop) { ?>
+                            <option value="<?= $stop['stop_id'] ?>"><?= $stop['stop_name'] ?></option>
+                          <?php } ?>
                         </select>
                       </div>
                     </div>
@@ -177,7 +177,7 @@
         <!-- product details wrapper end -->
       </div>
     </div>
-    </div>
+    <!-- page main wrapper End -->
 
   </main>
   <!-- main wrapper end -->

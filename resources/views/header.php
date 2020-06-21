@@ -38,7 +38,7 @@
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a href="/passenger/route">路線規劃</a>
+                                                <a href="/destination">路線規劃</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -151,7 +151,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="/passenger/route">路線規劃</a>
+                                <a href="/destination">路線規劃</a>
                             </li>
                         </ul>
                     </nav>
