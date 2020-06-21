@@ -740,19 +740,20 @@ return function (App $app) {
         });
 
         //用站牌尋找公車
-        $group->get('/routesearch/{stop_id}', function (Request $request, Response $response, $args) {
+        $group->get('/stopsearch/{stop_id}', function (Request $request, Response $response, $args) {
             $stopId = $args['stop_id'];
-            $stop = DB::find('route_stop', $stopId);
-            $stopId = $stop['stop_id'];
-            $routeListByStop = findRouteByStop($stopId);
+
             $stopdata = DB::find('stop', $stopId);
             $stopname = $stopdata['stop_name'];
-            //var_dump($stopname);
-            render('stoproute', [
-                'routeListByStop' => $routeListByStop,
-                'stop_name' => $stopname,
-                'msg' => $routeListByStop['route_id']
+
+            $routeListByStop = findRouteByStop($stopId);
+
+            $view = render('stoproute', [
+                'routeList' => $routeListByStop,
+                'stopＮame' => $stopname,
             ]);
+
+            $response->getBody()->write($view);
 
             return $response;
         });

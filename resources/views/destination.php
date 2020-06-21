@@ -19,7 +19,8 @@
                 <h1>路線規劃</h1>
                 <ul class="breadcrumb">
                   <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
-                  <li class="breadcrumb-item active" aria-current="page">路線規劃</li>
+                  <li class="breadcrumb-item" aria-current="page">路線規劃</li>
+                  <li class="breadcrumb-item active" aria-current="page">路線資訊</li>
                 </ul>
               </nav>
             </div>
@@ -86,8 +87,8 @@
                       <tbody>
                         <?php foreach ($stopNameByRoute as $key => $stop) { ?>
                           <tr>
-                            <td><a href="/destination/routesearch/<?= $stop['stop_id'] ?>"><?= $stop['stop_name'] ?></a></td>
-                            <td><a href="/destination/routesearch/<?= $stop['stop_id'] ?>"><?= array_reverse($stopNameByRoute)[$key]['stop_name'] ?></a></td>
+                            <td><a href="/destination/stopsearch/<?= $stop['stop_id'] ?>" style="color: #6b6b6b;"><?= $stop['stop_name'] ?></a></td>
+                            <td><a href="/destination/stopsearch/<?= $stop['stop_id'] ?>" style="color: #6b6b6b;"><?= array_reverse($stopNameByRoute)[$key]['stop_name'] ?></a></td>
                           </tr>
                         <?php } ?>
                     </table>

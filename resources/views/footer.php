@@ -1,5 +1,5 @@
     <!-- Start Footer Area Wrapper -->
-    <footer class="footer-wrapper" style="width:100%;position:relative;bottom:0;">
+    <footer class="footer-wrapper" style="width:100%;position:fixed;bottom:0;">
 
         <!-- footer bottom area start -->
         <div class="footer-bottom-area">
