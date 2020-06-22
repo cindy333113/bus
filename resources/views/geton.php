@@ -51,7 +51,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <?php foreach ($List as $key => $getondata) { ?>
+                    <?php foreach ($getOnList as $key => $getondata) { ?>
                       <tr>
                         <td class="pro-thumbnail">
                           <?= $getondata['route']['route_name'] ?>
@@ -73,9 +73,14 @@
                           <?= $getondata['geton']['unusal'] ? '✔︎' : '✗' ?>
                         </td>
                         <td class="pro-remove">
-                          <form name="deleteForm" action="/passenger/geton/delete" method="post">
+                          <form name="deleteForm<?= $getondata['geton']['geton_id'] ?>" action="/passenger/geton/delete" method="post">
                             <input type="hidden" name="id" value=<?= $getondata['geton']['geton_id'] ?> />
-                            <span><i class="fa fa-trash-o"></i></span>
+                            <span>
+                              <a href="javascript:document.deleteForm<?= $getondata['geton']['geton_id'] ?>.submit();">
+                                <i class="fa fa-trash-o">
+                                </i>
+                              </a>
+                            </span>
                           </form>
                         </td>
                       </tr>
@@ -106,57 +111,59 @@
               </div>
 
               <div class="row">
-                <div class="col-lg-6">
-                  <div class="align-items-end" style="padding-top: 5px;">
-                    <div class="form-group">
-                      <label for="#">公車路線 :</label>
-                      <div class="form-field">
-                        <select name="route_id" class="nice-select">
-                          <?php foreach ($routeList as $key => $route) { ?>
-                            <option value="<?= $route['route_id'] ?>"><?= $route['route_name'] ?></option>
-                          <?php } ?>
-                        </select>
+                <form name="addGetOn" action="/passenger/geton/add" method="post">
+                  <div class="col-lg-6">
+                    <div class="align-items-end" style="padding-top: 5px;">
+                      <div class="form-group">
+                        <label for="#">公車路線 :</label>
+                        <div class="form-field">
+                          <select name="route_id" class="nice-select">
+                            <?php foreach ($routeList as $key => $route) { ?>
+                              <option value="<?= $route['route_id'] ?>"><?= $route['route_name'] ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div class="align-items-end" style="padding-top: 30px;">
-                    <div class="form-group">
-                      <label for="#">方向</label>
-                      <div class="form-field">
-                        <select name="direction" class="nice-select">
-                          <option value="1">去程</option>
-                          <option value="0">回程</option>
-                        </select>
+                    <div class="align-items-end" style="padding-top: 30px;">
+                      <div class="form-group">
+                        <label for="#">方向</label>
+                        <div class="form-field">
+                          <select name="direction" class="nice-select">
+                            <option value="1">去程</option>
+                            <option value="0">回程</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="align-items-end" style="padding-top: 5px;">
-                    <div class="form-group">
-                      <label for="#">站牌名稱</label>
-                      <div class="form-field">
-                        <select name="direction" class="nice-select">
-                          <?php foreach ($stopList as $key => $stop) { ?>
-                            <option value="<?= $stop['stop_id'] ?>"><?= $stop['stop_name'] ?></option>
-                          <?php } ?>
-                        </select>
+                  <div class="col-lg-6">
+                    <div class="align-items-end" style="padding-top: 5px;">
+                      <div class="form-group">
+                        <label for="#">站牌名稱</label>
+                        <div class="form-field">
+                          <select name="stop_id" class="nice-select">
+                            <?php foreach ($stopList as $key => $stop) { ?>
+                              <option value="<?= $stop['stop_id'] ?>"><?= $stop['stop_name'] ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="align-items-end" style="padding-top: 30px;">
+                      <div class="form-group">
+                        <label for="#">是否需要特殊需求 :</label>
+                        <div class="form-field">
+                          <select name="unusal" class="nice-select">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="align-items-end" style="padding-top: 30px;">
-                    <div class="form-group">
-                      <label for="#">是否需要特殊需求 :</label>
-                      <div class="form-field">
-                        <select name="direction" class="nice-select">
-                          <option value="1">是</option>
-                          <option value="0">否</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                </form>
               </div>
 
               <div class="row">
@@ -164,7 +171,8 @@
                   <div class="align-items-end" style="padding-top: 30px;">
                     <div class="form-group">
                       <div class="action_link">
-                        <a class="btn btn-cart2" href="#">新增預約</a>
+                        <a class="btn btn-cart2" href="javascript:document.addGetOn.submit();">新增預約</a>
+                        <p style="color:#CC2121;"><?= $msg ?? '' ?></p>
                       </div>
                     </div>
                   </div>

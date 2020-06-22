@@ -58,14 +58,79 @@ function findStopNameByBus($busId)
     $departureTime = $bus['time'];
     $countOfStop = countStopBusPassed($departureTime);
 
+    if ($countOfStop < 0) {
+        return '尚未發車';
+    }
+
     $routeId = $bus['route_id'];
     $amountStopOfRoute = countStopOfRoute($routeId);
 
-    $isGoing = floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
+    $isGoing = findDirectionByBus($busId);
 
-    $StopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
-    $currentOrder =  $isGoing ? $StopOfCurrentDrive : $amountStopOfRoute - $StopOfCurrentDrive;
+    $stopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
+    $currentOrder =  $isGoing ? $stopOfCurrentDrive : $amountStopOfRoute - $stopOfCurrentDrive;
+
     return findStopNameByRouteOrder($routeId, $currentOrder);
+}
+
+/**
+ * =============================================================================
+ * = 查詢公車現在路線站數
+ * =============================================================================
+ *
+ * @param String $busId
+ * @return String
+ *
+ **/
+function findCurrentOrderByBus($busId)
+{
+    $bus = DB::find('bus', $busId);
+    $departureTime = $bus['time'];
+    $countOfStop = countStopBusPassed($departureTime);
+
+    if ($countOfStop < 0) {
+        return '尚未發車';
+    }
+
+    $routeId = $bus['route_id'];
+    $amountStopOfRoute = countStopOfRoute($routeId);
+
+    $isGoing = findDirectionByBus($busId);
+
+    $stopOfCurrentDrive = $countOfStop % $amountStopOfRoute;
+    $currentOrder =  $isGoing ? $stopOfCurrentDrive : $amountStopOfRoute - $stopOfCurrentDrive;
+
+    $routeStopList = DB::fetchAll('route_stop');
+    $nowStop = array_filter($routeStopList, function ($routeStop) use ($routeId, $currentOrder) {
+        return $routeId == $routeStop['route_id'] && $currentOrder == $routeStop['route_order'];
+    });
+
+    return DB::find('stop', array_values($nowStop)[0]['stop_id']);
+}
+
+/**
+ * =============================================================================
+ * = 查詢公車現在方向
+ * =============================================================================
+ *
+ * @param String $busId
+ * @return String
+ *
+ **/
+function findDirectionByBus($busId)
+{
+    $bus = DB::find('bus', $busId);
+    $departureTime = $bus['time'];
+    $countOfStop = countStopBusPassed($departureTime);
+
+    if ($countOfStop < 0) {
+        return '尚未發車';
+    }
+
+    $routeId = $bus['route_id'];
+    $amountStopOfRoute = countStopOfRoute($routeId);
+
+    return floor($countOfStop / $amountStopOfRoute) / 2 == 0 ? '1' : '0';
 }
 
 
@@ -169,4 +234,110 @@ function findStopListByRoute($routeId)
     }, $routeStopListByRoute);
 
     return $stopNameByRoute;
+}
+
+/**
+ * =============================================================================
+ * = 依乘客找出收藏清單
+ * =============================================================================
+ *
+ * @param String $passengerId
+ * @return Array
+ *
+ **/
+function getCollectByPassenger($passengerId)
+{
+    $user = DB::find('passenger', $passengerId);
+
+    $collectList = DB::fetchAll('collect');
+    $collectListByPassenger = [];
+
+    foreach ($collectList as $key => $collect) {
+
+        //獲得預約記錄之站牌資訊
+        $stop = DB::find('stop', $collect['stop_id']);
+        $route = DB::find('route', $collect['route_id']);
+
+        if ($collect['passenger_id'] === $user['passenger_id']) {
+            array_push($collectListByPassenger, [
+                'collect' => $collect,
+                'route' => $route,
+                'stop'  => $stop
+            ]);
+        }
+    };
+
+    return $collectListByPassenger;
+}
+
+/**
+ * =============================================================================
+ * = 依乘客找出預約上車記錄
+ * =============================================================================
+ *
+ * @param String $passengerId
+ * @return Array
+ *
+ **/
+function getGetOnByPassenger($passengerId)
+{
+    $user = DB::find('passenger', $passengerId);
+
+    $getOnList = DB::fetchAll('geton');
+    $getOnListByPassenger = [];
+
+    foreach ($getOnList as $key => $getOn) {
+
+        //獲得預約記錄之站牌資訊
+        $stop = DB::find('stop', $getOn['stop_id']);
+        $bus = DB::find('bus', $getOn['bus_id']);
+        $route = DB::find('route', $bus['route_id']);
+
+        if ($getOn['passenger_id'] == $user['passenger_id']) {
+            array_push($getOnListByPassenger, [
+                'geton' => $getOn,
+                'bus'   => $bus,
+                'route' => $route,
+                'stop'  => $stop
+            ]);
+        }
+    };
+
+    return $getOnListByPassenger;
+}
+
+/**
+ * =============================================================================
+ * = 依乘客找出預約上車記錄
+ * =============================================================================
+ *
+ * @param String $passengerId
+ * @return Array
+ *
+ **/
+function getGetOffByPassenger($passengerId)
+{
+    $user = DB::find('passenger', $passengerId);
+
+    $getOffList = DB::fetchAll('getoff');
+    $getOffListByPassenger = [];
+
+    foreach ($getOffList as $key => $getOff) {
+
+        //獲得預約記錄之站牌資訊
+        $stop = DB::find('stop', $getOff['stop_id']);
+        $bus = DB::find('bus', $getOff['bus_id']);
+        $route = DB::find('route', $bus['route_id']);
+
+        if ($getOff['passenger_id'] == $user['passenger_id']) {
+            array_push($getOffListByPassenger, [
+                'getoff' => $getOff,
+                'bus'   => $bus,
+                'route' => $route,
+                'stop'  => $stop
+            ]);
+        }
+    };
+
+    return $getOffListByPassenger;
 }

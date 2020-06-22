@@ -58,9 +58,14 @@
 													</span>
 												</td>
 												<td class="pro-remove">
-													<form name="deleteForm" action="/passenger/geton/delete" method="post">
+													<form name="deleteForm<?= $collect['collect']['collect_id'] ?>" action="/passenger/myfavourite/delete" method="post">
 														<input type="hidden" name="id" value=<?= $collect['collect']['collect_id'] ?> />
-														<span><i class="fa fa-trash-o"></i></span>
+														<span>
+															<a href="javascript:document.deleteForm<?= $collect['collect']['collect_id'] ?>.submit();">
+																<i class="fa fa-trash-o">
+																</i>
+															</a>
+														</span>
 													</form>
 												</td>
 											</tr>
@@ -92,31 +97,33 @@
 
 							<div class="row">
 								<div class="col-lg-12">
-									<div class="align-items-end" style="padding-top: 5px;">
-										<div class="form-group">
-											<label for="#">公車路線 :</label>
-											<div class="form-field">
-												<select name="route_id" class="nice-select">
-													<?php foreach ($routeList as $key => $route) { ?>
-														<option value="<?= $route['route_id'] ?>"><?= $route['route_name'] ?></option>
-													<?php } ?>
-												</select>
+									<form name="addFavourite" action="/passenger/myfavourite/add" method="post">
+										<div class="align-items-end" style="padding-top: 5px;">
+											<div class="form-group">
+												<label for="#">公車路線 :</label>
+												<div class="form-field">
+													<select name="route_id" class="nice-select">
+														<?php foreach ($routeList as $key => $route) { ?>
+															<option value="<?= $route['route_id'] ?>"><?= $route['route_name'] ?></option>
+														<?php } ?>
+													</select>
+												</div>
 											</div>
 										</div>
-									</div>
 
-									<div class="align-items-end" style="padding-top: 30px;">
-										<div class="form-group">
-											<label for="#">站牌名稱</label>
-											<div class="form-field">
-												<select name="direction" class="nice-select">
-													<?php foreach ($stopList as $key => $stop) { ?>
-														<option value="<?= $stop['stop_id'] ?>"><?= $stop['stop_name'] ?></option>
-													<?php } ?>
-												</select>
+										<div class="align-items-end" style="padding-top: 30px;">
+											<div class="form-group">
+												<label for="#">站牌名稱</label>
+												<div class="form-field">
+													<select name="stop_id" class="nice-select">
+														<?php foreach ($stopList as $key => $stop) { ?>
+															<option value="<?= $stop['stop_id'] ?>"><?= $stop['stop_name'] ?></option>
+														<?php } ?>
+													</select>
+												</div>
 											</div>
 										</div>
-									</div>
+									</form>
 								</div>
 							</div>
 
@@ -125,8 +132,9 @@
 									<div class="align-items-end" style="padding-top: 30px;">
 										<div class="form-group">
 											<div class="action_link">
-												<a class="btn btn-cart2" href="#">新增收藏</a>
+												<a class="btn btn-cart2" href="javascript:document.addFavourite.submit();">新增收藏</a>
 											</div>
+											<p style="color:#CC2121;"><?= $msg ?? '' ?></p>
 										</div>
 									</div>
 								</div>

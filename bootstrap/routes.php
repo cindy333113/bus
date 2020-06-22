@@ -89,7 +89,7 @@ return function (App $app) {
             'isdriver' => $isdriver,
         ]);
         return $response;
-    })->add(new AuthMiddleware('driver'));;
+    })->add(new AuthMiddleware('driver'));
 
 
     //記黑名單
@@ -392,29 +392,11 @@ return function (App $app) {
             $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
             */
 
-            $getOnList = DB::fetchAll('geton');
-            $getOnListByPassenger = [];
-
-            foreach ($getOnList as $key => $getOn) {
-
-                //獲得預約記錄之站牌資訊
-                $stop = DB::find('stop', $getOn['stop_id']);
-                $bus = DB::find('bus', $getOn['bus_id']);
-                $route = DB::find('route', $bus['route_id']);
-
-                if ($getOn['passenger_id'] == $user['passenger_id']) {
-                    array_push($getOnListByPassenger, [
-                        'geton' => $getOn,
-                        'bus'   => $bus,
-                        'route' => $route,
-                        'stop'  => $stop
-                    ]);
-                }
-            };
+            $getOnListByPassenger = getGetOnByPassenger($passengerId);
 
             $view = render('geton', [
                 'user' => $user,
-                'List' => $getOnListByPassenger,
+                'getOnList' => $getOnListByPassenger,
                 'routeList' => DB::fetchAll('route'),
                 'stopList' => DB::fetchAll('stop'),
             ]);
@@ -425,32 +407,70 @@ return function (App $app) {
         });
 
         $group->post('/geton/add', function (Request $request, Response $response, $args) {
-            //找出預約的車子  
-            $data = $request->getParsedBody();
             $user = $request->getAttribute('user');
             $passengerId = $user['passenger_id'];
 
-            $stopname = $data['stop_name'];
-            $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
-            $stop_id = $stopOfCollect['stop_id'];
-            //var_dump($stopname,$stop_id);
+            $data = $request->getParsedBody();
 
-            $routename = $data['route_name'];
-            $routeOfColllect = DB::find('route', $routename, 'route_name');
-            $route_id = $routeOfColllect['route_id'];
-            //var_dump($routename,$route_id);
+            $stopId = $data['stop_id'];
+            $stop = DB::find('stop', $stopId);
 
-            $directionId = $data['direction'];
+            $routeId = $data['route_id'];
+            $route = DB::find('route', $routeId);
+
+            $direction = $data['direction'];
             $unusal = $data['unusal'];
 
+            $bus = DB::find('bus', $routeId, 'route_id');
+
+            $routeStopList = DB::fetchAll('route_stop');
+            $result = array_filter($routeStopList, function ($routeStop) use ($stopId, $routeId) {
+                return $routeStop['stop_id'] === $stopId && $routeStop['route_id'] === $routeId;
+            });
+
+            $getOnListByPassenger = getGetOnByPassenger($passengerId);
+            $hasRecord = array_filter($getOnListByPassenger, function ($geton) use ($stopId, $bus) {
+                return $geton['geton']['stop_id'] === $stopId && $geton['geton']['bus_id'] === $bus['bus_id'];
+            });
+            //var_dump($result);die;
+
+            /* 
             $result = $conn = DB::getconnection();
-            $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
-        ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
+            $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$direction),$stop_id,$unusal)");
             $stmt->execute();
             $getonadd = $stmt->fetchAll(PDO::FETCH_ASSOC);
             //echo json_encode($a, JSON_UNESCAPED_UNICODE);
             render('geton', ['msg' => $result ? '預約成功' :
                 '預約失敗', 'userdata' => $user,]);
+            */
+
+            if ($result && count($hasRecord) === 0) {
+                $addData = [
+                    "passenger_id" => $passengerId,
+                    "bus_id"    => $bus['bus_id'],
+                    "stop_id"   => $stopId,
+                    "direction" => $direction,
+                    "unusal"    => $unusal,
+                    "status"    => 0,
+                ];
+
+                DB::create('geton', $addData);
+
+                return $response->withHeader('Location', '/passenger/geton');
+            }
+
+            $msg = $hasRecord ? '已做過該預約！' : '新增預約失敗，請檢查選擇選項';
+            $msg = $bus ? $msg : '查無可預約公車';
+
+            $view = render('geton', [
+                'msg' => $msg,
+                'getOnList' => $getOnListByPassenger,
+                'routeList' => DB::fetchAll('route'),
+                'stopList' => DB::fetchAll('stop'),
+            ]);
+
+            $response->getBody()->write($view);
+
             return $response;
         });
 
@@ -458,14 +478,18 @@ return function (App $app) {
             //刪除預約上車
             $user = $request->getAttribute('user');
             $data = $request->getParsedBody();
+            $getonId = $data['id'];
+
+            /*
             var_dump($data);
             $geton_id = $data['geton_id'];
             DB::delete('geton', $geton_id, 'geton_id');
-            header("Location:/geton");
-            render('geton', [
-                'msg' => '取消預約成功',
-                'userdata' => $user,
-            ]);
+            */
+            //刪除收藏站牌
+
+            DB::delete('geton', $getonId, 'geton_id');
+
+            return $response->withHeader('Location', '/passenger/geton');
         });
 
         /* =========================================================================
@@ -484,25 +508,7 @@ return function (App $app) {
             $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
             */
 
-            $getOffList = DB::fetchAll('getoff');
-            $getOffListByPassenger = [];
-
-            foreach ($getOffList as $key => $getOff) {
-
-                //獲得預約記錄之站牌資訊
-                $stop = DB::find('stop', $getOff['stop_id']);
-                $bus = DB::find('bus', $getOff['bus_id']);
-                $route = DB::find('route', $bus['route_id']);
-
-                if ($getOff['passenger_id'] == $user['passenger_id']) {
-                    array_push($getOffListByPassenger, [
-                        'getoff' => $getOff,
-                        'bus'   => $bus,
-                        'route' => $route,
-                        'stop'  => $stop
-                    ]);
-                }
-            };
+            $getOffListByPassenger = getGetOffByPassenger($passengerId);
 
             $view = render('getoff', [
                 'user' => $user,
@@ -514,11 +520,74 @@ return function (App $app) {
             $response->getBody()->write($view);
 
             return $response;
-            return $response;
         });
 
         $group->post('/getoff/add', function (Request $request, Response $response, $args) {
+            $user = $request->getAttribute('user');
+            $passengerId = $user['passenger_id'];
+
+            $data = $request->getParsedBody();
+
+            $stopId = $data['stop_id'];
+            $stop = DB::find('stop', $stopId);
+
+            $routeId = $data['route_id'];
+            $route = DB::find('route', $routeId);
+
+            $direction = $data['direction'];
+            $unusal = $data['unusal'];
+
+            $bus = DB::find('bus', $routeId, 'route_id');
+
+            $routeStopList = DB::fetchAll('route_stop');
+            $result = array_filter($routeStopList, function ($routeStop) use ($stopId, $routeId) {
+                return $routeStop['stop_id'] === $stopId && $routeStop['route_id'] === $routeId;
+            });
+
+            $getOffListByPassenger = getGetOffByPassenger($passengerId);
+            $hasRecord = array_filter($getOffListByPassenger, function ($getoff) use ($stopId, $bus) {
+                return $getoff['getoff']['stop_id'] === $stopId && $getoff['getoff']['bus_id'] === $bus['bus_id'];
+            });
+
+            /* 
+            $result = $conn = DB::getconnection();
+            $stmt = $conn->prepare("INSERT INTO `geton`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$direction),$stop_id,$unusal)");
+            $stmt->execute();
+            $getonadd = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            //echo json_encode($a, JSON_UNESCAPED_UNICODE);
+            render('geton', ['msg' => $result ? '預約成功' :
+                '預約失敗', 'userdata' => $user,]);
+            */
+
+            if ($result && count($hasRecord) === 0) {
+                $addData = [
+                    "passenger_id" => $passengerId,
+                    "bus_id"    => $bus['bus_id'],
+                    "stop_id"   => $stopId,
+                    "direction" => $direction,
+                    "unusal"    => $unusal,
+                    "status"    => 0,
+                ];
+
+                DB::create('getoff', $addData);
+
+                return $response->withHeader('Location', '/passenger/getoff');
+            }
+
+            $msg = $hasRecord ? '已做過該預約！' : '新增預約失敗，請檢查選擇選項';
+            $msg = $bus ? $msg : '查無可預約公車';
+
+            $view = render('geton', [
+                'msg' => $msg,
+                'getOnList' => $getOffListByPassenger,
+                'routeList' => DB::fetchAll('route'),
+                'stopList' => DB::fetchAll('stop'),
+            ]);
+
+            $response->getBody()->write($view);
+
             //找出預約的車子
+            /*
             $data = $request->getParsedBody();
             $passengerId = 2;
             $stopname = $data['stop_name'];
@@ -532,25 +601,32 @@ return function (App $app) {
             var_dump($routename, $route_id);
 
 
-            $directionId = $data['direction'];
+            $direction = $data['direction'];
             $unusal = $data['unusal'] ?? "";
             $result = $conn = DB::getconnection();
-            $stmt = $conn->prepare("INSERT INTO `getoff`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
-    ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
+            $stmt = $conn->prepare("INSERT INTO `getoff`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$direction),$stop_id,$unusal)");
             $stmt->execute();
             $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($a, JSON_UNESCAPED_UNICODE);
             render('getoff', ['msg' => $result ? '預約成功' : '預約失敗',]);
+            */
             return $response;
         });
 
         $group->post('/getoff/delete', function (Request $request, Response $response, $args) {
-            //刪除預約上車
+            //刪除預約下車
+            $user = $request->getAttribute('user');
             $data = $request->getParsedBody();
-            $getoff_id = $data['getoff_id'];
+            $getoffId = $data['id'];
+
+            /*
             $result = DB::delete('getoff', $getoff_id, 'getoff_id');
             render('getoff', ['msg' => $result ? '取消預約成功' : '取消預約失敗',]);
-            return $response;
+            */
+
+            DB::delete('getoff', $getoffId, 'getoff_id');
+
+            return $response->withHeader('Location', '/passenger/getoff');
         });
 
         /* =========================================================================
@@ -570,26 +646,9 @@ return function (App $app) {
             $collect = $stmt->fetchAll(PDO::FETCH_ASSOC);
             */
 
-            $collectList = DB::fetchAll('collect');
-            $collectListByPassenger = [];
-
-            foreach ($collectList as $key => $collect) {
-
-                //獲得預約記錄之站牌資訊
-                $stop = DB::find('stop', $collect['stop_id']);
-                $route = DB::find('route', $collect['route_id']);
-
-                if ($collect['passenger_id'] === $user['passenger_id']) {
-                    array_push($collectListByPassenger, [
-                        'collect' => $collect,
-                        'route' => $route,
-                        'stop'  => $stop
-                    ]);
-                }
-            };
+            $collectListByPassenger = getCollectByPassenger($passengerId);
 
             $view = render('myfavourite', [
-                'msg' => '輸入要新增修改的資料',
                 'collectList' => $collectListByPassenger,
                 'routeList' => DB::fetchAll('route'),
                 'stopList' => DB::fetchAll('stop'),
@@ -601,26 +660,54 @@ return function (App $app) {
         });
 
         $group->post('/myfavourite/add', function (Request $request, Response $response, $args) {
+            $user = $request->getAttribute('user');
+            $passengerId = $user['passenger_id'];
 
             $data = $request->getParsedBody(); //$_POST
-            var_dump($data);
-            $stopname = $data['stop_name'];
+
+            $stopId = $data['stop_id'];
+            $routeId = $data['route_id'];
+
+            $routeStopList = DB::fetchAll('route_stop');
+            $result = array_filter($routeStopList, function ($routeStop) use ($stopId, $routeId) {
+                return $routeStop['stop_id'] === $stopId && $routeStop['route_id'] === $routeId;
+            });
+
+            $collectListByPassenger = getCollectByPassenger($passengerId);
+            $hasCollect = array_filter($collectListByPassenger, function ($collect) use ($stopId, $routeId) {
+                return $collect['collect']['stop_id'] === $stopId && $collect['collect']['route_id'] === $routeId;
+            });
+
+            /*
             $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
             $stop_id = $stopOfCollect['stop_id'];
 
             $routename = $data['route_name'];
             $routeOfColllect = DB::find('route', $routename, 'route_name');
             $route_id = $routeOfColllect['route_id'];
+            */
+            if ($result && count($hasCollect) === 0) {
+                $addData = [
+                    "passenger_id" => $passengerId,
+                    "stop_id" => $stopId,
+                    "route_id" => $routeId
+                ];
 
-            $data2 = [
-                "passenger_id" => 2,
-                "stop_id" => $stop_id,
-                "route_id" => $route_id
-            ];
-            $result = DB::create('collect', $data2);
-            header("Location:/myfavourite");
-            render('/myfavourite', ['msg' => $result ? '增加收藏站牌資訊成功' : '增加收藏站牌資訊失敗',]);
+                DB::create('collect', $addData);
 
+                return $response->withHeader('Location', '/passenger/myfavourite');
+            }
+
+            $msg = $hasCollect ? '已收藏過該項目！' : '新增收藏失敗，請檢查選擇選項';
+
+            $view = render('myfavourite', [
+                'msg' => $msg,
+                'collectList' => $collectListByPassenger,
+                'routeList' => DB::fetchAll('route'),
+                'stopList' => DB::fetchAll('stop'),
+            ]);
+
+            $response->getBody()->write($view);
             return $response;
         });
 
@@ -630,10 +717,8 @@ return function (App $app) {
             $collectId = $data['id'];
 
             DB::delete('collect', $collectId, 'collect_id');
-            header("Location:/myfavourite");
-            render('myfavourite', [
-                'msg' => '刪除成功',
-            ]);
+
+            return $response->withHeader('Location', '/passenger/myfavourite');
         });
     })->add(new AuthMiddleware('passenger'));
 
@@ -708,12 +793,27 @@ return function (App $app) {
     $app->group('/destination', function (Group $group) {
         //搜尋公車列出站牌
         $group->get('', function (Request $request, Response $response, $args) {
-            $view = render('destination',[
+            $view = render('destination', [
                 'routeList' => DB::fetchAll('route')
             ]);
 
             $response->getBody()->write($view);
 
+            return $response;
+        });
+
+        $group->post('/planroute', function (Request $request, Response $response, $args) { //顯示站名
+            $data = $request->getParsedBody();
+            $start = $data['start'];
+            $goal = $data['goal'];
+            $conn = DB::getconnection();
+            $stmt = $conn->prepare("select rt.route_id,route_name from route_stop rt,route r where rt.stop_id in ($start,$goal) and rt.route_id=r.route_id group by rt.route_id having count(rt.route_id)=2 ");
+            $stmt->execute();
+
+            $planroute = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode($planroute, JSON_UNESCAPED_UNICODE);
+
+            render('/planroute', []);
             return $response;
         });
 
