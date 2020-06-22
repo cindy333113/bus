@@ -19,6 +19,7 @@ return function (App $app) {
         return $response;
     })->add(new AuthMiddleware('passenger'));;
     $app->get('/english', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
         render('english', [
             'msg' => '輸入要預約上車的資料',
 
@@ -26,8 +27,10 @@ return function (App $app) {
         return $response;
     });
     $app->get('/ublack', function (Request $request, Response $response, $args) {
+        
         render('ublack', [
             'msg' => '黑名單小壞壞',
+            'userdata'=>$user,
 
         ]);
         return $response;
@@ -264,7 +267,7 @@ return function (App $app) {
         $user = $request->getAttribute('user');
 
         $passengerId=$user['passenger_id'];
-        var_dump($passengerId);
+        //var_dump($passengerId);
         //$passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id 
