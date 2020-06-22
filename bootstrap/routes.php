@@ -444,6 +444,7 @@ return function (App $app) {
             $hasRecord = array_filter($getOnListByPassenger, function ($geton) use ($stopId, $bus) {
                 return $geton['geton']['stop_id'] === $stopId && $geton['geton']['bus_id'] === $bus['bus_id'];
             });
+
             //var_dump($result);die;
 
             /* 
@@ -474,8 +475,11 @@ return function (App $app) {
             $msg = $hasRecord ? '已做過該預約！' : '新增預約失敗，請檢查選擇選項';
             $msg = $bus ? $msg : '查無可預約公車';
 
+            $blackListByPassenger = getBlackListByPassenger($passengerId);
+
             $view = render('geton', [
                 'msg' => $msg,
+                'isBlack' => count($blackListByPassenger) < 3 ? 0 : 1,
                 'getOnList' => $getOnListByPassenger,
                 'routeList' => DB::fetchAll('route'),
                 'stopList' => DB::fetchAll('stop'),
@@ -591,8 +595,11 @@ return function (App $app) {
             $msg = $hasRecord ? '已做過該預約！' : '新增預約失敗，請檢查選擇選項';
             $msg = $bus ? $msg : '查無可預約公車';
 
+            $blackListByPassenger = getBlackListByPassenger($passengerId);
+
             $view = render('geton', [
                 'msg' => $msg,
+                'isBlack' => count($blackListByPassenger) < 3 ? 0 : 1,
                 'getOnList' => $getOffListByPassenger,
                 'routeList' => DB::fetchAll('route'),
                 'stopList' => DB::fetchAll('stop'),
