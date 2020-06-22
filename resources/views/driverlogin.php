@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-if (empty($userdata)) {
-	render("/login");
-	die;
-}
-?>
+
 <head>
   <title>HeyBus</title>
   <meta charset="utf-8">
@@ -79,7 +74,7 @@ if (empty($userdata)) {
                   </div>
                   <div class="row mb-3">
                     <div class="col-lg-12 text-right">
-                      <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin" onclick="/driver"><span>登入</span></button>
+                      <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin" onclick="/driverlogin"><span>登入</span></button>
                     </div>
                   </div>
                 </form>

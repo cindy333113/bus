@@ -66,7 +66,7 @@
           <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
           <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
           <li class="nav-item"><a href="/destination" class="nav-link"><span>公車查詢</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li>
+          <li class="nav-item"><a class="nav-link" action="/logout" href="/logout"><span>登出</span></a></li>
           <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
           <li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
         </ul>

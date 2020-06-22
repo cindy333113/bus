@@ -1,12 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-if (empty($userdata)) {
-	render("/login");
-	die;
-}
-?>
-
 <head>
   <title>HeyBus 註冊</title>
   <meta charset="utf-8">

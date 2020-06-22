@@ -10,12 +10,14 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
     $app->get('/index', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
         render('index', [
             'msg' => '首頁',
+            'userdata'=>$user,
 
         ]);
         return $response;
-    });
+    })->add(new AuthMiddleware('passenger'));;
     $app->get('/english', function (Request $request, Response $response, $args) {
         render('english', [
             'msg' => '輸入要預約上車的資料',
@@ -154,7 +156,7 @@ return function (App $app) {
         //刪除預約上車
         $user = $request->getAttribute('user');
         $data = $request->getParsedBody();
-        var_dump($data);
+        //var_dump($data);
         $geton_id = $data['geton_id'];
         DB::delete('geton', $geton_id, 'geton_id');
         header("Location:/geton");
@@ -212,12 +214,12 @@ return function (App $app) {
         $stopname = $data['stop_name'];
         $stopOfCollect = DB::find('stop', $stopname, 'stop_name');
         $stop_id = $stopOfCollect['stop_id'];
-        var_dump($stopname, $stop_id);
+        //var_dump($stopname, $stop_id);
 
         $routename = $data['route_name'];
         $routeOfColllect = DB::find('route', $routename, 'route_name');
         $route_id = $routeOfColllect['route_id'];
-        var_dump($routename, $route_id);
+        //var_dump($routename, $route_id);
 
 
         $directionId = $data['direction'];
@@ -262,6 +264,7 @@ return function (App $app) {
         $user = $request->getAttribute('user');
 
         $passengerId=$user['passenger_id'];
+        var_dump($passengerId);
         //$passengerId = 2;
         $conn = DB::getconnection();
         $stmt = $conn->prepare("SELECT stop_name,r.route_name,collect_id 
@@ -391,6 +394,10 @@ return function (App $app) {
         return $response;
     });
 */
+$app->get('/user', function (Request $request, Response $response, $args) { //顯示站名
+    render('user', []);
+    return $response;
+});
     /* =========================================================================
     * = 註冊登入
     * =========================================================================
@@ -404,11 +411,11 @@ return function (App $app) {
         $identity = $data['identity'] ?? '';
         $account = $data['account'] ?? '';
         $password = $data['password'] ?? '';
-
+        //var_dump($identity,$account,$password);
         if ($id = Auth::login($account, $password, $identity)) {
             $_SESSION['auth'] = ['id' => $id, 'identity' => $identity];
         }
-
+        
         //$response->getBody()->write(json_encode(['data'=>$data,'id'=>$id]));
 
 
@@ -440,7 +447,7 @@ return function (App $app) {
 
         $user = $request->getAttribute('user');
 
-        $view = render('/user', ['user' => $user]);
+        $view = render('/index', ['user' => $user]);
         $response->getBody()->write($view);
 
         return $response;
@@ -459,7 +466,7 @@ return function (App $app) {
         $response->getBody()->write($view);
 
         return $response;
-    })->add(new AuthMiddleware('passenger'));
+    })->add(new AuthMiddleware('driver'));
     /* =========================================================================
     * = DRIVER Group
     * =========================================================================

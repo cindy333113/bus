@@ -60,7 +60,7 @@ if(empty($isdriver)){
         <ul class="navbar-nav nav ml-auto">
           <li class="nav-item"><a href="/manage" class="nav-link"><span>司機首頁</span></a></li>
           <li class="nav-item"><a href="/blacklist" class="nav-link"><span>黑名單</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> 
+          <li class="nav-item"><a class="nav-link" action="/logout" href="/logout"><span>登出</span></a></li> 
           <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
           <li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
         </ul>   

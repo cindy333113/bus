@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-if (empty($userdata)) {
-	render("/login");
-	die;
-}
-?>
+
 <head>
 	<title>HeyYou 就是你</title>
 	<meta charset="utf-8">
@@ -49,7 +44,7 @@ if (empty($userdata)) {
 					<li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
 					<li class="nav-item"><a href="/destination" class="nav-link"><span>公車查詢</span></a></li>
 					<?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
-					<?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
+					<?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout" action="/logout"><span>登出</span></a></li> <?php } ?>
 					<li class="nav-item"><a class="nav-link"><span>|</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
 				</ul>

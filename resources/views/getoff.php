@@ -50,7 +50,7 @@ if (empty($userdata)) {
           <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
           <li class="nav-item"><a href="/destination" class="nav-link"><span>公車查詢</span></a></li>
           <?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
-          <?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
+          <?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" action="/logout" href="/logout"><span>登出</span></a></li> <?php } ?>
           <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
           <li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
         </ul>
@@ -172,30 +172,32 @@ if (empty($userdata)) {
                       <label for="#">站牌</label>
                       <div class="form-field">
                         <div class="select-wrap">
-                          <select name="stop_name" id="" class="form-control">
-                            <option value="捷運輔大站">捷運輔大站</option>
-                            <option value="盲人重建院">盲人重建院</option>
-                            <option value="">海山里</option>
-                            <option value="">新泰中正路口</option>
-                            <option value="">材試所</option>
-                            <option value="">新泰國中南站</option>
-                            <option value="">新莊棒球場</option>
-                            <option value="">新莊體育場</option>
-                            <option value="">新莊田徑場</option>
-                            <option value="">財元廣場</option>
-                            <option value="">中華路</option>
-                            <option value="">正邦社區</option>
-                            <option value="">幸福中華路口</option>
-                            <option value="">幸福新城</option>
+                        <select name="stop_name" id="" class="form-control">
+                        <option value="西盛">西盛</option>
+                            <option value="東方之星">東方之星</option>
+                            <option value="西盛館">西盛館</option>
+                            <option value="家麟新天地">家麟新天地</option>
+                            <option value="正豐">正豐</option>
+                            <option value="大唐江山">大唐江山</option>
+                            <option value="台灣通用">台灣通用</option>
+                            <option value="光華街口">光華街口</option>
+                            <option value="新寶社區">新寶社區</option>
+                            <option value="光華國小">光華國小</option>
+                            <option value="福祿新城1">福祿新城1</option>
+                            <option value="福祿新城2">福祿新城2</option>
+                            <option value="民安路橋">民安路橋</option>
+                            <option value="民安路">民安路</option>
+                            <option value="後港社區">後港社區</option>
 
                           </select>
+                        </div>
                         </div>
                       </div>
                     </div>
                     <div class="col-lg align-self-end">
                       <div class="form-group">
                         <div class="form-field">
-                          <input type="submit" value="新增" class="form-control btn btn-primary" onclick="getoff/add" method="post">
+                          <input type="submit" value="新增" class="form-control btn btn-primary" onclick="/getoff/add" method="post">
                         </div>
                       </div>
                     </div>
