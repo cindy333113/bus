@@ -341,3 +341,33 @@ function getGetOffByPassenger($passengerId)
 
     return $getOffListByPassenger;
 }
+
+
+/**
+ * =============================================================================
+ * = 依乘客找出黑名單紀錄
+ * =============================================================================
+ *
+ * @param String $passengerId
+ * @return Array
+ *
+ **/
+function getBlackListByPassenger($passengerId)
+{
+    $user = DB::find('passenger', $passengerId);
+
+    $blackList = DB::fetchAll('getoff');
+    $blackListByPassenger = [];
+
+    foreach ($blackList as $key => $black) {
+
+        if ($black['passenger_id'] == $user['passenger_id']) {
+            array_push($blackListByPassenger, [
+                'black' => $black,
+                'user'   => $user,
+            ]);
+        }
+    };
+
+    return $blackListByPassenger;
+}

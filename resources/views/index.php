@@ -144,8 +144,8 @@
                 <img src="assets/img/icon/free_shipping.png" alt="">
               </div>
               <div class="policy-terms">
-                <h5>free shipping</h5>
-                <p>Free shipping all order</p>
+                <h5>黑名單機制</h5>
+                <p>身為小頑皮還想預約啊</p>
               </div>
             </div>
             <!-- end policy single item -->

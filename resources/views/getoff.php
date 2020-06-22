@@ -171,7 +171,11 @@
                   <div class="align-items-end" style="padding-top: 30px;">
                     <div class="form-group">
                       <div class="action_link">
+                        <?php if(!$isBlack){ ?>
                         <a class="btn btn-cart2" href="javascript:document.addGetOff.submit();">新增預約</a>
+                        <?php } else { ?>
+                          <a class="btn btn-cart2" style="color: #fff">小頑皮！身為黑名單的你不能預約ㄛ:)</a>
+                        <?php } ?>
                         <p style="color:#CC2121;"><?= $msg ?? '' ?></p>
                       </div>
                     </div>

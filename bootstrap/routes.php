@@ -27,6 +27,7 @@ return function (App $app) {
     **/
 
     $app->get('/login', function (Request $request, Response $response, $args) {
+
         $view = render('login');
 
         $response->getBody()->write($view);
@@ -60,14 +61,25 @@ return function (App $app) {
         return $response->withHeader('Location', '/');
     });
 
-    //註冊 TODO:FIX
+    $app->get('/signup', function (Request $request, Response $response, $args) {
+
+        $view = render('/signup');
+
+        $response->getBody()->write($view);
+
+        return $response;
+    });
+
     $app->post('/signup/add', function (Request $request, Response $response, $args) {
 
         $data = $request->getParsedBody();
         $result = DB::create('passenger', $data);
-        //var_dump($data);
-        render('/login', ['msg' => $result ? '註冊成功' : '註冊失敗',]);
-        return $response->withHeader('Location', '/index');
+
+        $view = render('/signup', ['msg' => $result ? '註冊成功' : '註冊失敗',]);
+
+        $response->getBody()->write($view);
+
+        return $response;
     });
 
     /* =========================================================================
@@ -244,8 +256,7 @@ return function (App $app) {
         $directionId = $data['direction'];
         $unusal = $data['unusal'] ?? "";
         $result = $conn = DB::getconnection();
-        $stmt = $conn->prepare("INSERT INTO `getoff`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES 
-    ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
+        $stmt = $conn->prepare("INSERT INTO `getoff`(`passenger_id`, `bus_id`, `stop_id`, `unusal`) VALUES ($passengerId,(SELECT bus_id from bus where route_id=$route_id and direction=$directionId),$stop_id,$unusal)");
         $stmt->execute();
         $a = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
@@ -270,7 +281,6 @@ return function (App $app) {
         ]);
         return $response;
     })->add(new AuthMiddleware('passenger'));
-
 
     $app->get('/myfavourite', function (Request $request, Response $response, $args) {
         //列出id=?的顧客所收藏的站牌及路線
@@ -393,9 +403,11 @@ return function (App $app) {
             */
 
             $getOnListByPassenger = getGetOnByPassenger($passengerId);
+            $blackListByPassenger = getBlackListByPassenger($passengerId);
 
             $view = render('geton', [
                 'user' => $user,
+                'isBlack' => count($blackListByPassenger) < 3 ? 0 : 1,
                 'getOnList' => $getOnListByPassenger,
                 'routeList' => DB::fetchAll('route'),
                 'stopList' => DB::fetchAll('stop'),
@@ -509,9 +521,11 @@ return function (App $app) {
             */
 
             $getOffListByPassenger = getGetOffByPassenger($passengerId);
+            $blackListByPassenger = getBlackListByPassenger($passengerId);
 
             $view = render('getoff', [
                 'user' => $user,
+                'isBlack' => count($blackListByPassenger) < 3 ? 0 : 1,
                 'List' => $getOffListByPassenger,
                 'routeList' => DB::fetchAll('route'),
                 'stopList' => DB::fetchAll('stop'),
@@ -747,7 +761,11 @@ return function (App $app) {
     $app->get('/driver', function (Request $request, Response $response, $args) {
         $user = $request->getAttribute('user');
 
-        $view = render('/manage', ['user' => $user]);
+        $view = render('/manage', [
+            'user' => $user,
+            'blackList' => DB::fetchAll('black_list'),
+        ]);
+
         $response->getBody()->write($view);
 
         return $response;

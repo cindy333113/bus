@@ -61,7 +61,7 @@
                                             <ul class="dropdown-list">
                                                 <?php if (!isset($_SESSION['auth'])) { ?>
                                                     <li><a href="/login">登入</a></li>
-                                                    <li><a href="/register">註冊</a></li>
+                                                    <li><a href="/signup">註冊</a></li>
                                                 <?php } else { ?>
                                                     <li><a href="/passenger">會員頁面</a></li>
                                                     <li><a href="/logout">登出</a></li>

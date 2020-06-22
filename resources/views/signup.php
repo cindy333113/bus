@@ -1,111 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-if (empty($userdata)) {
-	render("/login");
-	die;
-}
-?>
 
-<head>
-  <title>HeyBus 註冊</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<?php include __DIR__ . "/head.php"; ?>
 
-  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+<body>
 
-  <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-  <link rel="stylesheet" href="css/animate.css">
+  <?php include __DIR__ . "/header.php"; ?>
 
-  <link rel="stylesheet" href="css/owl.carousel.min.css">
-  <link rel="stylesheet" href="css/owl.theme.default.min.css">
-  <link rel="stylesheet" href="css/magnific-popup.css">
-
-  <link rel="stylesheet" href="css/aos.css">
-
-  <link rel="stylesheet" href="css/ionicons.min.css">
-
-  <link rel="stylesheet" href="css/flaticon.css">
-  <link rel="stylesheet" href="css/icomoon.css">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-
-<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
-    <div class="container">
-      <a class="navbar-brand" href="/index">Hey Bus</a>
-      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="oi oi-menu"></span> Menu
-      </button>
-
-      <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav nav ml-auto">
-          <li class="nav-item"><a href="/index" class="nav-link"><span>首頁</span></a></li>
-          <li class="nav-item"><a href="/myfavourite" class="nav-link"><span>我的最愛</span></a></li>
-          <li class="nav-item"><a href="/geton" class="nav-link"><span>預約上車</span></a></li>
-          <li class="nav-item"><a href="/getoff" class="nav-link"><span>預約下車</span></a></li>
-          <li class="nav-item"><a href="/planroute" class="nav-link"><span>路線規劃</span></a></li>
-          <li class="nav-item"><a href="/destination" class="nav-link"><span>公車查詢</span></a></li>
-          <?php if (empty($userdata)) { ?> <li class="nav-item"><a href="/login" class="nav-link"><span>登入/註冊</span></a></li><?php } ?>
-          <?php if (!empty($userdata)) { ?> <li class="nav-item"><a class="nav-link" href="/logout"><span>登出</span></a></li> <?php } ?>
-          <li class="nav-item"><a class="nav-link"><span>|</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="/english"><span>English</span></a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <section class="ftco-section">
-    <div class="container">
-
-      <div class="center">
-        <div class="col-lg-9 p-5 bg-light" align=center>
-          <div class="search-wrap-1 ftco-animate">
-            <!-- form card login -->
-
-            <div class="card">
-              <div class="card-header">
-                <h3 class="mb-0">註冊</h3>
-              </div>
-              <div class="card-body">
-                <form id="formLogin" action="/signup/add" method="POST" class="formLogin">
-                <div class="form-group">
-                    <input for="username" class="form-control" id="name" name="passenger_name" placeholder="User Name" type="text" required="">
-                  </div>
-
-                  <div class="form-group">
-                    <input for="username" class="form-control" id="account" name="passenger_account" placeholder="Account" type="text" required="">
-                  </div>
-
-                  <div class="form-group">
-                    <input for="password" type="password" name="passenger_password" class="form-control" placeholder="Password" id="pwd" required="">
-                  </div>
-
-              </div>
-              <div class="row mb-3">
-                <div class="col-lg-12 text-right">
-                  <button type="submit" class="btn btn-success hover-btn btn-wd " id="btnLogin"><span>Sign up</span></button>
-                </div>
-              </div>
-              </form>
-
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="create-box text-block text-center my-0">
-                    <span class="text-small font-weight-semibold">已經是會員?</span>
-                    <a href="/login">login</a><br>
-                    <p></p>
-
-                  </div>
-                </div>
-              </div>
+  <!-- main wrapper start -->
+  <main>
+    <!-- breadcrumb area start -->
+    <div class="breadcrumb-area common-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="breadcrumb-wrap">
+              <nav aria-label="breadcrumb">
+                <h1>會員註冊</h1>
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>
+                  <li class="breadcrumb-item active" aria-current="page">使用者註冊</li>
+                </ul>
+              </nav>
             </div>
-
           </div>
         </div>
-      </div> <!-- end -->
+      </div>
     </div>
+    <!-- breadcrumb area end -->
+
+    <!-- login register wrapper start -->
+    <div class="login-register-wrapper section-space pb-0">
+      <div class="container">
+        <div class="member-area-from-wrap">
+          <div class="row">
+            <!-- Passenger Register Content Start -->
+            <div class="col-lg-6">
+              <div class="login-reg-form-wrap">
+                <h2>會員註冊</h2>
+                <form action="/signup/add" method="post">
+                  <div class="single-input-item">
+                    <input type="text"  name="passenger_name" placeholder="請輸入使用者姓名" required />
+                  </div>
+                  <div class="single-input-item">
+                    <input type="text"  name="passenger_account" placeholder="請輸入使用者帳號" required />
+                  </div>
+                  <div class="single-input-item">
+                    <input type="password" name="passenger_password" placeholder="請輸入密碼" required />
+                  </div>
+                  <div class="single-input-item">
+                    <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
+                      <div class="remember-meta" style="color: #CC2121;">
+                        <?= $msg ?? '' ?>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="single-input-item">
+                    <button class="btn btn__bg">確認註冊</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- Passenger Register Content End -->
+
+          </div>
+        </div> <!-- end -->
+      </div>
     </div>
   </section>
 
@@ -125,33 +85,23 @@ if (empty($userdata)) {
         </div>
       </div>
     </div>
-  </footer>
+    <!-- login register wrapper end -->
+  </main>
+  <!-- main wrapper end -->
 
+  <?php include __DIR__ . "/footer.php"; ?>
 
+  <!-- Scroll to top start -->
+  <div class="scroll-top not-visible">
+    <i class="fa fa-angle-up"></i>
+  </div>
+  <!-- Scroll to Top End -->
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
-      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
-
-
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.stellar.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="js/google-map.js"></script>
-
-  <script src="js/main.js"></script>
-
+  <!-- All vendor & plugins & active js include here -->
+  <!--All Vendor Js -->
+  <script src="assets/js/vendor.js"></script>
+  <!-- Active Js -->
+  <script src="assets/js/active.js"></script>
 </body>
 
 </html>
